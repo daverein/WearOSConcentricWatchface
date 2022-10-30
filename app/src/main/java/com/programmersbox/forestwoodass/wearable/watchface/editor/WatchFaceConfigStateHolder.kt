@@ -27,9 +27,9 @@ import androidx.wear.watchface.style.UserStyle
 import androidx.wear.watchface.style.UserStyleSchema
 import androidx.wear.watchface.style.UserStyleSetting
 import androidx.wear.watchface.style.WatchFaceLayer
-import com.programmersbox.forestwoodass.wearable.watchface.data.watchface.MINUTE_HAND_LENGTH_FRACTION_DEFAULT
-import com.programmersbox.forestwoodass.wearable.watchface.data.watchface.MINUTE_HAND_LENGTH_FRACTION_MAXIMUM
-import com.programmersbox.forestwoodass.wearable.watchface.data.watchface.MINUTE_HAND_LENGTH_FRACTION_MINIMUM
+import com.programmersbox.forestwoodass.wearable.watchface.data.watchface.SHIFT_PIXEL_AOD_FRACTION_DEFAULT
+import com.programmersbox.forestwoodass.wearable.watchface.data.watchface.SHIFT_PIXEL_AOD_FRACTION_MAXIMUM
+import com.programmersbox.forestwoodass.wearable.watchface.data.watchface.SHIFT_PIXEL_AOD_FRACTION_MINIMUM
 import com.programmersbox.forestwoodass.wearable.watchface.utils.*
 import com.programmersbox.forestwoodass.wearable.watchface.utils.LEFT_COMPLICATION_ID
 import com.programmersbox.forestwoodass.wearable.watchface.utils.RIGHT_COMPLICATION_ID
@@ -320,13 +320,13 @@ class WatchFaceConfigStateHolder(
         private const val MULTIPLE_FOR_SLIDER: Float = 1000f
 
         const val MINUTE_HAND_LENGTH_MINIMUM_FOR_SLIDER =
-            MINUTE_HAND_LENGTH_FRACTION_MINIMUM * MULTIPLE_FOR_SLIDER
+            SHIFT_PIXEL_AOD_FRACTION_MINIMUM * MULTIPLE_FOR_SLIDER
 
         const val MINUTE_HAND_LENGTH_MAXIMUM_FOR_SLIDER =
-            MINUTE_HAND_LENGTH_FRACTION_MAXIMUM * MULTIPLE_FOR_SLIDER
+            SHIFT_PIXEL_AOD_FRACTION_MAXIMUM * MULTIPLE_FOR_SLIDER
 
         const val MINUTE_HAND_LENGTH_DEFAULT_FOR_SLIDER =
-            MINUTE_HAND_LENGTH_FRACTION_DEFAULT * MULTIPLE_FOR_SLIDER
+            SHIFT_PIXEL_AOD_FRACTION_DEFAULT * MULTIPLE_FOR_SLIDER
 
         private fun multiplyByMultipleForSlider(lengthFraction: Double) =
             lengthFraction * MULTIPLE_FOR_SLIDER

@@ -313,7 +313,6 @@ class AnalogWatchCanvasRenderer(
             canvas.translate(cx, cy)
         }
 
-        Log.d(TAG, "Rendering now")
         canvas.drawColor(backgroundColor)
         val LAYOUT_ALT_CLOCK_SHIFT = 0.30f
 

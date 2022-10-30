@@ -140,7 +140,7 @@ enum class ColorStyleIdAndResourceIds(
                 GREEN.id -> GREEN
                 BLUE.id -> BLUE
                 WHITE.id -> WHITE
-                else -> WHITE
+                else -> BLUE
             }
         }
 

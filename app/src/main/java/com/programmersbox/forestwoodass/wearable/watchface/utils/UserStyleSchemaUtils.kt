@@ -77,7 +77,7 @@ fun createUserStyleSchema(context: Context): UserStyleSchema {
         R.string.watchface_pips_setting_description,
         null,
         listOf(WatchFaceLayer.BASE),
-        DRAW_HOUR_PIPS_DEFAULT
+        DRAW_TIME_AOD
     )
     val compaodStyleSetting = UserStyleSetting.BooleanUserStyleSetting(
         UserStyleSetting.Id(COMPAOD_STYLE_SETTING),
@@ -95,10 +95,10 @@ fun createUserStyleSchema(context: Context): UserStyleSchema {
         R.string.watchface_hand_length_setting,
         R.string.watchface_hand_length_setting_description,
         null,
-        MINUTE_HAND_LENGTH_FRACTION_MINIMUM.toDouble(),
-        MINUTE_HAND_LENGTH_FRACTION_MAXIMUM.toDouble(),
+        SHIFT_PIXEL_AOD_FRACTION_MINIMUM.toDouble(),
+        SHIFT_PIXEL_AOD_FRACTION_MAXIMUM.toDouble(),
         listOf(WatchFaceLayer.COMPLICATIONS_OVERLAY),
-        MINUTE_HAND_LENGTH_FRACTION_DEFAULT.toDouble()
+        SHIFT_PIXEL_AOD_FRACTION_DEFAULT.toDouble()
     )
 
     // 4. Create style settings to hold all options.

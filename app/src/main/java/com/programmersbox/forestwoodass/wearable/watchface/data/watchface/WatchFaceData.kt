@@ -17,7 +17,7 @@ package com.programmersbox.forestwoodass.wearable.watchface.data.watchface
 
 // Defaults for the watch face. All private values aren't editable by the user, so they don't need
 // to be exposed as settings defaults.
-const val DRAW_HOUR_PIPS_DEFAULT = true
+const val DRAW_TIME_AOD = true
 const val COMPAOD_DEFAULT = true
 
 private const val HOUR_HAND_LENGTH_FRACTION = 0.21028f
@@ -26,9 +26,9 @@ private const val HOUR_HAND_WIDTH_FRACTION = 0.02336f
 // Because the minute length is something the user can edit, we make it publicly
 // accessible as a default. We also specify the minimum and maximum values for the user
 // settings as well.
-const val MINUTE_HAND_LENGTH_FRACTION_DEFAULT = 5.0f
-const val MINUTE_HAND_LENGTH_FRACTION_MINIMUM = 0.0f
-const val MINUTE_HAND_LENGTH_FRACTION_MAXIMUM = 16.00000f
+const val SHIFT_PIXEL_AOD_FRACTION_DEFAULT = 5.0f
+const val SHIFT_PIXEL_AOD_FRACTION_MINIMUM = 0.0f
+const val SHIFT_PIXEL_AOD_FRACTION_MAXIMUM = 16.00000f
 private const val MINUTE_HAND_WIDTH_FRACTION = 0.0163f
 
 private const val SECOND_HAND_LENGTH_FRACTION = 0.37383f
@@ -55,9 +55,9 @@ data class WatchFaceData(
     val activeColorStyle: ColorStyleIdAndResourceIds = ColorStyleIdAndResourceIds.BLUE,
     val ambientColorStyle: ColorStyleIdAndResourceIds = ColorStyleIdAndResourceIds.AMBIENT,
     val layoutStyle: LayoutStyleIdAndResourceIds = LayoutStyleIdAndResourceIds.FULLFACE,
-    val drawHourPips: Boolean = DRAW_HOUR_PIPS_DEFAULT,
+    val drawHourPips: Boolean = DRAW_TIME_AOD,
     val compAOD: Boolean = COMPAOD_DEFAULT,
-    val lengthFraction: Float = MINUTE_HAND_LENGTH_FRACTION_DEFAULT,
+    val lengthFraction: Float = SHIFT_PIXEL_AOD_FRACTION_DEFAULT,
 
     val centerCircleDiameterFraction: Float = CENTER_CIRCLE_DIAMETER_FRACTION,
     val numberRadiusFraction: Float = NUMBER_RADIUS_FRACTION,
