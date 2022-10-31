@@ -122,7 +122,7 @@ class AnalogWatchCanvasRenderer(
     private val hourTextPaint = Paint().apply {
         isAntiAlias = true
         textSize = context.resources.getDimensionPixelSize(R.dimen.hour_text_size).toFloat()
-        typeface = context.resources.getFont(R.font.rubik_medium)
+        typeface = context.resources.getFont(R.font.rubik_regular)
 
     }
     private val hourTextAmbientPaint = Paint().apply {
@@ -140,7 +140,7 @@ class AnalogWatchCanvasRenderer(
     private val minuteTextPaint = Paint().apply {
         isAntiAlias = true
         textSize = context.resources.getDimensionPixelSize(R.dimen.minute_text_size).toFloat()
-        typeface = context.resources.getFont(R.font.rubik_medium)
+        typeface = context.resources.getFont(R.font.rubik_regular)
     }
     private val minuteHightlightPaint = Paint().apply {
         isAntiAlias = true
@@ -442,27 +442,28 @@ class AnalogWatchCanvasRenderer(
             } else {
                 hourOfDay % 12
             }
-            var tx = "%02d".format(formattedTime)
+            var txHour = "%02d".format(formattedTime)
             val biggestText = "88"
-            var paintToUse = if (drawAmbient) {
+            var hourPaintToUse = if (drawAmbient) {
                 hourTextAmbientPaint
             } else {
                 hourTextPaint
             }
             hourTextPaint.getTextBounds(biggestText, 0, biggestText.length, textBounds)
-            hourTextPaint.getTextBounds(tx, 0, tx.length, realTextBounds)
-
-            canvas.drawText(
-                tx,
-                bounds.exactCenterX() - realTextBounds.width().toFloat() * 0.6f,
-                bounds.exactCenterY() + textBounds.height().toFloat() * 0.5f,
-                paintToUse
-            )
+            hourTextPaint.getTextBounds(txHour, 0, txHour.length, realTextBounds)
+            val cxHour = bounds.exactCenterX() - realTextBounds.width().toFloat() * 0.6f
+            val cyHour = bounds.exactCenterY() + textBounds.height().toFloat() * 0.5f
+//            canvas.drawText(
+//                tx,
+//                bounds.exactCenterX() - realTextBounds.width().toFloat() * 0.6f,
+//                bounds.exactCenterY() + textBounds.height().toFloat() * 0.5f,
+//                hourPaintToUse
+//            )
 
             val hourOffset = textBounds.width()
 
-            tx = "%02d".format(minuteOfDay)
-            paintToUse = if (drawAmbient) {
+            var tx = "%02d".format(minuteOfDay)
+            var paintToUse = if (drawAmbient) {
                 minuteTextAmbientPaint
             } else {
                 minuteTextPaint
@@ -486,16 +487,23 @@ class AnalogWatchCanvasRenderer(
 
             minuteHightlightPaint.style = Paint.Style.FILL
             minuteHightlightPaint.color = watchFaceColors.activeBackgroundColor
-            if (drawAmbient) {
-                canvas.drawCircle(
-                    cx + textBounds.height().toFloat(),
-                    cy + sizeRadius / 2,
-                    sizeRadius / 2,
-                    minuteHightlightPaint
-                )
-            } else {
-                // XXX - The rounded mask
-            }
+
+
+            // Draw the underside of the hightlight
+            canvas.drawArc(bounds.width().toFloat()*0.15f, bounds.height().toFloat()*0.15f,
+                bounds.width().toFloat()*0.85f, bounds.height().toFloat()*0.85f,
+                -17f, 34f, true, minuteHightlightPaint)
+            canvas.drawRect(bounds.width().toFloat()*0.70f, bounds.height().toFloat()*0.39f,
+                bounds.width().toFloat()*0.82f, bounds.height().toFloat()*0.61f,
+                minuteHightlightPaint )
+
+
+            canvas.drawText(
+                txHour,
+                cxHour,
+                cyHour,
+                hourPaintToUse
+            )
 
             canvas.drawText(
                 tx,
