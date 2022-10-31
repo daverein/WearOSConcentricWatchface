@@ -603,7 +603,7 @@ class AnalogWatchCanvasRenderer(
                     -cos(rotation * 1.0f).toFloat() * (numberRadiusFraction - 0.01f) * bounds.height()
                         .toFloat()
                 val tx = "%02d".format(((60 - i) % 60))
-                textPaint.getTextBounds(tx, 0, tx.length, textBounds)
+                secondDialTextPaint.getTextBounds(tx, 0, tx.length, textBounds)
 
                 val stx = sin(rotation * 1.0f).toFloat() * (numberRadiusFraction) * (bounds.width()
                     .toFloat() + 30f)
@@ -705,7 +705,7 @@ class AnalogWatchCanvasRenderer(
                     -cos(rotation * 1.0f).toFloat() * (numberRadiusFraction - 0.15f) * bounds.width()
                         .toFloat()
                 val tx = "%02d".format(i % 60)
-                textPaint.getTextBounds(tx, 0, tx.length, textBounds)
+                minuteDialTextPaint.getTextBounds(tx, 0, tx.length, textBounds)
 
                 val stx =
                     sin(rotation * 1.0f).toFloat() * (numberRadiusFraction - 0.095f) * bounds.width()

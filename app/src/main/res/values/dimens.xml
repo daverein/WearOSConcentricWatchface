@@ -20,7 +20,7 @@
     <dimen name="hour_text_size">56sp</dimen>
     <dimen name="minute_text_size">33sp</dimen>
     <dimen name="minute_dial_text_size">13sp</dimen>
-    <dimen name="second_dial_text_size">12sp</dimen>
+    <dimen name="second_dial_text_size">13sp</dimen>
     <dimen name="clock_hand_stroke_width">2dp</dimen>
     <dimen name="calendar_month_font_size">8sp</dimen>
     <dimen name="calendar_day_font_size">10sp</dimen>
