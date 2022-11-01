@@ -408,8 +408,10 @@ class AnalogWatchCanvasRenderer(
                 val rec =
                     complication.complicationSlotBounds.perComplicationTypeBounds[ComplicationType.RANGED_VALUE]!!
 
-                val circleShadowOffset = if (rec.bottom < 0.5f) {
+                val circleShadowOffset = if (rec.bottom < 0.5f ) {
                     0.59f
+                } else if ( complication.id == MIDDLE_COMPLICATION_ID ) {
+                    0.50f
                 } else {
                     0.32f
                 }

@@ -42,20 +42,20 @@ import kotlinx.coroutines.launch
 // Creates bounds for the locations of both right and left complications. (This is the
 // location from 0.0 - 1.0.)
 // Both left and right complications use the same top and bottom bounds.
-private const val LEFT_COMPLICATIONS_TOP_BOUND = 0.02f
-private const val LEFT_COMPLICATIONS_BOTTOM_BOUND = 0.35f
+private const val LEFT_COMPLICATIONS_TOP_BOUND = 0.025f
+private const val LEFT_COMPLICATIONS_BOTTOM_BOUND = 0.325f
 const val LEFT_COMPLICATION_LEFT_BOUND = 0.32f
 const val LEFT_COMPLICATION_RIGHT_BOUND = 0.68f
 
-private const val RIGHT_COMPLICATIONS_TOP_BOUND = 0.64f
-private const val RIGHT_COMPLICATIONS_BOTTOM_BOUND = 0.99f
+private const val RIGHT_COMPLICATIONS_TOP_BOUND = 0.68f
+private const val RIGHT_COMPLICATIONS_BOTTOM_BOUND = 0.98f
 const val RIGHT_COMPLICATION_LEFT_BOUND = 0.32f
 const val RIGHT_COMPLICATION_RIGHT_BOUND = 0.68f
 
 private const val MIDDLE_COMPLICATIONS_TOP_BOUND = 0.35f
 private const val MIDDLE_COMPLICATIONS_BOTTOM_BOUND = 0.65f
-const val MIDDLE_COMPLICATION_LEFT_BOUND = 0.45f
-const val MIDDLE_COMPLICATION_RIGHT_BOUND = 0.75f
+const val MIDDLE_COMPLICATION_LEFT_BOUND = 0.47f
+const val MIDDLE_COMPLICATION_RIGHT_BOUND = 0.82f
 
 
 private const val DEFAULT_COMPLICATION_STYLE_DRAWABLE_ID = R.drawable.complication_blue_style
