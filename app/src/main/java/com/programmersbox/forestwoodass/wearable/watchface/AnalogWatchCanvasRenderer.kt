@@ -89,11 +89,6 @@ class AnalogWatchCanvasRenderer(
     )
 
     // Initializes paint object for painting the clock hands with default values.
-    private val clockHandPaint = Paint().apply {
-        isAntiAlias = true
-        strokeWidth =
-            context.resources.getDimensionPixelSize(R.dimen.clock_hand_stroke_width).toFloat()
-    }
     private val translucentPaint = Paint().apply {
         isAntiAlias = true
         color = context.resources.getColor(R.color.black_50)
@@ -317,8 +312,6 @@ class AnalogWatchCanvasRenderer(
         if (watchFaceData.layoutStyle.id == LayoutStyleIdAndResourceIds.HALFFACE.id) {
             canvas.translate(-bounds.width() * LAYOUT_ALT_CLOCK_SHIFT, 0f)
         }
-        // if (renderParameters.drawMode == DrawMode.INTERACTIVE &&
-        //     renderParameters.watchFaceLayers.contains(WatchFaceLayer.BASE)
 
         if (renderParameters.watchFaceLayers.contains(WatchFaceLayer.BASE)
         ) {
@@ -451,12 +444,6 @@ class AnalogWatchCanvasRenderer(
         ) {
             val drawAmbient = renderParameters.drawMode == DrawMode.AMBIENT
 
-            clockHandPaint.style = if (drawAmbient) Paint.Style.STROKE else Paint.Style.FILL
-            clockHandPaint.color = if (drawAmbient) {
-                watchFaceColors.ambientSecondaryColor
-            } else {
-                watchFaceColors.activePrimaryColor
-            }
             hourTextPaint.color = if (drawAmbient) {
                 watchFaceColors.ambientPrimaryTextColor
             } else {
@@ -501,13 +488,6 @@ class AnalogWatchCanvasRenderer(
             hourTextPaint.getTextBounds(txHour, 0, txHour.length, realTextBounds)
             val cxHour = bounds.exactCenterX() - realTextBounds.width().toFloat() * 0.63f
             val cyHour = bounds.exactCenterY() + textBounds.height().toFloat() * 0.5f
-//            canvas.drawText(
-//                tx,
-//                bounds.exactCenterX() - realTextBounds.width().toFloat() * 0.6f,
-//                bounds.exactCenterY() + textBounds.height().toFloat() * 0.5f,
-//                hourPaintToUse
-//            )
-
             val hourOffset = textBounds.width()
 
             val tx = "%02d".format(minuteOfDay)
@@ -566,7 +546,11 @@ class AnalogWatchCanvasRenderer(
 
             minuteHightlightPaint.style = Paint.Style.STROKE
             minuteHightlightPaint.strokeWidth = 3.0f
-            minuteHightlightPaint.color = clockHandPaint.color
+            minuteHightlightPaint.color = if (drawAmbient) {
+                watchFaceColors.ambientSecondaryColor
+            } else {
+                watchFaceColors.activePrimaryColor
+            }
 
             canvas.drawRoundRect(
                 cx, cy,
