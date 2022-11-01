@@ -101,13 +101,13 @@
 
 
         <com.google.android.material.switchmaterial.SwitchMaterial
-            android:id="@+id/ticks_enabled_switch"
+            android:id="@+id/timeaod_enabled_switch"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:drawableStart="@drawable/watch_ticks"
             android:drawablePadding="@dimen/activity_config_ticks_enabled_switch_icon_padding"
             android:gravity="start|center_vertical"
-            android:onClick="onClickTicksEnabledSwitch"
+            android:onClick="onClickTimeAODEnabledSwitch"
             android:text="@string/activity_config_ticks_enabled_label"
             android:textColor="@color/white"
             android:textAppearance="?attr/textAppearanceButton"
@@ -123,7 +123,7 @@
             android:layout_height="@dimen/activity_config_spacer_height_pre_slider"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/ticks_enabled_switch" />
+            app:layout_constraintTop_toBottomOf="@+id/timeaod_enabled_switch" />
 
         <TextView
             android:id="@+id/slider_label"
@@ -139,7 +139,7 @@
             app:layout_constraintTop_toBottomOf="@+id/pre_slider_spacer" />
 
         <com.google.android.material.slider.Slider
-            android:id="@+id/minute_hand_length_slider"
+            android:id="@+id/shift_pixel_amount_slider"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:contentDescription="@string/activity_config_minute_hand_length_slider_content_description"
@@ -155,7 +155,7 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="1.0"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/minute_hand_length_slider" />
+            app:layout_constraintTop_toBottomOf="@+id/shift_pixel_amount_slider" />
 
         <com.google.android.material.switchmaterial.SwitchMaterial
             android:id="@+id/compaod_enabled_switch"

@@ -219,7 +219,7 @@ class AnalogWatchCanvasRenderer(
                         UserStyleSetting.BooleanUserStyleSetting.BooleanOption
 
                     newWatchFaceData = newWatchFaceData.copy(
-                        drawHourPips = booleanValue.value
+                        timeAOD = booleanValue.value
                     )
                 }
                 COMPAOD_STYLE_SETTING -> {
@@ -240,7 +240,7 @@ class AnalogWatchCanvasRenderer(
                     armLengthChangedRecalculateClockHands = true
 
                     newWatchFaceData = newWatchFaceData.copy(
-                        lengthFraction = doubleValue.value.toFloat()
+                        shiftPixelAmount = doubleValue.value.toFloat()
                     )
                 }
             }
@@ -305,10 +305,10 @@ class AnalogWatchCanvasRenderer(
         }
 
         if (renderParameters.drawMode == DrawMode.AMBIENT &&
-            watchFaceData.lengthFraction >= 1.0f
+            watchFaceData.shiftPixelAmount >= 1.0f
         ) {
-            val cx = sin((zonedDateTime.minute % 60f) * 6f) * watchFaceData.lengthFraction
-            val cy = -cos((zonedDateTime.minute % 60f) * 6f) * watchFaceData.lengthFraction
+            val cx = sin((zonedDateTime.minute % 60f) * 6f) * watchFaceData.shiftPixelAmount
+            val cy = -cos((zonedDateTime.minute % 60f) * 6f) * watchFaceData.shiftPixelAmount
             canvas.translate(cx, cy)
         }
 
@@ -326,25 +326,23 @@ class AnalogWatchCanvasRenderer(
                 canvas,
                 bounds,
                 watchFaceData.numberRadiusFraction,
-                watchFaceData.numberStyleOuterCircleRadiusFraction,
                 watchFaceColors.activePrimaryColor,
                 watchFaceColors.activeOuterElementColor,
                 zonedDateTime
             )
         }
         if (renderParameters.watchFaceLayers.contains(WatchFaceLayer.COMPLICATIONS_OVERLAY) &&
-            (renderParameters.drawMode != DrawMode.AMBIENT || watchFaceData.drawHourPips)
+            (renderParameters.drawMode != DrawMode.AMBIENT || watchFaceData.timeAOD)
         ) {
             drawMinutesDial(
                 canvas,
                 bounds,
                 watchFaceData.numberRadiusFraction,
-                watchFaceData.numberStyleOuterCircleRadiusFraction,
                 if (renderParameters.drawMode != DrawMode.AMBIENT) watchFaceColors.activePrimaryColor else watchFaceColors.ambientPrimaryColor,
                 if (renderParameters.drawMode != DrawMode.AMBIENT) watchFaceColors.activeOuterElementColor else watchFaceColors.ambientOuterElementColor,
                 zonedDateTime
             )
-            if (renderParameters.drawMode != DrawMode.AMBIENT || watchFaceData.drawHourPips) {
+            if (renderParameters.drawMode != DrawMode.AMBIENT || watchFaceData.timeAOD) {
                 drawDigitalTime(canvas, bounds, zonedDateTime)
             }
         }
@@ -623,7 +621,6 @@ class AnalogWatchCanvasRenderer(
         canvas: Canvas,
         bounds: Rect,
         numberRadiusFraction: Float,
-        outerCircleStokeWidthFraction: Float,
         primaryColor: Int,
         outerElementColor: Int,
         zonedDateTime: ZonedDateTime
@@ -632,7 +629,6 @@ class AnalogWatchCanvasRenderer(
 
         if (drawAmbient)
             return
-        outerElementPaint.strokeWidth = outerCircleStokeWidthFraction * bounds.width()
         outerElementPaint.color = outerElementColor
         minuteDialTextPaint.color = outerElementColor
         secondDialTextPaint.color = primaryColor
@@ -710,9 +706,6 @@ class AnalogWatchCanvasRenderer(
             }
         }
 
-        // Draw seconds ticks
-        outerElementPaint.strokeWidth = outerCircleStokeWidthFraction * bounds.width()
-        outerElementPaint.color = outerElementColor
         canvas.save()
     }
 
@@ -721,12 +714,10 @@ class AnalogWatchCanvasRenderer(
         canvas: Canvas,
         bounds: Rect,
         numberRadiusFraction: Float,
-        outerCircleStokeWidthFraction: Float,
         primaryColor: Int,
         outerElementColor: Int,
         zonedDateTime: ZonedDateTime
     ) {
-        outerElementPaint.strokeWidth = outerCircleStokeWidthFraction * bounds.width()
         outerElementPaint.color = outerElementColor
         minuteDialTextPaint.color = outerElementColor
         secondDialTextPaint.color = primaryColor

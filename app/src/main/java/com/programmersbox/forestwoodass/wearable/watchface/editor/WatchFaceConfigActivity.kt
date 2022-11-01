@@ -23,14 +23,13 @@ import androidx.lifecycle.lifecycleScope
 import com.programmersbox.forestwoodass.wearable.watchface.data.watchface.ColorStyleIdAndResourceIds
 import com.programmersbox.forestwoodass.wearable.watchface.data.watchface.LayoutStyleIdAndResourceIds
 import com.programmersbox.forestwoodass.wearable.watchface.databinding.ActivityWatchFaceConfigBinding
-import com.programmersbox.forestwoodass.wearable.watchface.editor.WatchFaceConfigStateHolder.Companion.MINUTE_HAND_LENGTH_DEFAULT_FOR_SLIDER
-import com.programmersbox.forestwoodass.wearable.watchface.editor.WatchFaceConfigStateHolder.Companion.MINUTE_HAND_LENGTH_MAXIMUM_FOR_SLIDER
-import com.programmersbox.forestwoodass.wearable.watchface.editor.WatchFaceConfigStateHolder.Companion.MINUTE_HAND_LENGTH_MINIMUM_FOR_SLIDER
+import com.programmersbox.forestwoodass.wearable.watchface.editor.WatchFaceConfigStateHolder.Companion.SHIFT_PIXEL_AOD_DEFAULT_FOR_SLIDER
+import com.programmersbox.forestwoodass.wearable.watchface.editor.WatchFaceConfigStateHolder.Companion.SHIFT_PIXEL_AOD_MAXIMUM_FOR_SLIDER
+import com.programmersbox.forestwoodass.wearable.watchface.editor.WatchFaceConfigStateHolder.Companion.SHIFT_PIXEL_AOD_MINIMUM_FOR_SLIDER
 import com.programmersbox.forestwoodass.wearable.watchface.utils.LEFT_COMPLICATION_ID
 import com.programmersbox.forestwoodass.wearable.watchface.utils.MIDDLE_COMPLICATION_ID
 import com.programmersbox.forestwoodass.wearable.watchface.utils.RIGHT_COMPLICATION_ID
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 
 /**
@@ -57,18 +56,18 @@ class WatchFaceConfigActivity : ComponentActivity() {
 
         // Disable widgets until data loads and values are set.
         binding.colorStylePickerButton.isEnabled = false
-        binding.ticksEnabledSwitch.isEnabled = false
-        binding.minuteHandLengthSlider.isEnabled = false
+        binding.timeaodEnabledSwitch.isEnabled = false
+        binding.shiftPixelAmountSlider.isEnabled = false
         binding.compaodEnabledSwitch.isEnabled = false
 
         // Set max and min.
-        binding.minuteHandLengthSlider.valueTo = MINUTE_HAND_LENGTH_MAXIMUM_FOR_SLIDER
-        binding.minuteHandLengthSlider.valueFrom = MINUTE_HAND_LENGTH_MINIMUM_FOR_SLIDER
-        binding.minuteHandLengthSlider.value = MINUTE_HAND_LENGTH_DEFAULT_FOR_SLIDER
+        binding.shiftPixelAmountSlider.valueTo = SHIFT_PIXEL_AOD_MAXIMUM_FOR_SLIDER
+        binding.shiftPixelAmountSlider.valueFrom = SHIFT_PIXEL_AOD_MINIMUM_FOR_SLIDER
+        binding.shiftPixelAmountSlider.value = SHIFT_PIXEL_AOD_DEFAULT_FOR_SLIDER
 
-        binding.minuteHandLengthSlider.addOnChangeListener { slider, value, fromUser ->
+        binding.shiftPixelAmountSlider.addOnChangeListener { slider, value, fromUser ->
             Log.d(TAG, "addOnChangeListener(): $slider, $value, $fromUser")
-            stateHolder.setMinuteHandArmLength(value)
+            stateHolder.setShiftPixelAmount(value)
         }
 
         lifecycleScope.launch(Dispatchers.Main.immediate) {
@@ -98,9 +97,9 @@ class WatchFaceConfigActivity : ComponentActivity() {
         val colorStyleId: String = userStylesAndPreview.colorStyleId
         Log.d(TAG, "\tselected color style: $colorStyleId")
 
-        binding.ticksEnabledSwitch.isChecked = userStylesAndPreview.ticksEnabled
+        binding.timeaodEnabledSwitch.isChecked = userStylesAndPreview.timeaodEnabled
         binding.compaodEnabledSwitch.isChecked = userStylesAndPreview.compaodEnabled
-        binding.minuteHandLengthSlider.value = userStylesAndPreview.minuteHandLength
+        binding.shiftPixelAmountSlider.value = userStylesAndPreview.shiftpixelamount
         binding.preview.watchFaceBackground.setImageBitmap(userStylesAndPreview.previewImage)
 
         enabledWidgets()
@@ -108,8 +107,8 @@ class WatchFaceConfigActivity : ComponentActivity() {
 
     private fun enabledWidgets() {
         binding.colorStylePickerButton.isEnabled = true
-        binding.ticksEnabledSwitch.isEnabled = true
-        binding.minuteHandLengthSlider.isEnabled = true
+        binding.timeaodEnabledSwitch.isEnabled = true
+        binding.shiftPixelAmountSlider.isEnabled = true
         binding.compaodEnabledSwitch.isEnabled = true
     }
 
@@ -149,9 +148,9 @@ class WatchFaceConfigActivity : ComponentActivity() {
         stateHolder.setComplication(RIGHT_COMPLICATION_ID)
     }
 
-    fun onClickTicksEnabledSwitch(view: View) {
-        Log.d(TAG, "onClickTicksEnabledSwitch() $view")
-        stateHolder.setDrawPips(binding.ticksEnabledSwitch.isChecked)
+    fun onClickTimeAODEnabledSwitch(view: View) {
+        Log.d(TAG, "onClickTimeAODEnabledSwitch() $view")
+        stateHolder.setTimeAOD(binding.timeaodEnabledSwitch.isChecked)
     }
     fun onClickCompAODEnabledSwitch(view: View) {
         Log.d(TAG, "onClickTicksEnabledSwitch() $view")

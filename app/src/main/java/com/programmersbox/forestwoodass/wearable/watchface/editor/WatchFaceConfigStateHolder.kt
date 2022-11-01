@@ -71,9 +71,9 @@ class WatchFaceConfigStateHolder(
     // Keys from Watch Face Data Structure
     private lateinit var colorStyleKey: UserStyleSetting.ListUserStyleSetting
     private lateinit var layoutStyleKey: UserStyleSetting.ListUserStyleSetting
-    private lateinit var drawPipsKey: UserStyleSetting.BooleanUserStyleSetting
+    private lateinit var timeaodKey: UserStyleSetting.BooleanUserStyleSetting
     private lateinit var compaodKey: UserStyleSetting.BooleanUserStyleSetting
-    private lateinit var minuteHandLengthKey: UserStyleSetting.DoubleRangeUserStyleSetting
+    private lateinit var shiftpixelamountKey: UserStyleSetting.DoubleRangeUserStyleSetting
 
     val uiState: StateFlow<EditWatchFaceUiState> =
         flow<EditWatchFaceUiState> {
@@ -114,14 +114,14 @@ class WatchFaceConfigStateHolder(
                 }
 
                 DRAW_TIME_AOD_STYLE_SETTING -> {
-                    drawPipsKey = setting as UserStyleSetting.BooleanUserStyleSetting
+                    timeaodKey = setting as UserStyleSetting.BooleanUserStyleSetting
                 }
                 COMPAOD_STYLE_SETTING -> {
                     compaodKey = setting as UserStyleSetting.BooleanUserStyleSetting
                 }
 
                 SHIFT_PIXEL_STYLE_SETTING -> {
-                    minuteHandLengthKey = setting as UserStyleSetting.DoubleRangeUserStyleSetting
+                    shiftpixelamountKey = setting as UserStyleSetting.DoubleRangeUserStyleSetting
                 }
                 // TODO (codingjeremy): Add complication change support if settings activity
                 // PR doesn't cover it. Otherwise, remove comment.
@@ -156,22 +156,22 @@ class WatchFaceConfigStateHolder(
             userStyle[colorStyleKey] as UserStyleSetting.ListUserStyleSetting.ListOption
         val layoutStyle =
             userStyle[layoutStyleKey] as UserStyleSetting.ListUserStyleSetting.ListOption
-        val ticksEnabledStyle =
-            userStyle[drawPipsKey] as UserStyleSetting.BooleanUserStyleSetting.BooleanOption
+        val timeaodEnabledStyle =
+            userStyle[timeaodKey] as UserStyleSetting.BooleanUserStyleSetting.BooleanOption
         val compaodEnabledStyle =
             userStyle[compaodKey] as UserStyleSetting.BooleanUserStyleSetting.BooleanOption
-        val minuteHandStyle =
-            userStyle[minuteHandLengthKey]
+        val shiftpixelamountStyle =
+            userStyle[shiftpixelamountKey]
                 as UserStyleSetting.DoubleRangeUserStyleSetting.DoubleRangeOption
 
-        Log.d(TAG, "/new values: $colorStyle, $ticksEnabledStyle, $minuteHandStyle")
+        Log.d(TAG, "/new values: $colorStyle, $timeaodEnabledStyle, $shiftpixelamountStyle")
 
         return UserStylesAndPreview(
             colorStyleId = colorStyle.id.toString(),
             layoutStyleId = layoutStyle.id.toString(),
-            ticksEnabled = ticksEnabledStyle.value,
+            timeaodEnabled = timeaodEnabledStyle.value,
             compaodEnabled = compaodEnabledStyle.value,
-            minuteHandLength = multiplyByMultipleForSlider(minuteHandStyle.value).toFloat(),
+            shiftpixelamount = multiplyByMultipleForSlider(shiftpixelamountStyle.value).toFloat(),
             previewImage = bitmap
         )
     }
@@ -240,9 +240,9 @@ class WatchFaceConfigStateHolder(
         }
     }
 
-    fun setDrawPips(enabled: Boolean) {
+    fun setTimeAOD(enabled: Boolean) {
         setUserStyleOption(
-            drawPipsKey,
+            timeaodKey,
             UserStyleSetting.BooleanUserStyleSetting.BooleanOption.from(enabled)
         )
     }
@@ -252,12 +252,12 @@ class WatchFaceConfigStateHolder(
             UserStyleSetting.BooleanUserStyleSetting.BooleanOption.from(enabled)
         )
     }
-    fun setMinuteHandArmLength(newLengthRatio: Float) {
-        val newMinuteHandLengthRatio = newLengthRatio.toDouble() / MULTIPLE_FOR_SLIDER
+    fun setShiftPixelAmount(newShiftPixel: Float) {
+        val newShiftPixelRatio = newShiftPixel.toDouble() / MULTIPLE_FOR_SLIDER
 
         setUserStyleOption(
-            minuteHandLengthKey,
-            UserStyleSetting.DoubleRangeUserStyleSetting.DoubleRangeOption(newMinuteHandLengthRatio)
+            shiftpixelamountKey,
+            UserStyleSetting.DoubleRangeUserStyleSetting.DoubleRangeOption(newShiftPixelRatio)
         )
     }
 
@@ -268,9 +268,6 @@ class WatchFaceConfigStateHolder(
         userStyleSetting: UserStyleSetting,
         userStyleOption: UserStyleSetting.Option
     ) {
-        Log.d(TAG, "setUserStyleOption()")
-        Log.d(TAG, "\tuserStyleSetting: $userStyleSetting")
-        Log.d(TAG, "\tuserStyleOption: $userStyleOption")
 
         // TODO: As of watchface 1.0.0-beta01 We can't use MutableStateFlow.compareAndSet, or
         //       anything that calls through to that (like MutableStateFlow.update) because
@@ -289,9 +286,9 @@ class WatchFaceConfigStateHolder(
     data class UserStylesAndPreview(
         val colorStyleId: String,
         val layoutStyleId: String,
-        val ticksEnabled: Boolean,
+        val timeaodEnabled: Boolean,
         val compaodEnabled: Boolean,
-        val minuteHandLength: Float,
+        val shiftpixelamount: Float,
         val previewImage: Bitmap
     )
 
@@ -302,16 +299,16 @@ class WatchFaceConfigStateHolder(
         // slider can support, we need to multiply the original value times 1,000.
         private const val MULTIPLE_FOR_SLIDER: Float = 1000f
 
-        const val MINUTE_HAND_LENGTH_MINIMUM_FOR_SLIDER =
+        const val SHIFT_PIXEL_AOD_MINIMUM_FOR_SLIDER =
             SHIFT_PIXEL_AOD_FRACTION_MINIMUM * MULTIPLE_FOR_SLIDER
 
-        const val MINUTE_HAND_LENGTH_MAXIMUM_FOR_SLIDER =
+        const val SHIFT_PIXEL_AOD_MAXIMUM_FOR_SLIDER =
             SHIFT_PIXEL_AOD_FRACTION_MAXIMUM * MULTIPLE_FOR_SLIDER
 
-        const val MINUTE_HAND_LENGTH_DEFAULT_FOR_SLIDER =
+        const val SHIFT_PIXEL_AOD_DEFAULT_FOR_SLIDER =
             SHIFT_PIXEL_AOD_FRACTION_DEFAULT * MULTIPLE_FOR_SLIDER
 
-        private fun multiplyByMultipleForSlider(lengthFraction: Double) =
-            lengthFraction * MULTIPLE_FOR_SLIDER
+        private fun multiplyByMultipleForSlider(amountFraction: Double) =
+            amountFraction * MULTIPLE_FOR_SLIDER
     }
 }

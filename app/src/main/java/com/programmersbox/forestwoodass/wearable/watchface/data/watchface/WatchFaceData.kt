@@ -29,22 +29,6 @@ private const val HOUR_HAND_WIDTH_FRACTION = 0.02336f
 const val SHIFT_PIXEL_AOD_FRACTION_DEFAULT = 5.0f
 const val SHIFT_PIXEL_AOD_FRACTION_MINIMUM = 0.0f
 const val SHIFT_PIXEL_AOD_FRACTION_MAXIMUM = 16.00000f
-private const val MINUTE_HAND_WIDTH_FRACTION = 0.0163f
-
-private const val SECOND_HAND_LENGTH_FRACTION = 0.37383f
-private const val SECOND_HAND_WIDTH_FRACTION = 0.00934f
-
-// Used for corner roundness of the arms.
-private const val ROUNDED_RECTANGLE_CORNERS_RADIUS = 1.5f
-private const val SQUARE_RECTANGLE_CORNERS_RADIUS = 0.0f
-
-private const val CENTER_CIRCLE_DIAMETER_FRACTION = 0.03738f
-private const val OUTER_CIRCLE_STROKE_WIDTH_FRACTION = 0.00467f
-private const val NUMBER_STYLE_OUTER_CIRCLE_RADIUS_FRACTION = 0.00584f
-
-private const val GAP_BETWEEN_OUTER_CIRCLE_AND_BORDER_FRACTION = 0.03738f
-private const val GAP_BETWEEN_HAND_AND_CENTER_FRACTION =
-    0.01869f + CENTER_CIRCLE_DIAMETER_FRACTION / 2.0f
 
 private const val NUMBER_RADIUS_FRACTION = 0.45f
 
@@ -55,15 +39,8 @@ data class WatchFaceData(
     val activeColorStyle: ColorStyleIdAndResourceIds = ColorStyleIdAndResourceIds.BLUE,
     val ambientColorStyle: ColorStyleIdAndResourceIds = ColorStyleIdAndResourceIds.AMBIENT,
     val layoutStyle: LayoutStyleIdAndResourceIds = LayoutStyleIdAndResourceIds.FULLFACE,
-    val drawHourPips: Boolean = DRAW_TIME_AOD,
+    val timeAOD: Boolean = DRAW_TIME_AOD,
     val compAOD: Boolean = COMPAOD_DEFAULT,
-    val lengthFraction: Float = SHIFT_PIXEL_AOD_FRACTION_DEFAULT,
-
-    val centerCircleDiameterFraction: Float = CENTER_CIRCLE_DIAMETER_FRACTION,
+    val shiftPixelAmount: Float = SHIFT_PIXEL_AOD_FRACTION_DEFAULT,
     val numberRadiusFraction: Float = NUMBER_RADIUS_FRACTION,
-    val outerCircleStokeWidthFraction: Float = OUTER_CIRCLE_STROKE_WIDTH_FRACTION,
-    val numberStyleOuterCircleRadiusFraction: Float = NUMBER_STYLE_OUTER_CIRCLE_RADIUS_FRACTION,
-    val gapBetweenOuterCircleAndBorderFraction: Float =
-        GAP_BETWEEN_OUTER_CIRCLE_AND_BORDER_FRACTION,
-    val gapBetweenHandAndCenterFraction: Float = GAP_BETWEEN_HAND_AND_CENTER_FRACTION
 )
