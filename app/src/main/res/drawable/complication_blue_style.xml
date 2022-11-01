@@ -35,7 +35,7 @@
     app:titleTypeface="sans-serif-black">
   <ambient
       app:borderColor="@color/transparent"
-      app:iconColor="@color/ambient_primary_text_color"
+      app:iconColor="@color/ambient_primary_color"
       app:textColor="@color/ambient_primary_text_color"
       app:titleColor="@color/ambient_secondary_color"
 
