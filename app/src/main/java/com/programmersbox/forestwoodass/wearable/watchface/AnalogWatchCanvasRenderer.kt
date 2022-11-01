@@ -16,8 +16,9 @@
 package com.programmersbox.forestwoodass.wearable.watchface
 
 import android.content.Context
-import android.graphics.*
-import androidx.wear.watchface.complications.data.ComplicationType
+import android.graphics.Canvas
+import android.graphics.Paint
+import android.graphics.Rect
 import android.util.Log
 import android.view.SurfaceHolder
 import androidx.core.graphics.withScale
@@ -25,6 +26,7 @@ import androidx.wear.watchface.ComplicationSlotsManager
 import androidx.wear.watchface.DrawMode
 import androidx.wear.watchface.Renderer
 import androidx.wear.watchface.WatchState
+import androidx.wear.watchface.complications.data.ComplicationType
 import androidx.wear.watchface.complications.rendering.CanvasComplicationDrawable
 import androidx.wear.watchface.complications.rendering.ComplicationDrawable
 import androidx.wear.watchface.style.CurrentUserStyleRepository
@@ -36,14 +38,10 @@ import com.programmersbox.forestwoodass.wearable.watchface.data.watchface.Layout
 import com.programmersbox.forestwoodass.wearable.watchface.data.watchface.WatchFaceColorPalette.Companion.convertToWatchFaceColorPalette
 import com.programmersbox.forestwoodass.wearable.watchface.data.watchface.WatchFaceData
 import com.programmersbox.forestwoodass.wearable.watchface.utils.*
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.SupervisorJob
-import kotlinx.coroutines.cancel
-import kotlinx.coroutines.launch
 import java.time.ZonedDateTime
 import kotlin.math.cos
 import kotlin.math.sin
+import kotlinx.coroutines.*
 
 // Default for how long each frame is displayed at expected frame rate.
 private const val FRAME_PERIOD_MS_DEFAULT: Long = 16L
@@ -312,8 +310,8 @@ class AnalogWatchCanvasRenderer(
         if (renderParameters.drawMode == DrawMode.AMBIENT &&
             watchFaceData.lengthFraction >= 1.0f
         ) {
-            var cx = sin((zonedDateTime.minute % 60f) * 6f) * watchFaceData.lengthFraction
-            var cy = -cos((zonedDateTime.minute % 60f) * 6f) * watchFaceData.lengthFraction
+            val cx = sin((zonedDateTime.minute % 60f) * 6f) * watchFaceData.lengthFraction
+            val cy = -cos((zonedDateTime.minute % 60f) * 6f) * watchFaceData.lengthFraction
             canvas.translate(cx, cy)
         }
 
@@ -370,38 +368,43 @@ class AnalogWatchCanvasRenderer(
     }
 
     // ----- All drawing functions -----
-    private fun drawComplications(canvas: Canvas,
-                                  bounds: Rect,
-                                  zonedDateTime: ZonedDateTime) {
+    private fun drawComplications(
+        canvas: Canvas,
+        bounds: Rect,
+        zonedDateTime: ZonedDateTime
+    ) {
         for ((_, complication) in complicationSlotsManager.complicationSlots) {
             if (complication.enabled) {
-                val offset = if ( watchFaceData.layoutStyle.id == LayoutStyleIdAndResourceIds.HALFFACE.id ) {
-                    0.25f
-                } else {
-                    0.0f
-                }
+                val offset =
+                    if (watchFaceData.layoutStyle.id == LayoutStyleIdAndResourceIds.HALFFACE.id) {
+                        0.25f
+                    } else {
+                        0.0f
+                    }
 
-                if (complication.id == RIGHT_COMPLICATION_ID  ) {
+                when (complication.id) {
+                    RIGHT_COMPLICATION_ID -> {
                         complication.complicationSlotBounds.perComplicationTypeBounds[ComplicationType.RANGED_VALUE]?.left =
                             RIGHT_COMPLICATION_LEFT_BOUND + offset
                         complication.complicationSlotBounds.perComplicationTypeBounds[ComplicationType.RANGED_VALUE]?.right =
                             RIGHT_COMPLICATION_RIGHT_BOUND + offset
-                }
-                if (complication.id == LEFT_COMPLICATION_ID  ) {
-                    complication.complicationSlotBounds.perComplicationTypeBounds[ComplicationType.RANGED_VALUE]?.left =
-                        LEFT_COMPLICATION_LEFT_BOUND + offset
-                    complication.complicationSlotBounds.perComplicationTypeBounds[ComplicationType.RANGED_VALUE]?.right =
-                        LEFT_COMPLICATION_RIGHT_BOUND + offset
-                }
-                if (complication.id == MIDDLE_COMPLICATION_ID  ) {
-                    complication.complicationSlotBounds.perComplicationTypeBounds[ComplicationType.RANGED_VALUE]?.left =
-                        MIDDLE_COMPLICATION_LEFT_BOUND + offset
-                    complication.complicationSlotBounds.perComplicationTypeBounds[ComplicationType.RANGED_VALUE]?.right =
-                        MIDDLE_COMPLICATION_RIGHT_BOUND + offset
+                    }
+                    LEFT_COMPLICATION_ID -> {
+                        complication.complicationSlotBounds.perComplicationTypeBounds[ComplicationType.RANGED_VALUE]?.left =
+                            LEFT_COMPLICATION_LEFT_BOUND + offset
+                        complication.complicationSlotBounds.perComplicationTypeBounds[ComplicationType.RANGED_VALUE]?.right =
+                            LEFT_COMPLICATION_RIGHT_BOUND + offset
+                    }
+                    MIDDLE_COMPLICATION_ID -> {
+                        complication.complicationSlotBounds.perComplicationTypeBounds[ComplicationType.RANGED_VALUE]?.left =
+                            MIDDLE_COMPLICATION_LEFT_BOUND + offset
+                        complication.complicationSlotBounds.perComplicationTypeBounds[ComplicationType.RANGED_VALUE]?.right =
+                            MIDDLE_COMPLICATION_RIGHT_BOUND + offset
+                    }
                 }
 
-                if ((complication.id == MIDDLE_COMPLICATION_ID &&
-                        watchFaceData.layoutStyle.id != LayoutStyleIdAndResourceIds.HALFFACE.id)
+                if (complication.id == MIDDLE_COMPLICATION_ID &&
+                    watchFaceData.layoutStyle.id != LayoutStyleIdAndResourceIds.HALFFACE.id
                 ) {
                     complication.complicationSlotBounds.perComplicationTypeBounds[ComplicationType.RANGED_VALUE]?.left =
                         MIDDLE_COMPLICATION_LEFT_BOUND + offset + 1.5f
@@ -411,12 +414,17 @@ class AnalogWatchCanvasRenderer(
                 }
 
                 // draw the black under circle here
-                var rec = complication.complicationSlotBounds.perComplicationTypeBounds[ComplicationType.RANGED_VALUE]!!
+                val rec =
+                    complication.complicationSlotBounds.perComplicationTypeBounds[ComplicationType.RANGED_VALUE]!!
 
-                var circleShadowOffset = if ( rec.bottom < 0.5f ) { 0.59f } else {0.32f}
-                var cx = (rec.left + ((rec.right - rec.left)/2.0f))*bounds.width().toFloat()
-                var cy = (rec.top +  (rec.bottom-rec.top)*circleShadowOffset)*bounds.height()
-                var r = ((rec.right - rec.left)*0.28f)*bounds.width().toFloat()
+                val circleShadowOffset = if (rec.bottom < 0.5f) {
+                    0.59f
+                } else {
+                    0.32f
+                }
+                val cx = (rec.left + ((rec.right - rec.left) / 2.0f)) * bounds.width().toFloat()
+                val cy = (rec.top + (rec.bottom - rec.top) * circleShadowOffset) * bounds.height()
+                val r = ((rec.right - rec.left) * 0.28f) * bounds.width().toFloat()
                 canvas.drawCircle(cx, cy, r, translucentPaint)
 
                 complication.render(canvas, zonedDateTime, renderParameters)
@@ -486,9 +494,9 @@ class AnalogWatchCanvasRenderer(
             } else {
                 hourOfDay % 12
             }
-            var txHour = "%02d".format(formattedTime)
+            val txHour = "%02d".format(formattedTime)
             val biggestText = "88"
-            var hourPaintToUse = if (drawAmbient) {
+            val hourPaintToUse = if (drawAmbient) {
                 hourTextAmbientPaint
             } else {
                 hourTextPaint
@@ -506,8 +514,8 @@ class AnalogWatchCanvasRenderer(
 
             val hourOffset = textBounds.width()
 
-            var tx = "%02d".format(minuteOfDay)
-            var paintToUse = if (drawAmbient) {
+            val tx = "%02d".format(minuteOfDay)
+            val paintToUse = if (drawAmbient) {
                 minuteTextAmbientPaint
             } else {
                 minuteTextPaint
@@ -534,12 +542,16 @@ class AnalogWatchCanvasRenderer(
 
 
             // Draw the underside of the hightlight
-            canvas.drawArc(bounds.width().toFloat()*0.15f, bounds.height().toFloat()*0.15f,
-                bounds.width().toFloat()*0.85f, bounds.height().toFloat()*0.85f,
-                -17f, 34f, true, minuteHightlightPaint)
-            canvas.drawRect(bounds.width().toFloat()*0.70f, bounds.height().toFloat()*0.39f,
-                bounds.width().toFloat()*0.82f, bounds.height().toFloat()*0.61f,
-                minuteHightlightPaint )
+            canvas.drawArc(
+                bounds.width().toFloat() * 0.15f, bounds.height().toFloat() * 0.15f,
+                bounds.width().toFloat() * 0.85f, bounds.height().toFloat() * 0.85f,
+                -17f, 34f, true, minuteHightlightPaint
+            )
+            canvas.drawRect(
+                bounds.width().toFloat() * 0.70f, bounds.height().toFloat() * 0.39f,
+                bounds.width().toFloat() * 0.82f, bounds.height().toFloat() * 0.61f,
+                minuteHightlightPaint
+            )
 
 
             canvas.drawText(
