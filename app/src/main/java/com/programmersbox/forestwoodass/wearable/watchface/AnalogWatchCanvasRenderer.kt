@@ -68,6 +68,7 @@ class AnalogWatchCanvasRenderer(
 ) {
     class AnalogSharedAssets : SharedAssets {
         override fun onDestroy() {
+            // Not sure why we are overriding this method
         }
     }
 

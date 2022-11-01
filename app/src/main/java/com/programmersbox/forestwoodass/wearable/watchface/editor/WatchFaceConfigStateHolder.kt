@@ -168,6 +168,7 @@ class WatchFaceConfigStateHolder(
 
         return UserStylesAndPreview(
             colorStyleId = colorStyle.id.toString(),
+            layoutStyleId = layoutStyle.id.toString(),
             ticksEnabled = ticksEnabledStyle.value,
             compaodEnabled = compaodEnabledStyle.value,
             minuteHandLength = multiplyByMultipleForSlider(minuteHandStyle.value).toFloat(),
@@ -231,7 +232,7 @@ class WatchFaceConfigStateHolder(
                 // to find the matching option, and if it exists, sets it as the color style.
                 for (layoutOptions in layoutUserStyleSetting.options) {
                     if (layoutOptions.id.toString() == newLayoutStyleId) {
-                        setLayoutStyleOption(layoutStyleKey, layoutOptions)
+                        setUserStyleOption(layoutStyleKey, layoutOptions)
                         return
                     }
                 }
@@ -279,25 +280,6 @@ class WatchFaceConfigStateHolder(
         editorSession.userStyle.value = mutableUserStyle.toUserStyle()
     }
 
-    // Saves User Style Option change back to the back to the EditorSession.
-    // Note: The UI widgets in the Activity that can trigger this method (through the 'set' methods)
-    // will only be enabled after the EditorSession has been initialized.
-    private fun setLayoutStyleOption(
-        userStyleSetting: UserStyleSetting,
-        userStyleOption: UserStyleSetting.Option
-    ) {
-        Log.d(TAG, "setUserStyleOption()")
-        Log.d(TAG, "\tuserStyleSetting: $userStyleSetting")
-        Log.d(TAG, "\tuserStyleOption: $userStyleOption")
-
-        // TODO: As of watchface 1.0.0-beta01 We can't use MutableStateFlow.compareAndSet, or
-        //       anything that calls through to that (like MutableStateFlow.update) because
-        //       MutableStateFlow.compareAndSet won't properly update the user style.
-        val mutableUserStyle = editorSession.userStyle.value.toMutableUserStyle()
-        mutableUserStyle[userStyleSetting] = userStyleOption
-        editorSession.userStyle.value = mutableUserStyle.toUserStyle()
-    }
-
     sealed class EditWatchFaceUiState {
         data class Success(val userStylesAndPreview: UserStylesAndPreview) : EditWatchFaceUiState()
         data class Loading(val message: String) : EditWatchFaceUiState()
@@ -306,6 +288,7 @@ class WatchFaceConfigStateHolder(
 
     data class UserStylesAndPreview(
         val colorStyleId: String,
+        val layoutStyleId: String,
         val ticksEnabled: Boolean,
         val compaodEnabled: Boolean,
         val minuteHandLength: Float,

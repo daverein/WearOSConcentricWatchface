@@ -17,7 +17,6 @@ package com.programmersbox.forestwoodass.wearable.watchface.data.watchface
 
 import android.content.Context
 import android.graphics.drawable.Icon
-import androidx.annotation.ColorRes
 import androidx.annotation.DrawableRes
 import androidx.annotation.StringRes
 import androidx.wear.watchface.style.UserStyleSetting

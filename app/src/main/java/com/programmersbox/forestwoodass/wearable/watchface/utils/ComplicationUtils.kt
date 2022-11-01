@@ -35,7 +35,6 @@ import com.programmersbox.forestwoodass.wearable.watchface.data.watchface.Layout
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.SupervisorJob
-import kotlinx.coroutines.flow.toList
 import kotlinx.coroutines.launch
 
 // Information needed for complications.
