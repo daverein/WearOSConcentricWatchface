@@ -348,13 +348,17 @@ class AnalogWatchCanvasRenderer(
                 drawDigitalTime(canvas, bounds, zonedDateTime)
             }
         }
+        if (watchFaceData.layoutStyle.id == LayoutStyleIdAndResourceIds.HALFFACE.id) {
+            canvas.translate(bounds.width() * LAYOUT_ALT_CLOCK_SHIFT, 0f)
+        }
 
-        //  canvas.translate(-bounds.width()*0.60f, 0f)
+
+        if (renderParameters.drawMode != DrawMode.AMBIENT) {
+            drawDateElement(canvas, bounds, zonedDateTime)
+        }
         // CanvasComplicationDrawable already obeys rendererParameters.
         if (renderParameters.drawMode != DrawMode.AMBIENT || watchFaceData.compAOD) {
-            if (watchFaceData.layoutStyle.id == LayoutStyleIdAndResourceIds.HALFFACE.id) {
-                canvas.translate(bounds.width() * LAYOUT_ALT_CLOCK_SHIFT, 0f)
-            }
+
             drawComplications(canvas, bounds, zonedDateTime)
         }
     }
@@ -572,9 +576,6 @@ class AnalogWatchCanvasRenderer(
                 sizeRadius, sizeRadius, minuteHightlightPaint
             )
 
-            if (!drawAmbient) {
-                drawDateElement(canvas, bounds, zonedDateTime)
-            }
         }
     }
 
