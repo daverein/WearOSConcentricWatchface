@@ -17,24 +17,30 @@
 <drawable
     class="androidx.wear.watchface.complications.rendering.ComplicationDrawable"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    app:backgroundColor="@color/black"
+    app:backgroundColor="@color/transparent"
     app:borderColor="@color/maroon_50"
     app:borderStyle="solid"
     app:borderWidth="1dp"
+    app:rangedValueProgressHidden="true"
     app:highlightColor="@color/maroon_30"
     app:iconColor="@color/maroon_light"
     app:rangedValuePrimaryColor="@color/maroon_70"
     app:rangedValueRingWidth="2dp"
     app:rangedValueSecondaryColor="@color/maroon_30"
-    app:textColor="@color/maroon_light"
-    app:textTypeface="sans-serif-condensed"
+    app:textColor="@color/white"
+    app:textSize="@dimen/complication_text_size"
+    app:textTypeface="sans-serif-black"
     app:titleColor="@color/maroon_60"
-    app:titleTypeface="sans-serif-condensed">
+    app:titleSize="@dimen/complication_title_size"
+    app:titleTypeface="sans-serif-black">
   <ambient
-      app:borderColor="@color/white_50"
-      app:iconColor="@color/white"
-      app:textColor="@color/white"
-      app:titleColor="@color/white_70"
-      app:rangedValuePrimaryColor="@color/white"
+      app:borderColor="@color/transparent"
+      app:iconColor="@color/ambient_primary_color"
+      app:textColor="@color/ambient_primary_text_color"
+      app:titleColor="@color/ambient_secondary_color"
+      app:textTypeface="sans-serif-regular"
+      app:titleTypeface="sans-serif-regular"
+
+      app:rangedValuePrimaryColor="@color/ambient_secondary_color"
       app:rangedValueSecondaryColor="@color/transparent" />
 </drawable>
