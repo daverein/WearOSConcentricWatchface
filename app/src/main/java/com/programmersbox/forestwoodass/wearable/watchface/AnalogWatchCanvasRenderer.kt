@@ -17,6 +17,7 @@ package com.programmersbox.forestwoodass.wearable.watchface
 
 import android.content.Context
 import android.graphics.*
+import androidx.wear.watchface.complications.data.ComplicationType
 import android.util.Log
 import android.view.SurfaceHolder
 import androidx.core.graphics.withScale
@@ -93,7 +94,10 @@ class AnalogWatchCanvasRenderer(
         strokeWidth =
             context.resources.getDimensionPixelSize(R.dimen.clock_hand_stroke_width).toFloat()
     }
-
+    private val translucentPaint = Paint().apply {
+        isAntiAlias = true
+        color = context.resources.getColor(R.color.black_50)
+    }
     private val outerElementPaint = Paint().apply {
         isAntiAlias = true
     }
@@ -126,13 +130,13 @@ class AnalogWatchCanvasRenderer(
 
     }
     private val hourTextAmbientPaint = Paint().apply {
-        isAntiAlias = true
+        isAntiAlias = false
         textSize = context.resources.getDimensionPixelSize(R.dimen.hour_text_size).toFloat()
         typeface = context.resources.getFont(R.font.rubik_light)
 
     }
     private val minuteTextAmbientPaint = Paint().apply {
-        isAntiAlias = true
+        isAntiAlias = false
         textSize = context.resources.getDimensionPixelSize(R.dimen.minute_text_size).toFloat()
         typeface = context.resources.getFont(R.font.rubik_light)
 
@@ -360,21 +364,61 @@ class AnalogWatchCanvasRenderer(
         if (renderParameters.drawMode != DrawMode.AMBIENT || watchFaceData.compAOD) {
             if (watchFaceData.layoutStyle.id == LayoutStyleIdAndResourceIds.HALFFACE.id) {
                 canvas.translate(bounds.width() * LAYOUT_ALT_CLOCK_SHIFT, 0f)
-                canvas.translate(bounds.width() * 0.25f, 0f)
             }
-            drawComplications(canvas, zonedDateTime)
+            drawComplications(canvas, bounds, zonedDateTime)
         }
     }
 
     // ----- All drawing functions -----
-    private fun drawComplications(canvas: Canvas, zonedDateTime: ZonedDateTime) {
+    private fun drawComplications(canvas: Canvas,
+                                  bounds: Rect,
+                                  zonedDateTime: ZonedDateTime) {
         for ((_, complication) in complicationSlotsManager.complicationSlots) {
             if (complication.enabled) {
+                val offset = if ( watchFaceData.layoutStyle.id == LayoutStyleIdAndResourceIds.HALFFACE.id ) {
+                    0.25f
+                } else {
+                    0.0f
+                }
+
+                if (complication.id == RIGHT_COMPLICATION_ID  ) {
+                        complication.complicationSlotBounds.perComplicationTypeBounds[ComplicationType.RANGED_VALUE]?.left =
+                            RIGHT_COMPLICATION_LEFT_BOUND + offset
+                        complication.complicationSlotBounds.perComplicationTypeBounds[ComplicationType.RANGED_VALUE]?.right =
+                            RIGHT_COMPLICATION_RIGHT_BOUND + offset
+                }
+                if (complication.id == LEFT_COMPLICATION_ID  ) {
+                    complication.complicationSlotBounds.perComplicationTypeBounds[ComplicationType.RANGED_VALUE]?.left =
+                        LEFT_COMPLICATION_LEFT_BOUND + offset
+                    complication.complicationSlotBounds.perComplicationTypeBounds[ComplicationType.RANGED_VALUE]?.right =
+                        LEFT_COMPLICATION_RIGHT_BOUND + offset
+                }
+                if (complication.id == MIDDLE_COMPLICATION_ID  ) {
+                    complication.complicationSlotBounds.perComplicationTypeBounds[ComplicationType.RANGED_VALUE]?.left =
+                        MIDDLE_COMPLICATION_LEFT_BOUND + offset
+                    complication.complicationSlotBounds.perComplicationTypeBounds[ComplicationType.RANGED_VALUE]?.right =
+                        MIDDLE_COMPLICATION_RIGHT_BOUND + offset
+                }
+
                 if ((complication.id == MIDDLE_COMPLICATION_ID &&
                         watchFaceData.layoutStyle.id != LayoutStyleIdAndResourceIds.HALFFACE.id)
                 ) {
+                    complication.complicationSlotBounds.perComplicationTypeBounds[ComplicationType.RANGED_VALUE]?.left =
+                        MIDDLE_COMPLICATION_LEFT_BOUND + offset + 1.5f
+                    complication.complicationSlotBounds.perComplicationTypeBounds[ComplicationType.RANGED_VALUE]?.right =
+                        MIDDLE_COMPLICATION_RIGHT_BOUND + offset + 1.5f
                     continue
                 }
+
+                // draw the black under circle here
+                var rec = complication.complicationSlotBounds.perComplicationTypeBounds[ComplicationType.RANGED_VALUE]!!
+
+                var circleShadowOffset = if ( rec.bottom < 0.5f ) { 0.59f } else {0.32f}
+                var cx = (rec.left + ((rec.right - rec.left)/2.0f))*bounds.width().toFloat()
+                var cy = (rec.top +  (rec.bottom-rec.top)*circleShadowOffset)*bounds.height()
+                var r = ((rec.right - rec.left)*0.28f)*bounds.width().toFloat()
+                canvas.drawCircle(cx, cy, r, translucentPaint)
+
                 complication.render(canvas, zonedDateTime, renderParameters)
             }
         }

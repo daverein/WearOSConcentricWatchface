@@ -42,22 +42,20 @@ import kotlinx.coroutines.launch
 // Creates bounds for the locations of both right and left complications. (This is the
 // location from 0.0 - 1.0.)
 // Both left and right complications use the same top and bottom bounds.
-private const val LEFT_COMPLICATIONS_TOP_BOUND = 0.12f
-private const val LEFT_COMPLICATIONS_BOTTOM_BOUND = 0.32f
-private const val RIGHT_COMPLICATIONS_TOP_BOUND = 0.68f
-private const val RIGHT_COMPLICATIONS_BOTTOM_BOUND = 0.88f
+private const val LEFT_COMPLICATIONS_TOP_BOUND = 0.02f
+private const val LEFT_COMPLICATIONS_BOTTOM_BOUND = 0.35f
+const val LEFT_COMPLICATION_LEFT_BOUND = 0.32f
+const val LEFT_COMPLICATION_RIGHT_BOUND = 0.68f
 
-private const val LEFT_COMPLICATION_LEFT_BOUND = 0.40f
-private const val LEFT_COMPLICATION_RIGHT_BOUND = 0.60f
+private const val RIGHT_COMPLICATIONS_TOP_BOUND = 0.64f
+private const val RIGHT_COMPLICATIONS_BOTTOM_BOUND = 0.99f
+const val RIGHT_COMPLICATION_LEFT_BOUND = 0.32f
+const val RIGHT_COMPLICATION_RIGHT_BOUND = 0.68f
 
-private const val RIGHT_COMPLICATION_LEFT_BOUND = 0.40f
-private const val RIGHT_COMPLICATION_RIGHT_BOUND = 0.60f
-
-
-private const val MIDDLE_COMPLICATIONS_TOP_BOUND = 0.385f
-private const val MIDDLE_COMPLICATIONS_BOTTOM_BOUND = 0.625f
-private const val MIDDLE_COMPLICATION_LEFT_BOUND = 0.50f
-private const val MIDDLE_COMPLICATION_RIGHT_BOUND = 0.75f
+private const val MIDDLE_COMPLICATIONS_TOP_BOUND = 0.35f
+private const val MIDDLE_COMPLICATIONS_BOTTOM_BOUND = 0.65f
+const val MIDDLE_COMPLICATION_LEFT_BOUND = 0.45f
+const val MIDDLE_COMPLICATION_RIGHT_BOUND = 0.75f
 
 
 private const val DEFAULT_COMPLICATION_STYLE_DRAWABLE_ID = R.drawable.complication_blue_style
@@ -95,9 +93,9 @@ sealed class ComplicationConfig(val id: Int, val supportedTypes: List<Complicati
     object Middle : ComplicationConfig(
         MIDDLE_COMPLICATION_ID,
         listOf(
+            ComplicationType.SHORT_TEXT,
             ComplicationType.RANGED_VALUE,
             ComplicationType.MONOCHROMATIC_IMAGE,
-            ComplicationType.SHORT_TEXT,
             ComplicationType.SMALL_IMAGE
         )
     )
