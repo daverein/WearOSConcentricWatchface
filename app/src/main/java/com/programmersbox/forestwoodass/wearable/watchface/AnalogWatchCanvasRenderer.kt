@@ -45,6 +45,7 @@ import kotlinx.coroutines.*
 
 // Default for how long each frame is displayed at expected frame rate.
 private const val FRAME_PERIOD_MS_DEFAULT: Long = 16L
+private const val LAYOUT_ALT_CLOCK_SHIFT = 0.30f
 
 /**
  * Renders watch face via data in Room database. Also, updates watch face state based on setting
@@ -237,11 +238,6 @@ class AnalogWatchCanvasRenderer(
                     // watch length, we need to trigger a recalculation.
                     armLengthChangedRecalculateClockHands = true
 
-                    // Updates length of minute hand based on edits from user.
-                    val newMinuteHandDimensions = newWatchFaceData.copy(
-                        lengthFraction = doubleValue.value.toFloat()
-                    )
-
                     newWatchFaceData = newWatchFaceData.copy(
                         lengthFraction = doubleValue.value.toFloat()
                     )
@@ -316,7 +312,6 @@ class AnalogWatchCanvasRenderer(
         }
 
         canvas.drawColor(backgroundColor)
-        val LAYOUT_ALT_CLOCK_SHIFT = 0.30f
 
         if (watchFaceData.layoutStyle.id == LayoutStyleIdAndResourceIds.HALFFACE.id) {
             canvas.translate(-bounds.width() * LAYOUT_ALT_CLOCK_SHIFT, 0f)
@@ -333,8 +328,6 @@ class AnalogWatchCanvasRenderer(
                 watchFaceData.numberStyleOuterCircleRadiusFraction,
                 watchFaceColors.activePrimaryColor,
                 watchFaceColors.activeOuterElementColor,
-                watchFaceData.numberStyleOuterCircleRadiusFraction,
-                watchFaceData.gapBetweenOuterCircleAndBorderFraction,
                 zonedDateTime
             )
         }
@@ -348,8 +341,6 @@ class AnalogWatchCanvasRenderer(
                 watchFaceData.numberStyleOuterCircleRadiusFraction,
                 if (renderParameters.drawMode != DrawMode.AMBIENT) watchFaceColors.activePrimaryColor else watchFaceColors.ambientPrimaryColor,
                 if (renderParameters.drawMode != DrawMode.AMBIENT) watchFaceColors.activeOuterElementColor else watchFaceColors.ambientOuterElementColor,
-                watchFaceData.numberStyleOuterCircleRadiusFraction,
-                watchFaceData.gapBetweenOuterCircleAndBorderFraction,
                 zonedDateTime
             )
             if (renderParameters.drawMode != DrawMode.AMBIENT || watchFaceData.drawHourPips) {
@@ -631,8 +622,6 @@ class AnalogWatchCanvasRenderer(
         outerCircleStokeWidthFraction: Float,
         primaryColor: Int,
         outerElementColor: Int,
-        numberStyleOuterCircleRadiusFraction: Float,
-        gapBetweenOuterCircleAndBorderFraction: Float,
         zonedDateTime: ZonedDateTime
     ) {
         val drawAmbient = renderParameters.drawMode == DrawMode.AMBIENT
@@ -650,7 +639,7 @@ class AnalogWatchCanvasRenderer(
         textPaint.color = primaryColor
         for (i in 0 until 60) {
             val rotation =
-                (((12.0f / 360.0f)) * (i + sec + 15).toFloat() + ((12.0f / 360.0f) * (nano.toFloat() / 1000.0f))) * Math.PI
+                ((12.0f / 360.0f) * (i + sec + 15).toFloat() + ((12.0f / 360.0f) * (nano.toFloat() / 1000.0f))) * Math.PI
             if (i % 5 == 0) {
                 val dx =
                     sin(rotation * 1.0f).toFloat() * (numberRadiusFraction - 0.01f) * bounds.width()
@@ -731,18 +720,14 @@ class AnalogWatchCanvasRenderer(
         outerCircleStokeWidthFraction: Float,
         primaryColor: Int,
         outerElementColor: Int,
-        numberStyleOuterCircleRadiusFraction: Float,
-        gapBetweenOuterCircleAndBorderFraction: Float,
         zonedDateTime: ZonedDateTime
     ) {
-        val drawAmbient = renderParameters.drawMode == DrawMode.AMBIENT
         outerElementPaint.strokeWidth = outerCircleStokeWidthFraction * bounds.width()
         outerElementPaint.color = outerElementColor
         minuteDialTextPaint.color = outerElementColor
         secondDialTextPaint.color = primaryColor
         // Draw and move seconds
         val textBounds = Rect()
-        val nano = zonedDateTime.toLocalTime().nano.toFloat() / 1000000f
         val sec = zonedDateTime.toLocalTime().second
         textPaint.color = primaryColor
 
@@ -751,7 +736,7 @@ class AnalogWatchCanvasRenderer(
         textPaint.color = outerElementColor
         for (i in 0 until 60) {
             val rotation =
-                (((12.0f / 360.0f)) * (i - minute - 45).toFloat() - ((12.0f / 360.0f) * (sec.toFloat() / 60.0f))) * Math.PI
+                ((12.0f / 360.0f) * (i - minute - 45).toFloat() - ((12.0f / 360.0f) * (sec.toFloat() / 60.0f))) * Math.PI
             if (i % 5 == 0) {
 
                 val dx =
