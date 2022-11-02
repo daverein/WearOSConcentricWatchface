@@ -15,10 +15,14 @@
  */
 package com.programmersbox.forestwoodass.wearable.watchface
 
+import android.content.BroadcastReceiver
 import android.content.Context
+import android.content.Intent
+import android.content.IntentFilter
 import android.graphics.Canvas
 import android.graphics.Paint
 import android.graphics.Rect
+import android.os.BatteryManager
 import android.util.Log
 import android.view.SurfaceHolder
 import androidx.core.graphics.withScale
@@ -165,12 +169,41 @@ class AnalogWatchCanvasRenderer(
     // valid dimensions from the system.
     private var currentWatchFaceSize = Rect(0, 0, 0, 0)
 
+
+    class BatteryLevelChangeReceiver : BroadcastReceiver() {
+
+        var batteryLow : Boolean = false
+
+        override fun onReceive(context: Context?, batteryStatus: Intent?) {
+
+            val batteryPct: Float? = batteryStatus?.let { intent ->
+                val level: Int = intent.getIntExtra(BatteryManager.EXTRA_LEVEL, -1)
+                val scale: Int = intent.getIntExtra(BatteryManager.EXTRA_SCALE, -1)
+                level * 100 / scale.toFloat()
+            }
+            val low: Boolean = batteryStatus?.getBooleanExtra(BatteryManager.EXTRA_BATTERY_LOW, false)!!
+            //batteryLow = batteryPct!! < 20.0f
+            batteryLow = low
+        }
+    }
+
+    // Is this expensive?
+    private val batteryLevelChanged = BatteryLevelChangeReceiver()
+
+    private fun isBatteryLow() : Boolean
+    {
+        return batteryLevelChanged.batteryLow
+    }
     init {
         scope.launch {
             currentUserStyleRepository.userStyle.collect { userStyle ->
                 updateWatchFaceData(userStyle)
             }
         }
+        val batteryStatus: Intent? = IntentFilter(Intent.ACTION_BATTERY_CHANGED).let { ifilter ->
+            context.registerReceiver(batteryLevelChanged, ifilter)
+        }
+        batteryLevelChanged.onReceive(context, batteryStatus)
     }
 
     override suspend fun createSharedAssets(): AnalogSharedAssets {
@@ -269,6 +302,7 @@ class AnalogWatchCanvasRenderer(
     override fun onDestroy() {
         Log.d(TAG, "onDestroy()")
         scope.cancel("AnalogWatchCanvasRenderer scope clear() request")
+        context.unregisterReceiver(batteryLevelChanged)
         super.onDestroy()
     }
 
@@ -315,26 +349,31 @@ class AnalogWatchCanvasRenderer(
 
         if (renderParameters.watchFaceLayers.contains(WatchFaceLayer.BASE)
         ) {
-            drawSecondsDial(
-                canvas,
-                bounds,
-                watchFaceData.numberRadiusFraction,
-                watchFaceColors.activePrimaryColor,
-                watchFaceColors.activeOuterElementColor,
-                zonedDateTime
-            )
+            if ( !isBatteryLow() ) {
+                drawSecondsDial(
+                    canvas,
+                    bounds,
+                    watchFaceData.numberRadiusFraction,
+                    watchFaceColors.activePrimaryColor,
+                    watchFaceColors.activeOuterElementColor,
+                    zonedDateTime
+                )
+            }
         }
         if (renderParameters.watchFaceLayers.contains(WatchFaceLayer.COMPLICATIONS_OVERLAY) &&
             (renderParameters.drawMode != DrawMode.AMBIENT || watchFaceData.timeAOD)
         ) {
-            drawMinutesDial(
-                canvas,
-                bounds,
-                watchFaceData.numberRadiusFraction,
-                if (renderParameters.drawMode != DrawMode.AMBIENT) watchFaceColors.activePrimaryColor else watchFaceColors.ambientPrimaryColor,
-                if (renderParameters.drawMode != DrawMode.AMBIENT) watchFaceColors.activeOuterElementColor else watchFaceColors.ambientOuterElementColor,
-                zonedDateTime
-            )
+            if ( renderParameters.drawMode != DrawMode.AMBIENT ||
+                (!isBatteryLow() && renderParameters.drawMode == DrawMode.AMBIENT)) {
+                drawMinutesDial(
+                    canvas,
+                    bounds,
+                    watchFaceData.numberRadiusFraction,
+                    if (renderParameters.drawMode != DrawMode.AMBIENT) watchFaceColors.activePrimaryColor else watchFaceColors.ambientPrimaryColor,
+                    if (renderParameters.drawMode != DrawMode.AMBIENT) watchFaceColors.activeOuterElementColor else watchFaceColors.ambientOuterElementColor,
+                    zonedDateTime
+                )
+            }
             if (renderParameters.drawMode != DrawMode.AMBIENT || watchFaceData.timeAOD) {
                 drawDigitalTime(canvas, bounds, zonedDateTime)
             }
@@ -348,8 +387,7 @@ class AnalogWatchCanvasRenderer(
             drawDateElement(canvas, bounds, zonedDateTime)
         }
         // CanvasComplicationDrawable already obeys rendererParameters.
-        if (renderParameters.drawMode != DrawMode.AMBIENT || watchFaceData.compAOD) {
-
+        if ((renderParameters.drawMode != DrawMode.AMBIENT || (!isBatteryLow() && watchFaceData.compAOD))) {
             drawComplications(canvas, bounds, zonedDateTime)
         }
     }
