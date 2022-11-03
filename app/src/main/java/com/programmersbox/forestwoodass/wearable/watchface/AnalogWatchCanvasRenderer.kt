@@ -533,6 +533,7 @@ class AnalogWatchCanvasRenderer(
                 minuteTextPaint
             }
             paintToUse.getTextBounds(biggestText, 0, biggestText.length, textBounds)
+            paintToUse.getTextBounds(tx, 0, tx.length, realTextBounds)
 
             val sizeRadius = textBounds.height().toFloat() * 2.5f
             val cx = bounds.exactCenterX() + hourOffset * 0.45f
@@ -564,7 +565,7 @@ class AnalogWatchCanvasRenderer(
 
             canvas.drawText(
                 tx,
-                bounds.exactCenterX() + hourOffset * (0.55f),
+                bounds.exactCenterX() + hourOffset * (0.55f) + (textBounds.width() - realTextBounds.width())/2.0f,
                 bounds.exactCenterY() + textBounds.height() / 2,
                 paintToUse
             )
