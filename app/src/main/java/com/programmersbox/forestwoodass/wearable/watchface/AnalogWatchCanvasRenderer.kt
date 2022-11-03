@@ -95,7 +95,7 @@ class AnalogWatchCanvasRenderer(
     // Initializes paint object for painting the clock hands with default values.
     private val translucentPaint = Paint().apply {
         isAntiAlias = true
-        color = context.resources.getColor(R.color.black_50)
+        color = context.resources.getColor(R.color.black_50, context.theme)
     }
     private val outerElementPaint = Paint().apply {
         isAntiAlias = true
@@ -125,7 +125,7 @@ class AnalogWatchCanvasRenderer(
     private val hourTextPaint = Paint().apply {
         isAntiAlias = true
         textSize = context.resources.getDimensionPixelSize(R.dimen.hour_text_size).toFloat()
-        typeface = context.resources.getFont(R.font.rubik_medium)
+        typeface = context.resources.getFont(R.font.rubik_regular)
 
     }
     private val hourTextAmbientPaint = Paint().apply {
@@ -143,7 +143,7 @@ class AnalogWatchCanvasRenderer(
     private val minuteTextPaint = Paint().apply {
         isAntiAlias = true
         textSize = context.resources.getDimensionPixelSize(R.dimen.minute_text_size).toFloat()
-        typeface = context.resources.getFont(R.font.rubik_medium)
+        typeface = context.resources.getFont(R.font.rubik_regular)
     }
     private val minuteHightlightPaint = Paint().apply {
         isAntiAlias = true
@@ -173,16 +173,16 @@ class AnalogWatchCanvasRenderer(
     class BatteryLevelChangeReceiver : BroadcastReceiver() {
 
         var batteryLow : Boolean = false
+        private var batteryPct : Float? = 0f
 
         override fun onReceive(context: Context?, batteryStatus: Intent?) {
 
-            val batteryPct: Float? = batteryStatus?.let { intent ->
+            batteryPct = batteryStatus?.let { intent ->
                 val level: Int = intent.getIntExtra(BatteryManager.EXTRA_LEVEL, -1)
                 val scale: Int = intent.getIntExtra(BatteryManager.EXTRA_SCALE, -1)
                 level * 100 / scale.toFloat()
             }
             val low: Boolean = batteryStatus?.getBooleanExtra(BatteryManager.EXTRA_BATTERY_LOW, false)!!
-            //batteryLow = batteryPct!! < 20.0f
             batteryLow = low
         }
     }
@@ -347,18 +347,16 @@ class AnalogWatchCanvasRenderer(
             canvas.translate(-bounds.width() * LAYOUT_ALT_CLOCK_SHIFT, 0f)
         }
 
-        if (renderParameters.watchFaceLayers.contains(WatchFaceLayer.BASE)
-        ) {
-            if ( !isBatteryLow() ) {
-                drawSecondsDial(
-                    canvas,
-                    bounds,
-                    watchFaceData.numberRadiusFraction,
-                    watchFaceColors.activePrimaryColor,
-                    watchFaceColors.activeOuterElementColor,
-                    zonedDateTime
-                )
-            }
+        if (renderParameters.watchFaceLayers.contains(WatchFaceLayer.BASE) && !isBatteryLow())
+        {
+            drawSecondsDial(
+                canvas,
+                bounds,
+                watchFaceData.numberRadiusFraction,
+                watchFaceColors.activePrimaryColor,
+                watchFaceColors.activeOuterElementColor,
+                zonedDateTime
+            )
         }
         if (renderParameters.watchFaceLayers.contains(WatchFaceLayer.COMPLICATIONS_OVERLAY) &&
             (renderParameters.drawMode != DrawMode.AMBIENT || watchFaceData.timeAOD)
@@ -536,20 +534,9 @@ class AnalogWatchCanvasRenderer(
             }
             paintToUse.getTextBounds(biggestText, 0, biggestText.length, textBounds)
 
-            val sizeRadius = textBounds.height().toFloat() * 2f
+            val sizeRadius = textBounds.height().toFloat() * 2.5f
             val cx = bounds.exactCenterX() + hourOffset * 0.45f
-            val cy = bounds.exactCenterY() - sizeRadius / 2;
-            val focusModeWidth =
-                if (watchFaceData.layoutStyle.id == LayoutStyleIdAndResourceIds.HALFFACE.id) {
-                    1.6f
-                } else {
-                    3.0f
-                }
-            val ambientOffset = if (!drawAmbient) {
-                focusModeWidth
-            } else {
-                1.0f
-            }
+            val cy = bounds.exactCenterY() - sizeRadius / 2f
 
             minuteHightlightPaint.style = Paint.Style.FILL
             minuteHightlightPaint.color = watchFaceColors.activeBackgroundColor
@@ -590,9 +577,18 @@ class AnalogWatchCanvasRenderer(
                 watchFaceColors.activePrimaryColor
             }
 
+            val rightSide : Float = if ( drawAmbient ) {
+                cx+sizeRadius
+            } else {
+                if (watchFaceData.layoutStyle.id == LayoutStyleIdAndResourceIds.HALFFACE.id) {
+                    bounds.width().toFloat()
+                } else {
+                    bounds.width()*1.5f
+                }
+            }
             canvas.drawRoundRect(
                 cx, cy,
-                cx + (sizeRadius * ambientOffset), cy + sizeRadius,
+                rightSide, cy + sizeRadius,
                 sizeRadius, sizeRadius, minuteHightlightPaint
             )
 
@@ -661,7 +657,7 @@ class AnalogWatchCanvasRenderer(
         textPaint.color = primaryColor
         for (i in 0 until 60) {
             val rotation =
-                ((12.0f / 360.0f) * (i + sec + 15).toFloat() + ((12.0f / 360.0f) * (nano.toFloat() / 1000.0f))) * Math.PI
+                ((12.0f / 360.0f) * (i + sec + 15).toFloat() + ((12.0f / 360.0f) * (nano / 1000.0f))) * Math.PI
             if (i % 5 == 0) {
                 val dx =
                     sin(rotation * 1.0f).toFloat() * (numberRadiusFraction - 0.01f) * bounds.width()

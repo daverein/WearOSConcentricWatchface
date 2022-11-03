@@ -14,13 +14,13 @@
   See the License for the specific language governing permissions and
   limitations under the License.
   -->
-<resources>
+<resources xmlns:tools="http://schemas.android.com/tools">
     <!-- constants for watch face element renderer. -->
     <dimen name="hour_mark_size">10sp</dimen>
-    <dimen name="hour_text_size">120px</dimen>
-    <dimen name="minute_text_size">60px</dimen>
-    <dimen name="minute_dial_text_size">25px</dimen>
-    <dimen name="second_dial_text_size">25px</dimen>
+    <dimen name="hour_text_size" tools:ignore="PxUsage">110px</dimen>
+    <dimen name="minute_text_size" tools:ignore="PxUsage">50px</dimen>
+    <dimen name="minute_dial_text_size" tools:ignore="PxUsage">25px</dimen>
+    <dimen name="second_dial_text_size" tools:ignore="PxUsage">25px</dimen>
     <dimen name="clock_hand_stroke_width">2dp</dimen>
     <dimen name="calendar_month_font_size">8sp</dimen>
     <dimen name="calendar_day_font_size">10sp</dimen>
