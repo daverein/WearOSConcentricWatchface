@@ -48,7 +48,7 @@ import kotlin.math.sin
 import kotlinx.coroutines.*
 
 // Default for how long each frame is displayed at expected frame rate.
-private const val FRAME_PERIOD_MS_DEFAULT: Long = 16L
+private const val FRAME_PERIOD_MS_DEFAULT: Long = 64L
 private const val LAYOUT_ALT_CLOCK_SHIFT = 0.30f
 
 /**
@@ -536,12 +536,12 @@ class AnalogWatchCanvasRenderer(
             }
             paintToUse.getTextBounds(biggestText, 0, biggestText.length, textBounds)
 
-            val sizeRadius = textBounds.height().toFloat() * 1.9f
-            val cx = bounds.exactCenterX() + hourOffset * 0.5f
+            val sizeRadius = textBounds.height().toFloat() * 2f
+            val cx = bounds.exactCenterX() + hourOffset * 0.45f
             val cy = bounds.exactCenterY() - sizeRadius / 2;
             val focusModeWidth =
                 if (watchFaceData.layoutStyle.id == LayoutStyleIdAndResourceIds.HALFFACE.id) {
-                    1.5f
+                    1.6f
                 } else {
                     3.0f
                 }

@@ -41,8 +41,8 @@ import kotlinx.coroutines.launch
 // Creates bounds for the locations of both right and left complications. (This is the
 // location from 0.0 - 1.0.)
 // Both left and right complications use the same top and bottom bounds.
-private const val LEFT_COMPLICATIONS_TOP_BOUND = 0.025f
-private const val LEFT_COMPLICATIONS_BOTTOM_BOUND = 0.325f
+private const val LEFT_COMPLICATIONS_TOP_BOUND = 0.04f
+private const val LEFT_COMPLICATIONS_BOTTOM_BOUND = 0.34f
 const val LEFT_COMPLICATION_LEFT_BOUND = 0.32f
 const val LEFT_COMPLICATION_RIGHT_BOUND = 0.68f
 
