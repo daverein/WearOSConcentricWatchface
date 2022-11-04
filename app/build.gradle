@@ -40,10 +40,12 @@ android {
             proguardFiles getDefaultProguardFile("proguard-android-optimize.txt"), "proguard-rules.pro"
         }
     }
-
     packagingOptions {
-        exclude "META-INF/atomicfu.kotlin_module"
+        resources {
+            excludes += ['META-INF/atomicfu.kotlin_module']
+        }
     }
+
 
     compileOptions {
         sourceCompatibility = 1.8
@@ -53,6 +55,7 @@ android {
     kotlinOptions {
         jvmTarget = "1.8"
     }
+    namespace 'com.programmersbox.forestwoodass.wearable.watchface'
 }
 
 dependencies {
