@@ -19,9 +19,7 @@ import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
 import android.content.IntentFilter
-import android.graphics.Canvas
-import android.graphics.Paint
-import android.graphics.Rect
+import android.graphics.*
 import android.os.BatteryManager
 import android.util.Log
 import android.view.SurfaceHolder
@@ -92,6 +90,8 @@ class AnalogWatchCanvasRenderer(
         watchFaceData.ambientColorStyle
     )
 
+    private var shadowLeft : Bitmap = BitmapFactory.decodeResource(context.getResources(),
+        R.drawable.shadow_left)
     // Initializes paint object for painting the clock hands with default values.
     private val translucentPaint = Paint().apply {
         isAntiAlias = true
@@ -390,6 +390,17 @@ class AnalogWatchCanvasRenderer(
                     if (renderParameters.drawMode != DrawMode.AMBIENT) watchFaceColors.activeOuterElementColor else watchFaceColors.ambientOuterElementColor,
                     zonedDateTime
                 )
+                if ( isHalfFace ) {
+                    var currentColor = translucentPaint.color
+                    translucentPaint.color = context.getColor(R.color.black)
+                    val shadowLeftX = if (scaledImage) {
+                        bounds.width() * 0.45f
+                    } else {
+                        bounds.width() * LAYOUT_ALT_CLOCK_SHIFT
+                    }
+                    canvas.drawBitmap(shadowLeft, shadowLeftX, 0f, translucentPaint)
+                    translucentPaint.color = currentColor
+                }
             }
             if (renderParameters.drawMode != DrawMode.AMBIENT || watchFaceData.timeAOD) {
                 drawDigitalTime(canvas, bounds, zonedDateTime)
