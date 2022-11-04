@@ -547,7 +547,7 @@ class AnalogWatchCanvasRenderer(
             }
             hourTextPaint.getTextBounds(biggestText, 0, biggestText.length, textBounds)
             hourTextPaint.getTextBounds(txHour, 0, txHour.length, realTextBounds)
-            val cxHour = bounds.exactCenterX() - realTextBounds.width().toFloat() * 0.5f
+            val cxHour = bounds.exactCenterX() - realTextBounds.width().toFloat() * 0.63f
             val cyHour = bounds.exactCenterY() + textBounds.height().toFloat() * 0.5f
             val hourOffset = textBounds.width()
 
@@ -561,7 +561,7 @@ class AnalogWatchCanvasRenderer(
             paintToUse.getTextBounds(tx, 0, tx.length, realTextBounds)
 
             val sizeRadius = textBounds.height().toFloat() * 2.5f
-            val cx = bounds.exactCenterX() + hourOffset * 0.65f
+            val cx = bounds.exactCenterX() + hourOffset * 0.45f
             val cy = bounds.exactCenterY() - sizeRadius / 2f
 
             minuteHightlightPaint.style = Paint.Style.FILL
@@ -590,7 +590,7 @@ class AnalogWatchCanvasRenderer(
 
             canvas.drawText(
                 tx,
-                bounds.exactCenterX() + hourOffset * (0.75f) + (textBounds.width() - realTextBounds.width())/2.0f,
+                bounds.exactCenterX() + hourOffset * (0.55f) + (textBounds.width() - realTextBounds.width())/2.0f,
                 bounds.exactCenterY() + textBounds.height() / 2,
                 paintToUse
             )
