@@ -337,6 +337,11 @@ class AnalogWatchCanvasRenderer(
         }
 
         if (renderParameters.drawMode == DrawMode.AMBIENT &&
+            watchFaceData.layoutStyle.id == LayoutStyleIdAndResourceIds.FULLFACE.id) {
+            canvas.scale(1.15f, 1.15f, bounds.exactCenterX(), bounds.exactCenterY())
+        }
+
+        if (renderParameters.drawMode == DrawMode.AMBIENT &&
             watchFaceData.shiftPixelAmount >= 1.0f
         ) {
             val cx = sin((zonedDateTime.minute % 60f) * 6f) * watchFaceData.shiftPixelAmount
@@ -403,6 +408,8 @@ class AnalogWatchCanvasRenderer(
         if ((renderParameters.drawMode != DrawMode.AMBIENT || (!isBatteryLow() && watchFaceData.compAOD))) {
             drawComplications(canvas, bounds, zonedDateTime)
         }
+
+
     }
 
     // ----- All drawing functions -----
