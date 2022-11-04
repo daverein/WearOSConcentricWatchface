@@ -327,6 +327,9 @@ class AnalogWatchCanvasRenderer(
         zonedDateTime: ZonedDateTime,
         sharedAssets: AnalogSharedAssets
     ) {
+        val scaledImage = watchFaceData.layoutStyle.id == LayoutStyleIdAndResourceIds.SCALED_HALFFACE.id
+        val isHalfFace = watchFaceData.layoutStyle.id == LayoutStyleIdAndResourceIds.HALFFACE.id ||
+            watchFaceData.layoutStyle.id == LayoutStyleIdAndResourceIds.SCALED_HALFFACE.id
         val backgroundColor = if (renderParameters.drawMode == DrawMode.AMBIENT) {
             watchFaceColors.ambientBackgroundColor
         } else {
@@ -341,10 +344,21 @@ class AnalogWatchCanvasRenderer(
             canvas.translate(cx, cy)
         }
 
+
+        var restoreCount = canvas.save()
+        var scaledShiftX = -bounds.width() * LAYOUT_ALT_CLOCK_SHIFT
+        var scaledShiftY = 0f
+
+        if ( scaledImage ) {
+            canvas.scale(1.40f, 1.40f)
+            scaledShiftX *= 1.05f
+            scaledShiftY = -(bounds.height()*1.30f-bounds.height())/2.0f
+        }
+
         canvas.drawColor(backgroundColor)
 
-        if (watchFaceData.layoutStyle.id == LayoutStyleIdAndResourceIds.HALFFACE.id) {
-            canvas.translate(-bounds.width() * LAYOUT_ALT_CLOCK_SHIFT, 0f)
+        if (isHalfFace) {
+            canvas.translate(scaledShiftX, scaledShiftY)
         }
 
         if (renderParameters.watchFaceLayers.contains(WatchFaceLayer.BASE) && !isBatteryLow())
@@ -376,10 +390,11 @@ class AnalogWatchCanvasRenderer(
                 drawDigitalTime(canvas, bounds, zonedDateTime)
             }
         }
-        if (watchFaceData.layoutStyle.id == LayoutStyleIdAndResourceIds.HALFFACE.id) {
-            canvas.translate(bounds.width() * LAYOUT_ALT_CLOCK_SHIFT, 0f)
+       if (isHalfFace ) {
+            canvas.translate(-scaledShiftX, -scaledShiftY)
         }
 
+        canvas.restoreToCount(restoreCount)
 
         if (renderParameters.drawMode != DrawMode.AMBIENT) {
             drawDateElement(canvas, bounds, zonedDateTime)
@@ -399,10 +414,16 @@ class AnalogWatchCanvasRenderer(
         for ((_, complication) in complicationSlotsManager.complicationSlots) {
             if (complication.enabled) {
                 val offset =
-                    if (watchFaceData.layoutStyle.id == LayoutStyleIdAndResourceIds.HALFFACE.id) {
-                        0.25f
-                    } else {
-                        0.0f
+                    when (watchFaceData.layoutStyle.id) {
+                        LayoutStyleIdAndResourceIds.HALFFACE.id -> {
+                            0.25f
+                        }
+                        LayoutStyleIdAndResourceIds.SCALED_HALFFACE.id -> {
+                            -0.25f
+                        }
+                        else -> {
+                            0.0f
+                        }
                     }
 
                 when (complication.id) {
@@ -445,7 +466,11 @@ class AnalogWatchCanvasRenderer(
                 } else if ( complication.id == MIDDLE_COMPLICATION_ID ) {
                     0.50f
                 } else {
-                    0.32f
+                    if ( watchFaceData.layoutStyle.id == LayoutStyleIdAndResourceIds.SCALED_HALFFACE.id ) {
+                        0.5f
+                    } else {
+                        0.32f
+                    }
                 }
                 val cx = (rec.left + ((rec.right - rec.left) / 2.0f)) * bounds.width().toFloat()
                 val cy = (rec.top + (rec.bottom - rec.top) * circleShadowOffset) * bounds.height()
@@ -522,7 +547,7 @@ class AnalogWatchCanvasRenderer(
             }
             hourTextPaint.getTextBounds(biggestText, 0, biggestText.length, textBounds)
             hourTextPaint.getTextBounds(txHour, 0, txHour.length, realTextBounds)
-            val cxHour = bounds.exactCenterX() - realTextBounds.width().toFloat() * 0.63f
+            val cxHour = bounds.exactCenterX() - realTextBounds.width().toFloat() * 0.5f
             val cyHour = bounds.exactCenterY() + textBounds.height().toFloat() * 0.5f
             val hourOffset = textBounds.width()
 
@@ -536,7 +561,7 @@ class AnalogWatchCanvasRenderer(
             paintToUse.getTextBounds(tx, 0, tx.length, realTextBounds)
 
             val sizeRadius = textBounds.height().toFloat() * 2.5f
-            val cx = bounds.exactCenterX() + hourOffset * 0.45f
+            val cx = bounds.exactCenterX() + hourOffset * 0.65f
             val cy = bounds.exactCenterY() - sizeRadius / 2f
 
             minuteHightlightPaint.style = Paint.Style.FILL
@@ -565,7 +590,7 @@ class AnalogWatchCanvasRenderer(
 
             canvas.drawText(
                 tx,
-                bounds.exactCenterX() + hourOffset * (0.55f) + (textBounds.width() - realTextBounds.width())/2.0f,
+                bounds.exactCenterX() + hourOffset * (0.75f) + (textBounds.width() - realTextBounds.width())/2.0f,
                 bounds.exactCenterY() + textBounds.height() / 2,
                 paintToUse
             )
@@ -581,7 +606,8 @@ class AnalogWatchCanvasRenderer(
             val rightSide : Float = if ( drawAmbient ) {
                 cx+sizeRadius
             } else {
-                if (watchFaceData.layoutStyle.id == LayoutStyleIdAndResourceIds.HALFFACE.id) {
+                if (watchFaceData.layoutStyle.id == LayoutStyleIdAndResourceIds.HALFFACE.id ||
+                    watchFaceData.layoutStyle.id == LayoutStyleIdAndResourceIds.SCALED_HALFFACE.id) {
                     bounds.width().toFloat()
                 } else {
                     bounds.width()*1.5f
@@ -681,7 +707,7 @@ class AnalogWatchCanvasRenderer(
                 val sty1 =
                     -cos(rotation * 1.0f).toFloat() * (numberRadiusFraction + 0.05f) * bounds.width()
                         .toFloat()
-                outerElementPaint.strokeWidth = 3f
+                outerElementPaint.strokeWidth = 4f
                 canvas.drawLine(
                     bounds.exactCenterX() + stx,
                     bounds.exactCenterY() + sty,
@@ -713,7 +739,7 @@ class AnalogWatchCanvasRenderer(
                     -cos(rotation * 1.0f).toFloat() * (numberRadiusFraction + 0.05f) * bounds.width()
                         .toFloat()
 
-                outerElementPaint.strokeWidth = 1f
+                outerElementPaint.strokeWidth = 2f
                 canvas.drawLine(
                     bounds.exactCenterX() + stx,
                     bounds.exactCenterY() + sty,

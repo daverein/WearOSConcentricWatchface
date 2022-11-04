@@ -35,6 +35,10 @@ const val HALF_FACE_STYLE_ID = "halfface_style_id"
 private const val HALF_FACE_STYLE_NAME_RESOURCE_ID = R.string.halfface_style_name
 private const val HALF_FACE_STYLE_ICON_ID = R.drawable.halfface
 
+const val SCALED_HALF_FACE_STYLE_ID = "scaled_halfface_style_id"
+private const val SCALED_HALF_FACE_STYLE_NAME_RESOURCE_ID = R.string.scaled_halfface_style_name
+private const val SCALED_HALF_FACE_STYLE_ICON_ID = R.drawable.scaled_halfface
+
 /**
  * Represents watch face color style options the user can select (includes the unique id, the
  * complication style resource id, and general watch face color style resource ids).
@@ -64,6 +68,13 @@ enum class LayoutStyleIdAndResourceIds(
         nameResourceId = HALF_FACE_STYLE_NAME_RESOURCE_ID,
         iconResourceId = HALF_FACE_STYLE_ICON_ID,
         complicationStyleDrawableId = R.drawable.halfface,
+    ),
+
+    SCALED_HALFFACE(
+        id = SCALED_HALF_FACE_STYLE_ID,
+        nameResourceId = SCALED_HALF_FACE_STYLE_NAME_RESOURCE_ID,
+        iconResourceId = SCALED_HALF_FACE_STYLE_ICON_ID,
+        complicationStyleDrawableId = R.drawable.scaled_halfface,
     );
 
     companion object {
@@ -74,6 +85,7 @@ enum class LayoutStyleIdAndResourceIds(
             return when (id) {
                 FULLFACE.id -> FULLFACE
                 HALFFACE.id -> HALFFACE
+                SCALED_HALFFACE.id -> SCALED_HALFFACE
                 else -> FULLFACE
             }
         }

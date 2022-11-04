@@ -37,6 +37,8 @@
     <!-- Name of watchface style [CHAR LIMIT=20] -->
     <string name="halfface_style_name">Half Face Layout Style</string>
 
+    <string name="scaled_halfface_style_name">Scaled Half Face Layout Style</string>
+
 
     <!-- Name of watchface style [CHAR LIMIT=20] -->
     <string name="ambient_style_name">Ambient Style</string>
