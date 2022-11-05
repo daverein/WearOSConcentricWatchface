@@ -330,6 +330,7 @@ class AnalogWatchCanvasRenderer(
         val scaledImage = watchFaceData.layoutStyle.id == LayoutStyleIdAndResourceIds.SCALED_HALFFACE.id
         val isHalfFace = watchFaceData.layoutStyle.id == LayoutStyleIdAndResourceIds.HALFFACE.id ||
             watchFaceData.layoutStyle.id == LayoutStyleIdAndResourceIds.SCALED_HALFFACE.id
+        val isAmbient = renderParameters.drawMode == DrawMode.AMBIENT
         val backgroundColor = if (renderParameters.drawMode == DrawMode.AMBIENT) {
             watchFaceColors.ambientBackgroundColor
         } else {
@@ -400,6 +401,20 @@ class AnalogWatchCanvasRenderer(
                     }
                     canvas.drawBitmap(shadowLeft, shadowLeftX, 0f, translucentPaint)
                     translucentPaint.color = currentColor
+                } else {
+                    if ( watchFaceData.layoutStyle.id == LayoutStyleIdAndResourceIds.FULLFACE.id &&
+                        (!isAmbient || (isAmbient && watchFaceData.compAOD))) {
+                        canvas.drawArc(
+                            bounds.width().toFloat() * 0.15f, bounds.height().toFloat() * 0.15f,
+                            bounds.width().toFloat() * 0.85f, bounds.height().toFloat() * 0.88f,
+                            70f, 40f, true, translucentPaint
+                        )
+                        canvas.drawArc(
+                            bounds.width().toFloat() * 0.15f, bounds.height().toFloat() * 0.11f,
+                            bounds.width().toFloat() * 0.85f, bounds.height().toFloat() * 0.85f,
+                            250f, 40f, true, translucentPaint
+                        )
+                    }
                 }
             }
             if (renderParameters.drawMode != DrawMode.AMBIENT || watchFaceData.timeAOD) {
@@ -474,26 +489,6 @@ class AnalogWatchCanvasRenderer(
                         MIDDLE_COMPLICATION_RIGHT_BOUND + offset + 1.5f
                     continue
                 }
-
-                // draw the black under circle here
-                val rec =
-                    complication.complicationSlotBounds.perComplicationTypeBounds[ComplicationType.RANGED_VALUE]!!
-
-                val circleShadowOffset = if (rec.bottom < 0.5f ) {
-                    0.59f
-                } else if ( complication.id == MIDDLE_COMPLICATION_ID ) {
-                    0.50f
-                } else {
-                    if ( watchFaceData.layoutStyle.id == LayoutStyleIdAndResourceIds.SCALED_HALFFACE.id ) {
-                        0.5f
-                    } else {
-                        0.32f
-                    }
-                }
-                val cx = (rec.left + ((rec.right - rec.left) / 2.0f)) * bounds.width().toFloat()
-                val cy = (rec.top + (rec.bottom - rec.top) * circleShadowOffset) * bounds.height()
-                val r = ((rec.right - rec.left) * 0.28f) * bounds.width().toFloat()
-                canvas.drawCircle(cx, cy, r, translucentPaint)
 
                 complication.render(canvas, zonedDateTime, renderParameters)
             }
