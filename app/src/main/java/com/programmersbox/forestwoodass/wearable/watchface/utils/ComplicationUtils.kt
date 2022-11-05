@@ -17,7 +17,6 @@ package com.programmersbox.forestwoodass.wearable.watchface.utils
 
 import android.content.Context
 import android.graphics.RectF
-import android.util.Log
 import androidx.wear.watchface.CanvasComplicationFactory
 import androidx.wear.watchface.ComplicationSlot
 import androidx.wear.watchface.ComplicationSlotsManager
@@ -28,14 +27,7 @@ import androidx.wear.watchface.complications.data.ComplicationType
 import androidx.wear.watchface.complications.rendering.CanvasComplicationDrawable
 import androidx.wear.watchface.complications.rendering.ComplicationDrawable
 import androidx.wear.watchface.style.CurrentUserStyleRepository
-import androidx.wear.watchface.style.UserStyleSetting
 import com.programmersbox.forestwoodass.wearable.watchface.R
-import com.programmersbox.forestwoodass.wearable.watchface.data.watchface.ColorStyleIdAndResourceIds
-import com.programmersbox.forestwoodass.wearable.watchface.data.watchface.LayoutStyleIdAndResourceIds
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.SupervisorJob
-import kotlinx.coroutines.launch
 
 // Information needed for complications.
 // Creates bounds for the locations of both right and left complications. (This is the
@@ -98,36 +90,6 @@ sealed class ComplicationConfig(val id: Int, val supportedTypes: List<Complicati
             ComplicationType.SMALL_IMAGE
         )
     )
-}
-
-// Doesnt really help since we only do this once it appears
-fun isHalfface(currentUserStyleRepository: CurrentUserStyleRepository): Boolean {
-    val scope: CoroutineScope =
-        CoroutineScope(SupervisorJob() + Dispatchers.Main.immediate)
-    var isHalfface = false
-    scope.launch {
-        currentUserStyleRepository.userStyle.collect { userStyle ->
-            for (options in userStyle) {
-                Log.d("helpme", "Checking userStyle" + options.key.id.toString())
-                when (options.key.id.toString()) {
-                    LAYOUT_STYLE_SETTING -> {
-                        val listOption = options.value as
-                            UserStyleSetting.ListUserStyleSetting.ListOption
-
-                        var currentLayoutStyle = LayoutStyleIdAndResourceIds.getLayoutStyleConfig(
-                            listOption.id.toString()
-                        )
-
-                        if ( currentLayoutStyle == LayoutStyleIdAndResourceIds.HALFFACE ) {
-                            isHalfface = true
-                            Log.d("helpme", "Found it ishalfface")
-                        }
-                    }
-                }
-            }
-        }
-    }
-    return isHalfface
 }
 
 // Utility function that initializes default complication slots (left and right).

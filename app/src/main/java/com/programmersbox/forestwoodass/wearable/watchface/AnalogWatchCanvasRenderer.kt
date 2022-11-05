@@ -351,7 +351,7 @@ class AnalogWatchCanvasRenderer(
         }
 
 
-        var restoreCount = canvas.save()
+        val restoreCount = canvas.save()
         var scaledShiftX = -bounds.width() * LAYOUT_ALT_CLOCK_SHIFT
         var scaledShiftY = 0f
 
@@ -386,13 +386,10 @@ class AnalogWatchCanvasRenderer(
                 drawMinutesDial(
                     canvas,
                     bounds,
-                    watchFaceData.numberRadiusFraction,
-                    if (renderParameters.drawMode != DrawMode.AMBIENT) watchFaceColors.activePrimaryColor else watchFaceColors.ambientPrimaryColor,
-                    if (renderParameters.drawMode != DrawMode.AMBIENT) watchFaceColors.activeOuterElementColor else watchFaceColors.ambientOuterElementColor,
                     zonedDateTime
                 )
                 if ( isHalfFace ) {
-                    var currentColor = translucentPaint.color
+                    val currentColor = translucentPaint.color
                     translucentPaint.color = context.getColor(R.color.black)
                     val shadowLeftX = if (scaledImage) {
                         bounds.width() * 0.45f
@@ -432,16 +429,13 @@ class AnalogWatchCanvasRenderer(
         }
         // CanvasComplicationDrawable already obeys rendererParameters.
         if ((renderParameters.drawMode != DrawMode.AMBIENT || (!isBatteryLow() && watchFaceData.compAOD))) {
-            drawComplications(canvas, bounds, zonedDateTime)
+            drawComplications(canvas, zonedDateTime)
         }
-
-
     }
 
     // ----- All drawing functions -----
     private fun drawComplications(
         canvas: Canvas,
-        bounds: Rect,
         zonedDateTime: ZonedDateTime
     ) {
         for ((_, complication) in complicationSlotsManager.complicationSlots) {
@@ -495,6 +489,34 @@ class AnalogWatchCanvasRenderer(
         }
     }
 
+    private fun configColors(drawAmbient: Boolean)
+    {
+        hourTextPaint.color = if (drawAmbient) {
+            watchFaceColors.ambientPrimaryTextColor
+        } else {
+            watchFaceColors.activePrimaryTextColor
+        }
+        hourTextAmbientPaint.color = if (drawAmbient) {
+            watchFaceColors.ambientPrimaryTextColor
+        } else {
+            watchFaceColors.activePrimaryTextColor
+        }
+        minuteTextPaint.color = if (drawAmbient) {
+            watchFaceColors.ambientPrimaryTextColor
+        } else {
+            watchFaceColors.activePrimaryTextColor
+        }
+        minuteTextAmbientPaint.color = if (drawAmbient) {
+            watchFaceColors.ambientPrimaryTextColor
+        } else {
+            watchFaceColors.activePrimaryTextColor
+        }
+        minuteHightlightPaint.color = if (drawAmbient) {
+            watchFaceColors.ambientPrimaryColor
+        } else {
+            watchFaceColors.activePrimaryColor
+        }
+    }
     private fun drawDigitalTime(
         canvas: Canvas,
         bounds: Rect,
@@ -517,32 +539,7 @@ class AnalogWatchCanvasRenderer(
             pivotY = bounds.exactCenterY()
         ) {
             val drawAmbient = renderParameters.drawMode == DrawMode.AMBIENT
-
-            hourTextPaint.color = if (drawAmbient) {
-                watchFaceColors.ambientPrimaryTextColor
-            } else {
-                watchFaceColors.activePrimaryTextColor
-            }
-            hourTextAmbientPaint.color = if (drawAmbient) {
-                watchFaceColors.ambientPrimaryTextColor
-            } else {
-                watchFaceColors.activePrimaryTextColor
-            }
-            minuteTextPaint.color = if (drawAmbient) {
-                watchFaceColors.ambientPrimaryTextColor
-            } else {
-                watchFaceColors.activePrimaryTextColor
-            }
-            minuteTextAmbientPaint.color = if (drawAmbient) {
-                watchFaceColors.ambientPrimaryTextColor
-            } else {
-                watchFaceColors.activePrimaryTextColor
-            }
-            minuteHightlightPaint.color = if (drawAmbient) {
-                watchFaceColors.ambientPrimaryColor
-            } else {
-                watchFaceColors.activePrimaryColor
-            }
+            configColors(drawAmbient)
 
             val textBounds = Rect()
             val realTextBounds = Rect()
@@ -729,14 +726,12 @@ class AnalogWatchCanvasRenderer(
                     outerElementPaint
                 )
 
-                if (!drawAmbient) {
-                    canvas.drawText(
-                        tx,
-                        bounds.exactCenterX() + dx - textBounds.width() / 2.0f,
-                        bounds.exactCenterY() + dy + textBounds.height() / 2.0f,
-                        secondDialTextPaint
-                    )
-                }
+                canvas.drawText(
+                    tx,
+                    bounds.exactCenterX() + dx - textBounds.width() / 2.0f,
+                    bounds.exactCenterY() + dy + textBounds.height() / 2.0f,
+                    secondDialTextPaint
+                )
             } else {
 
                 val stx = sin(rotation * 1.0f).toFloat() * (numberRadiusFraction) * (bounds.width()
@@ -771,22 +766,18 @@ class AnalogWatchCanvasRenderer(
     private fun drawMinutesDial(
         canvas: Canvas,
         bounds: Rect,
-        numberRadiusFraction: Float,
-        primaryColor: Int,
-        outerElementColor: Int,
         zonedDateTime: ZonedDateTime
     ) {
-        outerElementPaint.color = outerElementColor
-        minuteDialTextPaint.color = outerElementColor
-        secondDialTextPaint.color = primaryColor
+        outerElementPaint.color = if (renderParameters.drawMode != DrawMode.AMBIENT) watchFaceColors.activeOuterElementColor else watchFaceColors.ambientOuterElementColor
+        minuteDialTextPaint.color = if (renderParameters.drawMode != DrawMode.AMBIENT) watchFaceColors.activeOuterElementColor else watchFaceColors.ambientOuterElementColor
+        secondDialTextPaint.color = if (renderParameters.drawMode != DrawMode.AMBIENT) watchFaceColors.activePrimaryColor else watchFaceColors.ambientPrimaryColor
         // Draw and move seconds
+        val numberRadiusFraction = watchFaceData.numberRadiusFraction
         val textBounds = Rect()
         val sec = zonedDateTime.toLocalTime().second
-        textPaint.color = primaryColor
 
 
         val minute = zonedDateTime.toLocalTime().minute
-        textPaint.color = outerElementColor
         for (i in 0 until 60) {
             val rotation =
                 ((12.0f / 360.0f) * (i - minute - 45).toFloat() - ((12.0f / 360.0f) * (sec.toFloat() / 60.0f))) * Math.PI

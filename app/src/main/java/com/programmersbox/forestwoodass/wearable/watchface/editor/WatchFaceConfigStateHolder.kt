@@ -123,8 +123,6 @@ class WatchFaceConfigStateHolder(
                 SHIFT_PIXEL_STYLE_SETTING -> {
                     shiftpixelamountKey = setting as UserStyleSetting.DoubleRangeUserStyleSetting
                 }
-                // TODO (codingjeremy): Add complication change support if settings activity
-                // PR doesn't cover it. Otherwise, remove comment.
             }
         }
     }
