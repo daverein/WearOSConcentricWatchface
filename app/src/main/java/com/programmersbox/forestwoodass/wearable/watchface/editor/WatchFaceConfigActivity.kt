@@ -18,10 +18,8 @@ package com.programmersbox.forestwoodass.wearable.watchface.editor
 import android.os.Bundle
 import android.util.Log
 import android.view.View
-import android.widget.ImageView
 import androidx.activity.ComponentActivity
 import androidx.lifecycle.lifecycleScope
-import com.programmersbox.forestwoodass.wearable.watchface.R
 import com.programmersbox.forestwoodass.wearable.watchface.data.watchface.ColorStyleIdAndResourceIds
 import com.programmersbox.forestwoodass.wearable.watchface.data.watchface.LayoutStyleIdAndResourceIds
 import com.programmersbox.forestwoodass.wearable.watchface.databinding.ActivityWatchFaceConfigBinding

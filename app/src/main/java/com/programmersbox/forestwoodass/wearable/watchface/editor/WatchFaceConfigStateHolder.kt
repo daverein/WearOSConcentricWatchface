@@ -266,10 +266,6 @@ class WatchFaceConfigStateHolder(
         userStyleSetting: UserStyleSetting,
         userStyleOption: UserStyleSetting.Option
     ) {
-
-        // TODO: As of watchface 1.0.0-beta01 We can't use MutableStateFlow.compareAndSet, or
-        //       anything that calls through to that (like MutableStateFlow.update) because
-        //       MutableStateFlow.compareAndSet won't properly update the user style.
         val mutableUserStyle = editorSession.userStyle.value.toMutableUserStyle()
         mutableUserStyle[userStyleSetting] = userStyleOption
         editorSession.userStyle.value = mutableUserStyle.toUserStyle()
