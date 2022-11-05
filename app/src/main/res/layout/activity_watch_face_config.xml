@@ -75,9 +75,10 @@
             android:gravity="start|center_vertical"
             android:onClick="onClickColorStylePickerButton"
             android:text="@string/activity_config_color_style_picker_label"
+            android:textSize="@dimen/settings_default_text_size"
             android:textAppearance="?attr/textAppearanceButton"
             android:contentDescription="@string/activity_config_change_color_style_button_content_description"
-            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/more_options_image_view" />
 
@@ -93,11 +94,12 @@
             android:gravity="start|center_vertical"
             android:onClick="onClickLayoutStylePickerButton"
             android:text="@string/activity_config_layout_style_picker_label"
+            android:textSize="@dimen/settings_default_text_size"
             android:textAppearance="?attr/textAppearanceButton"
             android:contentDescription="@string/activity_config_change_layout_style_button_content_description"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/color_style_picker_button" />
+            app:layout_constraintRight_toLeftOf="@id/color_style_picker_button"
+            app:layout_constraintTop_toBottomOf="@+id/more_options_image_view" />
 
 
         <com.google.android.material.switchmaterial.SwitchMaterial
@@ -110,6 +112,7 @@
             android:onClick="onClickTimeAODEnabledSwitch"
             android:text="@string/activity_config_ticks_enabled_label"
             android:textColor="@color/white"
+            android:textSize="@dimen/settings_default_text_size"
             android:textAppearance="?attr/textAppearanceButton"
             android:contentDescription="@string/activity_config_ticks_enabled_switch_content_description"
             app:layout_constraintEnd_toEndOf="parent"
@@ -131,6 +134,7 @@
             android:layout_height="wrap_content"
             android:gravity="center"
             android:text="@string/activity_config_slider_text_label"
+            android:textSize="@dimen/settings_default_text_size"
             android:textColor="@color/white"
             android:textAppearance="?attr/textAppearanceButton"
             android:contentDescription="@string/activity_config_minute_hand_slider_text_label_content_description"
@@ -167,6 +171,7 @@
             android:onClick="onClickCompAODEnabledSwitch"
             android:text="@string/activity_config_compaod_enabled_label"
             android:textColor="@color/white"
+            android:textSize="@dimen/settings_default_text_size"
             android:textAppearance="?attr/textAppearanceButton"
             android:contentDescription="@string/activity_config_compaod_enabled_switch_content_description"
             app:layout_constraintEnd_toEndOf="parent"

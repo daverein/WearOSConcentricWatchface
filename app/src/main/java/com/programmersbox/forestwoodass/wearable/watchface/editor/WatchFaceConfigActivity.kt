@@ -46,6 +46,8 @@ class WatchFaceConfigActivity : ComponentActivity() {
     }
 
     private lateinit var binding: ActivityWatchFaceConfigBinding
+    private  var currentLayoutId : String = ""
+    private  var currentColorId : String = ""
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -59,6 +61,8 @@ class WatchFaceConfigActivity : ComponentActivity() {
         binding.timeaodEnabledSwitch.isEnabled = false
         binding.shiftPixelAmountSlider.isEnabled = false
         binding.compaodEnabledSwitch.isEnabled = false
+        currentLayoutId = ""
+        currentColorId = ""
 
         // Set max and min.
         binding.shiftPixelAmountSlider.valueTo = SHIFT_PIXEL_AOD_MAXIMUM_FOR_SLIDER
@@ -100,6 +104,8 @@ class WatchFaceConfigActivity : ComponentActivity() {
         binding.timeaodEnabledSwitch.isChecked = userStylesAndPreview.timeaodEnabled
         binding.compaodEnabledSwitch.isChecked = userStylesAndPreview.compaodEnabled
         binding.shiftPixelAmountSlider.value = userStylesAndPreview.shiftpixelamount
+        currentLayoutId = userStylesAndPreview.layoutStyleId
+        currentColorId = userStylesAndPreview.colorStyleId
         binding.preview.watchFaceBackground.setImageBitmap(userStylesAndPreview.previewImage)
 
         enabledWidgets()
@@ -115,22 +121,30 @@ class WatchFaceConfigActivity : ComponentActivity() {
     fun onClickColorStylePickerButton(view: View) {
         Log.d(TAG, "onClickColorStylePickerButton() $view")
 
-        // TODO (codingjeremy): Replace with a RecyclerView to choose color style (next CL)
-        // Selects a random color style from list.
         val colorStyleIdAndResourceIdsList = enumValues<ColorStyleIdAndResourceIds>()
-        val newColorStyle: ColorStyleIdAndResourceIds = colorStyleIdAndResourceIdsList.random()
-
-        stateHolder.setColorStyle(newColorStyle.id)
+        var newColorStyle = ""
+        for ( i in 0..colorStyleIdAndResourceIdsList.size-1) {
+            val r = colorStyleIdAndResourceIdsList[i]
+            if ( currentColorId == r.id ) {
+                newColorStyle = colorStyleIdAndResourceIdsList[(i+1)%colorStyleIdAndResourceIdsList.size].id
+            }
+        }
+        stateHolder.setColorStyle(newColorStyle)
     }
     fun onClickLayoutStylePickerButton(view: View) {
         Log.d(TAG, "onClickLayoutStylePickerButton() $view")
 
-        // TODO (codingjeremy): Replace with a RecyclerView to choose color style (next CL)
-        // Selects a random color style from list.
         val layoutStyleIdAndResourceIdsList = enumValues<LayoutStyleIdAndResourceIds>()
-        val newLayoutStyle: LayoutStyleIdAndResourceIds = layoutStyleIdAndResourceIdsList.random()
+        var newLayoutStyle = ""
+        for ( i in 0..layoutStyleIdAndResourceIdsList.size-1) {
+            val r = layoutStyleIdAndResourceIdsList[i]
+            if ( currentLayoutId == r.id ) {
+                newLayoutStyle = layoutStyleIdAndResourceIdsList[(i+1)%layoutStyleIdAndResourceIdsList.size].id
+            }
+        }
 
-        stateHolder.setLayoutStyle(newLayoutStyle.id)
+        stateHolder.setLayoutStyle(newLayoutStyle)
+
     }
 
     fun onClickLeftComplicationButton(view: View) {
