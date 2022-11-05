@@ -18,8 +18,10 @@ package com.programmersbox.forestwoodass.wearable.watchface.editor
 import android.os.Bundle
 import android.util.Log
 import android.view.View
+import android.widget.ImageView
 import androidx.activity.ComponentActivity
 import androidx.lifecycle.lifecycleScope
+import com.programmersbox.forestwoodass.wearable.watchface.R
 import com.programmersbox.forestwoodass.wearable.watchface.data.watchface.ColorStyleIdAndResourceIds
 import com.programmersbox.forestwoodass.wearable.watchface.data.watchface.LayoutStyleIdAndResourceIds
 import com.programmersbox.forestwoodass.wearable.watchface.databinding.ActivityWatchFaceConfigBinding
@@ -107,7 +109,8 @@ class WatchFaceConfigActivity : ComponentActivity() {
         currentLayoutId = userStylesAndPreview.layoutStyleId
         currentColorId = userStylesAndPreview.colorStyleId
         binding.preview.watchFaceBackground.setImageBitmap(userStylesAndPreview.previewImage)
-
+        setColorObject(userStylesAndPreview.colorStyleId)
+        setLayoutObject(userStylesAndPreview.layoutStyleId)
         enabledWidgets()
     }
 
@@ -116,6 +119,17 @@ class WatchFaceConfigActivity : ComponentActivity() {
         binding.timeaodEnabledSwitch.isEnabled = true
         binding.shiftPixelAmountSlider.isEnabled = true
         binding.compaodEnabledSwitch.isEnabled = true
+    }
+
+    fun setColorObject(id: String)
+    {
+        val colorStyleIdAndResourceIdsList = enumValues<ColorStyleIdAndResourceIds>()
+        for ( i in 0..colorStyleIdAndResourceIdsList.size-1) {
+            val r = colorStyleIdAndResourceIdsList[i]
+            if ( id == r.id ) {
+                binding.currentColorStyleIcon.setImageResource(colorStyleIdAndResourceIdsList[(i)%colorStyleIdAndResourceIdsList.size].iconResourceId)
+            }
+        }
     }
 
     fun onClickColorStylePickerButton(view: View) {
@@ -127,10 +141,23 @@ class WatchFaceConfigActivity : ComponentActivity() {
             val r = colorStyleIdAndResourceIdsList[i]
             if ( currentColorId == r.id ) {
                 newColorStyle = colorStyleIdAndResourceIdsList[(i+1)%colorStyleIdAndResourceIdsList.size].id
+                binding.currentColorStyleIcon.setImageResource(colorStyleIdAndResourceIdsList[(i+1)%colorStyleIdAndResourceIdsList.size].iconResourceId)
             }
         }
         stateHolder.setColorStyle(newColorStyle)
     }
+
+    fun setLayoutObject(id: String)
+    {
+        val layoutStyleIdAndResourceIdsList = enumValues<LayoutStyleIdAndResourceIds>()
+        for ( i in 0..layoutStyleIdAndResourceIdsList.size-1) {
+            val r = layoutStyleIdAndResourceIdsList[i]
+            if ( id == r.id ) {
+                binding.currentLayoutStyleIcon.setImageResource(layoutStyleIdAndResourceIdsList[(i)%layoutStyleIdAndResourceIdsList.size].iconResourceId)
+            }
+        }
+    }
+
     fun onClickLayoutStylePickerButton(view: View) {
         Log.d(TAG, "onClickLayoutStylePickerButton() $view")
 
@@ -140,6 +167,7 @@ class WatchFaceConfigActivity : ComponentActivity() {
             val r = layoutStyleIdAndResourceIdsList[i]
             if ( currentLayoutId == r.id ) {
                 newLayoutStyle = layoutStyleIdAndResourceIdsList[(i+1)%layoutStyleIdAndResourceIdsList.size].id
+                binding.currentLayoutStyleIcon.setImageResource(layoutStyleIdAndResourceIdsList[(i+1)%layoutStyleIdAndResourceIdsList.size].iconResourceId)
             }
         }
 

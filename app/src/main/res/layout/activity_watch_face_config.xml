@@ -53,9 +53,27 @@
             app:layout_constraintTop_toTopOf="parent" />
 
         <ImageView
+            android:id="@+id/current_color_style_icon"
+            android:layout_width="32dp"
+            android:layout_height="32dp"
+            android:padding="@dimen/activity_config_style_picker_icon_padding"
+            android:src="@drawable/green_style"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintBottom_toBottomOf="@+id/preview" />
+
+        <ImageView
+            android:id="@+id/current_layout_style_icon"
+            android:layout_width="32dp"
+            android:layout_height="32dp"
+            android:padding="@dimen/activity_config_style_picker_icon_padding"
+            android:src="@drawable/fullface"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintBottom_toBottomOf="@+id/preview" />
+
+        <ImageView
             android:id="@+id/more_options_image_view"
             android:layout_width="0dp"
-            android:layout_height="wrap_content"
+            android:layout_height="0dp"
             android:layout_centerHorizontal="true"
             android:padding="@dimen/activity_config_more_options_padding"
             android:src="@drawable/more_options_icon"

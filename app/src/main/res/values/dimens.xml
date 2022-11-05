@@ -29,8 +29,8 @@
 
     <!-- Values for WatchFaceConfigActivity -->
     <dimen name="activity_config_padding">6dp</dimen>
-    <dimen name="activity_config_spacer_height_post_content">60dp</dimen>
-    <dimen name="activity_config_spacer_height_pre_slider">20dp</dimen>
+    <dimen name="activity_config_spacer_height_post_content">10dp</dimen>
+    <dimen name="activity_config_spacer_height_pre_slider">10dp</dimen>
     <dimen name="activity_config_more_options_padding">1dp</dimen>
     <dimen name="activity_config_style_picker_icon_padding">2dp</dimen>
     <dimen name="activity_config_ticks_enabled_switch_icon_padding">2dp</dimen>
