@@ -53,6 +53,7 @@ private const val LAYOUT_ALT_CLOCK_SHIFT = 0.30f
  * Renders watch face via data in Room database. Also, updates watch face state based on setting
  * changes by user via [userStyleRepository.addUserStyleListener()].
  */
+@Suppress("KotlinConstantConditions")
 class AnalogWatchCanvasRenderer(
     private val context: Context,
     surfaceHolder: SurfaceHolder,
