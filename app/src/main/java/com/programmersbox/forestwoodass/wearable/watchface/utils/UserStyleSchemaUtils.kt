@@ -29,6 +29,7 @@ const val COLOR_STYLE_SETTING = "color_style_setting"
 const val LAYOUT_STYLE_SETTING = "layout_style_setting"
 const val DRAW_TIME_AOD_STYLE_SETTING = "draw_time_aod_style_setting"
 const val COMPAOD_STYLE_SETTING = "compaod_style_setting"
+const val MINUTEDIALAOD_STYLE_SETTING = "minutedialaod_style_setting"
 const val SHIFT_PIXEL_STYLE_SETTING = "shift_pixels_style_setting"
 
 /*
@@ -88,6 +89,15 @@ fun createUserStyleSchema(context: Context): UserStyleSchema {
         listOf(WatchFaceLayer.BASE),
         COMPAOD_DEFAULT
     )
+    val minuteaodStyleSetting = UserStyleSetting.BooleanUserStyleSetting(
+        UserStyleSetting.Id(MINUTEDIALAOD_STYLE_SETTING),
+        context.resources,
+        R.string.watchface_minutedialaod_setting,
+        R.string.watchface_minutedialaod_setting_description,
+        null,
+        listOf(WatchFaceLayer.BASE),
+        COMPAOD_DEFAULT
+    )
     // 3. Allows user to change the length of the minute hand.
     val watchHandLengthStyleSetting = UserStyleSetting.DoubleRangeUserStyleSetting(
         UserStyleSetting.Id(SHIFT_PIXEL_STYLE_SETTING),
@@ -108,6 +118,7 @@ fun createUserStyleSchema(context: Context): UserStyleSchema {
             layoutStyleSetting,
             drawTimeOnAODStyleSetting,
             compaodStyleSetting,
+            minuteaodStyleSetting,
             watchHandLengthStyleSetting
         )
     )

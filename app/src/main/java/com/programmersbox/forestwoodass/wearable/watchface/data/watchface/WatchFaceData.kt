@@ -19,9 +19,7 @@ package com.programmersbox.forestwoodass.wearable.watchface.data.watchface
 // to be exposed as settings defaults.
 const val DRAW_TIME_AOD = true
 const val COMPAOD_DEFAULT = true
-
-private const val HOUR_HAND_LENGTH_FRACTION = 0.21028f
-private const val HOUR_HAND_WIDTH_FRACTION = 0.02336f
+const val MINUTEDIALAOD_DEFAULT = true
 
 // Because the minute length is something the user can edit, we make it publicly
 // accessible as a default. We also specify the minimum and maximum values for the user
@@ -41,6 +39,7 @@ data class WatchFaceData(
     val layoutStyle: LayoutStyleIdAndResourceIds = LayoutStyleIdAndResourceIds.FULLFACE,
     val timeAOD: Boolean = DRAW_TIME_AOD,
     val compAOD: Boolean = COMPAOD_DEFAULT,
+    val minuteDialAOD: Boolean = MINUTEDIALAOD_DEFAULT,
     val shiftPixelAmount: Float = SHIFT_PIXEL_AOD_FRACTION_DEFAULT,
     val numberRadiusFraction: Float = NUMBER_RADIUS_FRACTION,
 )

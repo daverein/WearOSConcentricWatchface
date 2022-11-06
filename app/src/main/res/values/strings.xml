@@ -69,6 +69,12 @@
      on the watch face -->
     <string name="watchface_compaod_setting_description">Show complication information on the AOD</string>
 
+    <!-- An option within the analog watch face to draw pips to mark each hour [CHAR LIMIT=20] -->
+    <string name="watchface_minutedialaod_setting">Show minute dial on AOD</string>
+
+    <!-- Subtitle for the menu option to configure if we should draw pips to mark each hour
+     on the watch face -->
+    <string name="watchface_minutedialaod_setting_description">Show minute dial on the AOD</string>
 
     <!-- A menu option to select a widget that lets us configure the length of the watch hands
     [CHAR LIMIT=20] -->
@@ -110,6 +116,7 @@
     <string name="activity_config_layout_style_picker_label">Layout\nStyle</string>
     <string name="activity_config_ticks_enabled_label">Show time\non AOD</string>
     <string name="activity_config_compaod_enabled_label">Complications\non AOD</string>
+    <string name="activity_config_secondsaod_enabled_label">Minute Dial\non AOD</string>
     <string name="activity_config_slider_text_label">Shift Pixel\nAmount</string>
     <!-- Content Descriptions -->
     <string name="activity_config_preview_of_watch_face_content_description">Preview of Watch Face.</string>
@@ -118,8 +125,9 @@
     <string name="activity_config_change_layout_style_button_content_description">Button to change the layout style of the watch face.</string>
     <string name="activity_config_ticks_enabled_switch_content_description">Show time on AOD</string>
     <string name="activity_config_compaod_enabled_switch_content_description">Display Complications on AOD</string>
+    <string name="activity_config_secondsaod_enabled_switch_content_description">Display Minute Dial on AOD</string>
     <string name="activity_config_minute_hand_slider_text_label_content_description">Shift pixels on the AOD to avoid burn in</string>
-    <string name="activity_config_minute_hand_length_slider_content_description">Slider for adjusting pixels to shift (0-16).</string>
+    <string name="activity_config_minute_hand_length_slider_content_description">Slider for adjusting pixels to shift (0&#8211;16).</string>
     <string name="activity_config_screenshot_content_description">Screenshot of Watch Face</string>
     <string name="activity_config_complication_button_right_content_description">Button to edit the right complication data</string>
     <string name="activity_config_complication_button_left_content_description">Button to edit the left complication data</string>

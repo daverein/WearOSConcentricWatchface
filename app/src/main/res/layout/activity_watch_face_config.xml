@@ -205,10 +205,35 @@
         <Space
         android:id="@+id/post_content_spacer2"
         android:layout_width="0dp"
-        android:layout_height="@dimen/activity_config_spacer_height_post_content"
+        android:layout_height="@dimen/activity_config_spacer_height_pre_content"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/compaod_enabled_switch" />
+
+        <com.google.android.material.switchmaterial.SwitchMaterial
+            android:id="@+id/minutedialaod_enabled_switch"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:drawableStart="@drawable/watch_ticks"
+            android:drawablePadding="@dimen/activity_config_ticks_enabled_switch_icon_padding"
+            android:gravity="start|center_vertical"
+            android:onClick="onClickMinuteDialAODEnabledSwitch"
+            android:text="@string/activity_config_secondsaod_enabled_label"
+            android:textColor="@color/white"
+            android:textSize="@dimen/settings_default_text_size"
+            android:textAppearance="?attr/textAppearanceButton"
+            android:contentDescription="@string/activity_config_secondsaod_enabled_switch_content_description"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/post_content_spacer2" />
+
+        <Space
+            android:id="@+id/post_content_spacer3"
+            android:layout_width="0dp"
+            android:layout_height="@dimen/activity_config_spacer_height_post_content"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/minutedialaod_enabled_switch" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 </ScrollView>
 

@@ -61,6 +61,7 @@ class WatchFaceConfigActivity : ComponentActivity() {
         binding.timeaodEnabledSwitch.isEnabled = false
         binding.shiftPixelAmountSlider.isEnabled = false
         binding.compaodEnabledSwitch.isEnabled = false
+        binding.minutedialaodEnabledSwitch.isEnabled = false
         currentLayoutId = ""
         currentColorId = ""
 
@@ -103,6 +104,7 @@ class WatchFaceConfigActivity : ComponentActivity() {
 
         binding.timeaodEnabledSwitch.isChecked = userStylesAndPreview.timeaodEnabled
         binding.compaodEnabledSwitch.isChecked = userStylesAndPreview.compaodEnabled
+        binding.minutedialaodEnabledSwitch.isChecked = userStylesAndPreview.minutedialaodEnabled
         binding.shiftPixelAmountSlider.value = userStylesAndPreview.shiftpixelamount
         currentLayoutId = userStylesAndPreview.layoutStyleId
         currentColorId = userStylesAndPreview.colorStyleId
@@ -117,6 +119,7 @@ class WatchFaceConfigActivity : ComponentActivity() {
         binding.timeaodEnabledSwitch.isEnabled = true
         binding.shiftPixelAmountSlider.isEnabled = true
         binding.compaodEnabledSwitch.isEnabled = true
+        binding.minutedialaodEnabledSwitch.isEnabled = true
     }
 
     fun setColorObject(id: String)
@@ -193,8 +196,12 @@ class WatchFaceConfigActivity : ComponentActivity() {
         stateHolder.setTimeAOD(binding.timeaodEnabledSwitch.isChecked)
     }
     fun onClickCompAODEnabledSwitch(view: View) {
-        Log.d(TAG, "onClickTicksEnabledSwitch() $view")
+        Log.d(TAG, "onClickCompAODEnabledSwitch() $view")
         stateHolder.setCompAOD(binding.compaodEnabledSwitch.isChecked)
+    }
+    fun onClickMinuteDialAODEnabledSwitch(view: View) {
+        Log.d(TAG, "onClickMinuteDialAODEnabledSwitch() $view")
+        stateHolder.setMinuteDialAOD(binding.minutedialaodEnabledSwitch.isChecked)
     }
     companion object {
         const val TAG = "WatchFaceConfigActivity"

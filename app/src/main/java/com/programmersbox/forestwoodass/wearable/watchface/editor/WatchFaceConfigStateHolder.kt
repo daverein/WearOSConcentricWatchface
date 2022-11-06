@@ -73,6 +73,7 @@ class WatchFaceConfigStateHolder(
     private lateinit var layoutStyleKey: UserStyleSetting.ListUserStyleSetting
     private lateinit var timeaodKey: UserStyleSetting.BooleanUserStyleSetting
     private lateinit var compaodKey: UserStyleSetting.BooleanUserStyleSetting
+    private lateinit var minutedialaodKey: UserStyleSetting.BooleanUserStyleSetting
     private lateinit var shiftpixelamountKey: UserStyleSetting.DoubleRangeUserStyleSetting
 
     val uiState: StateFlow<EditWatchFaceUiState> =
@@ -119,7 +120,9 @@ class WatchFaceConfigStateHolder(
                 COMPAOD_STYLE_SETTING -> {
                     compaodKey = setting as UserStyleSetting.BooleanUserStyleSetting
                 }
-
+                MINUTEDIALAOD_STYLE_SETTING -> {
+                    minutedialaodKey = setting as UserStyleSetting.BooleanUserStyleSetting
+                }
                 SHIFT_PIXEL_STYLE_SETTING -> {
                     shiftpixelamountKey = setting as UserStyleSetting.DoubleRangeUserStyleSetting
                 }
@@ -158,6 +161,8 @@ class WatchFaceConfigStateHolder(
             userStyle[timeaodKey] as UserStyleSetting.BooleanUserStyleSetting.BooleanOption
         val compaodEnabledStyle =
             userStyle[compaodKey] as UserStyleSetting.BooleanUserStyleSetting.BooleanOption
+        val minuteDialAODEnabledStyle =
+            userStyle[minutedialaodKey] as UserStyleSetting.BooleanUserStyleSetting.BooleanOption
         val shiftpixelamountStyle =
             userStyle[shiftpixelamountKey]
                 as UserStyleSetting.DoubleRangeUserStyleSetting.DoubleRangeOption
@@ -169,6 +174,7 @@ class WatchFaceConfigStateHolder(
             layoutStyleId = layoutStyle.id.toString(),
             timeaodEnabled = timeaodEnabledStyle.value,
             compaodEnabled = compaodEnabledStyle.value,
+            minutedialaodEnabled = minuteDialAODEnabledStyle.value,
             shiftpixelamount = multiplyByMultipleForSlider(shiftpixelamountStyle.value).toFloat(),
             previewImage = bitmap
         )
@@ -250,6 +256,12 @@ class WatchFaceConfigStateHolder(
             UserStyleSetting.BooleanUserStyleSetting.BooleanOption.from(enabled)
         )
     }
+    fun setMinuteDialAOD(enabled: Boolean) {
+        setUserStyleOption(
+            minutedialaodKey,
+            UserStyleSetting.BooleanUserStyleSetting.BooleanOption.from(enabled)
+        )
+    }
     fun setShiftPixelAmount(newShiftPixel: Float) {
         val newShiftPixelRatio = newShiftPixel.toDouble() / MULTIPLE_FOR_SLIDER
 
@@ -282,6 +294,7 @@ class WatchFaceConfigStateHolder(
         val layoutStyleId: String,
         val timeaodEnabled: Boolean,
         val compaodEnabled: Boolean,
+        val minutedialaodEnabled: Boolean,
         val shiftpixelamount: Float,
         val previewImage: Bitmap
     )

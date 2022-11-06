@@ -258,6 +258,14 @@ class AnalogWatchCanvasRenderer(
                         compAOD = booleanValue.value
                     )
                 }
+                MINUTEDIALAOD_STYLE_SETTING -> {
+                    val booleanValue = options.value as
+                        UserStyleSetting.BooleanUserStyleSetting.BooleanOption
+
+                    newWatchFaceData = newWatchFaceData.copy(
+                        minuteDialAOD = booleanValue.value
+                    )
+                }
                 SHIFT_PIXEL_STYLE_SETTING -> {
                     val doubleValue = options.value as
                         UserStyleSetting.DoubleRangeUserStyleSetting.DoubleRangeOption
@@ -331,18 +339,23 @@ class AnalogWatchCanvasRenderer(
         val isHalfFace = watchFaceData.layoutStyle.id == LayoutStyleIdAndResourceIds.HALFFACE.id ||
             watchFaceData.layoutStyle.id == LayoutStyleIdAndResourceIds.SCALED_HALFFACE.id
         val isAmbient = renderParameters.drawMode == DrawMode.AMBIENT
-        val backgroundColor = if (renderParameters.drawMode == DrawMode.AMBIENT) {
+        val backgroundColor = if (isAmbient) {
             watchFaceColors.ambientBackgroundColor
         } else {
             watchFaceColors.activeBackgroundColor
         }
 
-        if (renderParameters.drawMode == DrawMode.AMBIENT &&
-            watchFaceData.layoutStyle.id == LayoutStyleIdAndResourceIds.FULLFACE.id) {
-            canvas.scale(1.15f, 1.15f, bounds.exactCenterX(), bounds.exactCenterY())
+        // Zoom the ambient watchface a bit larger, for viewing purposes, in ambient mode.
+        // XXX - but maybe not do this or as an option
+        if (isAmbient ) {
+            if ( watchFaceData.layoutStyle.id == LayoutStyleIdAndResourceIds.FULLFACE.id) {
+                canvas.scale(1.15f, 1.15f, bounds.exactCenterX(), bounds.exactCenterY())
+            } else if ( !watchFaceData.compAOD ){
+                canvas.scale(1.20f, 1.20f, 0f, bounds.exactCenterY())
+            }
         }
 
-        if (renderParameters.drawMode == DrawMode.AMBIENT &&
+        if (isAmbient &&
             watchFaceData.shiftPixelAmount >= 1.0f
         ) {
             val cx = sin((zonedDateTime.minute % 60f) * 6f) * watchFaceData.shiftPixelAmount
@@ -379,10 +392,10 @@ class AnalogWatchCanvasRenderer(
             )
         }
         if (renderParameters.watchFaceLayers.contains(WatchFaceLayer.COMPLICATIONS_OVERLAY) &&
-            (renderParameters.drawMode != DrawMode.AMBIENT || watchFaceData.timeAOD)
+            (!isAmbient || watchFaceData.timeAOD)
         ) {
             if ( renderParameters.drawMode != DrawMode.AMBIENT ||
-                (!isBatteryLow() && renderParameters.drawMode == DrawMode.AMBIENT)) {
+                (!isBatteryLow() && isAmbient && watchFaceData.minuteDialAOD)) {
                 drawMinutesDial(
                     canvas,
                     bounds,
@@ -414,7 +427,7 @@ class AnalogWatchCanvasRenderer(
                     }
                 }
             }
-            if (renderParameters.drawMode != DrawMode.AMBIENT || watchFaceData.timeAOD) {
+            if (!isAmbient || watchFaceData.timeAOD) {
                 drawDigitalTime(canvas, bounds, zonedDateTime)
             }
         }
@@ -424,11 +437,11 @@ class AnalogWatchCanvasRenderer(
 
         canvas.restoreToCount(restoreCount)
 
-        if (renderParameters.drawMode != DrawMode.AMBIENT) {
+        if (!isAmbient) {
             drawDateElement(canvas, bounds, zonedDateTime)
         }
         // CanvasComplicationDrawable already obeys rendererParameters.
-        if ((renderParameters.drawMode != DrawMode.AMBIENT || (!isBatteryLow() && watchFaceData.compAOD))) {
+        if ((!isAmbient || (!isBatteryLow() && watchFaceData.compAOD))) {
             drawComplications(canvas, zonedDateTime)
         }
     }
@@ -618,7 +631,7 @@ class AnalogWatchCanvasRenderer(
             } else {
                 if (watchFaceData.layoutStyle.id == LayoutStyleIdAndResourceIds.HALFFACE.id ||
                     watchFaceData.layoutStyle.id == LayoutStyleIdAndResourceIds.SCALED_HALFFACE.id) {
-                    bounds.width().toFloat()
+                    bounds.width().toFloat()+10f
                 } else {
                     bounds.width()*1.5f
                 }
