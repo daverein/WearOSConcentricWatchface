@@ -33,15 +33,15 @@
 
     <!-- Red Style -->
     <color name="red_primary_color">@color/maroon_light</color>
-    <color name="red_secondary_color">@color/maroon_50</color>
+    <color name="red_secondary_color">@color/maroon_30</color>
     <color name="red_background_color">@color/black</color>
-    <color name="red_outer_element_color">@color/maroon_30</color>
+    <color name="red_outer_element_color">@color/maroon_50</color>
 
     <!-- Green Style -->
     <color name="green_primary_color">@color/light_green</color>
     <color name="green_secondary_color">@color/dark_green</color>
     <color name="green_background_color">@color/black</color>
-    <color name="green_outer_element_color">@color/light_green</color>
+    <color name="green_outer_element_color">@color/light_green_50</color>
 
     <!-- Blue Style -->
     <color name="blue_primary_color">@color/aquablue</color>
