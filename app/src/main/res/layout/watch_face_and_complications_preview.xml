@@ -46,10 +46,13 @@
         android:onClick="onClickRightComplicationButton"
         android:contentDescription="@string/activity_config_complication_button_left_content_description"
         android:background="@android:color/transparent"
-        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        android:layout_marginRight="30dp"
+        android:layout_marginLeft="30dp"
         app:layout_constraintHeight_percent="0.3"
-        app:layout_constraintWidth_percent="1.0" />
+        app:layout_constraintWidth_percent="0.7" />
 
     <Button
         android:id="@+id/middle_complication"
