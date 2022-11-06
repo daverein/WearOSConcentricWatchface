@@ -68,6 +68,17 @@ enum class ColorStyleIdAndResourceIds(
     @ColorRes val backgroundColorId: Int,
     @ColorRes val outerElementColorId: Int
 ) {
+    BLUE(
+        id = BLUE_COLOR_STYLE_ID,
+        nameResourceId = BLUE_COLOR_STYLE_NAME_RESOURCE_ID,
+        iconResourceId = BLUE_COLOR_STYLE_ICON_ID,
+        complicationStyleDrawableId = R.drawable.complication_blue_style,
+        primaryColorId = R.color.blue_primary_color,
+        primaryColorTextId = R.color.color_text_primary,
+        secondaryColorId = R.color.blue_secondary_color,
+        backgroundColorId = R.color.blue_background_color,
+        outerElementColorId = R.color.blue_outer_element_color
+    ),
 
     AMBIENT(
         id = AMBIENT_COLOR_STYLE_ID,
@@ -105,17 +116,7 @@ enum class ColorStyleIdAndResourceIds(
         outerElementColorId = R.color.green_outer_element_color
     ),
 
-    BLUE(
-        id = BLUE_COLOR_STYLE_ID,
-        nameResourceId = BLUE_COLOR_STYLE_NAME_RESOURCE_ID,
-        iconResourceId = BLUE_COLOR_STYLE_ICON_ID,
-        complicationStyleDrawableId = R.drawable.complication_blue_style,
-        primaryColorId = R.color.blue_primary_color,
-        primaryColorTextId = R.color.color_text_primary,
-        secondaryColorId = R.color.blue_secondary_color,
-        backgroundColorId = R.color.blue_background_color,
-        outerElementColorId = R.color.blue_outer_element_color
-    ),
+
 
     WHITE(
         id = WHITE_COLOR_STYLE_ID,
