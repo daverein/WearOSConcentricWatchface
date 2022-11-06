@@ -54,14 +54,14 @@ private const val LAYOUT_ALT_CLOCK_SHIFT = 0.30f
  * changes by user via [userStyleRepository.addUserStyleListener()].
  */
 @Suppress("KotlinConstantConditions")
-class AnalogWatchCanvasRenderer(
+class ConcentricNativeCanvasRenderer(
     private val context: Context,
     surfaceHolder: SurfaceHolder,
     watchState: WatchState,
     private val complicationSlotsManager: ComplicationSlotsManager,
     currentUserStyleRepository: CurrentUserStyleRepository,
     canvasType: Int
-) : Renderer.CanvasRenderer2<AnalogWatchCanvasRenderer.AnalogSharedAssets>(
+) : Renderer.CanvasRenderer2<ConcentricNativeCanvasRenderer.AnalogSharedAssets>(
     surfaceHolder,
     currentUserStyleRepository,
     watchState,
@@ -311,7 +311,7 @@ class AnalogWatchCanvasRenderer(
 
     override fun onDestroy() {
         Log.d(TAG, "onDestroy()")
-        scope.cancel("AnalogWatchCanvasRenderer scope clear() request")
+        scope.cancel("ConcentricNativeCanvasRenderer scope clear() request")
         context.unregisterReceiver(batteryLevelChanged)
         super.onDestroy()
     }
@@ -877,7 +877,7 @@ class AnalogWatchCanvasRenderer(
 
 
     companion object {
-        private const val TAG = "AnalogWatchCanvasRenderer"
+        private const val TAG = "ConcentricNativeCanvasRenderer"
 
         // Used to canvas.scale() to scale watch hands in proper bounds. This will always be 1.0.
         private const val WATCH_HAND_SCALE = 1.0f

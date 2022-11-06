@@ -30,10 +30,10 @@ import com.programmersbox.forestwoodass.wearable.watchface.utils.createUserStyle
 
 /**
  * Handles much of the boilerplate needed to implement a watch face (minus rendering code; see
- * [AnalogWatchCanvasRenderer]) including the complications and settings (styles user can change on
+ * [ConcentricNativeFaceService]) including the complications and settings (styles user can change on
  * the watch face).
  */
-class AnalogWatchFaceService : WatchFaceService() {
+class ConcentricNativeFaceService : WatchFaceService() {
 
     // Used by Watch Face APIs to construct user setting options and repository.
     override fun createUserStyleSchema(): UserStyleSchema =
@@ -57,7 +57,7 @@ class AnalogWatchFaceService : WatchFaceService() {
         Log.d(TAG, "createWatchFace()")
 
         // Creates class that renders the watch face.
-        val renderer = AnalogWatchCanvasRenderer(
+        val renderer = ConcentricNativeCanvasRenderer(
             context = applicationContext,
             surfaceHolder = surfaceHolder,
             watchState = watchState,
@@ -75,6 +75,6 @@ class AnalogWatchFaceService : WatchFaceService() {
     }
 
     companion object {
-        const val TAG = "AnalogWatchFaceService"
+        const val TAG = "ConcentricNativeFaceService"
     }
 }
