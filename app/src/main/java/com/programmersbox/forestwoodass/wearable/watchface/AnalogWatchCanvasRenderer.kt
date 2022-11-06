@@ -91,6 +91,7 @@ class AnalogWatchCanvasRenderer(
         watchFaceData.ambientColorStyle
     )
 
+    private val colorBlack = context.resources.getColor(R.color.black, context.theme)
     private var shadowLeft : Bitmap = BitmapFactory.decodeResource(context.getResources(),
         R.drawable.shadow_left)
     // Initializes paint object for painting the clock hands with default values.
@@ -402,31 +403,7 @@ class AnalogWatchCanvasRenderer(
                     bounds,
                     zonedDateTime
                 )
-                if ( isHalfFace ) {
-                    val currentColor = translucentPaint.color
-                    translucentPaint.color = context.getColor(R.color.black)
-                    val shadowLeftX = if (scaledImage) {
-                        bounds.width() * 0.45f
-                    } else {
-                        bounds.width() * LAYOUT_ALT_CLOCK_SHIFT
-                    }
-                    canvas.drawBitmap(shadowLeft, shadowLeftX, 0f, translucentPaint)
-                    translucentPaint.color = currentColor
-                } else {
-                    if ( watchFaceData.layoutStyle.id == LayoutStyleIdAndResourceIds.FULLFACE.id &&
-                        (!isAmbient || (isAmbient && watchFaceData.compAOD))) {
-                        canvas.drawArc(
-                            bounds.width().toFloat() * 0.15f, bounds.height().toFloat() * 0.15f,
-                            bounds.width().toFloat() * 0.85f, bounds.height().toFloat() * 0.88f,
-                            70f, 40f, true, translucentPaint
-                        )
-                        canvas.drawArc(
-                            bounds.width().toFloat() * 0.15f, bounds.height().toFloat() * 0.11f,
-                            bounds.width().toFloat() * 0.85f, bounds.height().toFloat() * 0.85f,
-                            250f, 40f, true, translucentPaint
-                        )
-                    }
-                }
+                drawShadows(canvas, bounds, isAmbient, isHalfFace, scaledImage)
             }
             if (!isAmbient || watchFaceData.timeAOD) {
                 drawDigitalTime(canvas, bounds, zonedDateTime)
@@ -448,6 +425,40 @@ class AnalogWatchCanvasRenderer(
     }
 
     // ----- All drawing functions -----
+    private fun drawShadows(canvas: Canvas,
+                            bounds: Rect,
+                            isAmbient : Boolean,
+                            isHalfFace : Boolean,
+                            scaledImage : Boolean)
+    {
+        if ( isHalfFace ) {
+            val currentColor = translucentPaint.color
+            translucentPaint.color = colorBlack
+            val shadowLeftX = if (scaledImage) {
+                bounds.width() * 0.45f
+            } else {
+                bounds.width() * LAYOUT_ALT_CLOCK_SHIFT
+            }
+            canvas.drawBitmap(shadowLeft, shadowLeftX, 0f, translucentPaint)
+            translucentPaint.color = currentColor
+        } else {
+            if ( watchFaceData.layoutStyle.id == LayoutStyleIdAndResourceIds.FULLFACE.id &&
+                (!isAmbient || (isAmbient && watchFaceData.compAOD))) {
+                canvas.drawArc(
+                    bounds.width().toFloat() * 0.15f, bounds.height().toFloat() * 0.15f,
+                    bounds.width().toFloat() * 0.85f, bounds.height().toFloat() * 0.88f,
+                    70f, 40f, true, translucentPaint
+                )
+                canvas.drawArc(
+                    bounds.width().toFloat() * 0.15f, bounds.height().toFloat() * 0.11f,
+                    bounds.width().toFloat() * 0.85f, bounds.height().toFloat() * 0.85f,
+                    250f, 40f, true, translucentPaint
+                )
+            }
+        }
+    }
+
+
     private fun drawComplications(
         canvas: Canvas,
         zonedDateTime: ZonedDateTime
