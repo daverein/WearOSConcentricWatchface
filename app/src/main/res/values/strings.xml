@@ -72,11 +72,11 @@
 
     <!-- A menu option to select a widget that lets us configure the length of the watch hands
     [CHAR LIMIT=20] -->
-    <string name="watchface_hand_length_setting">Shift Pixel amount</string>
+    <string name="watchface_hand_length_setting">AOD Burn-in Protection</string>
 
     <!-- Sub title for the menu option to select a widget that lets us configure the length of the
     watch hands -->
-    <string name="watchface_hand_length_setting_description">Number of pixels to shift</string>
+    <string name="watchface_hand_length_setting_description">Number of pixels to shift on AOD</string>
 
     <!-- A menu option to select a widget that lets us configure the Complications (a watch
     making term) [CHAR LIMIT=20] -->
