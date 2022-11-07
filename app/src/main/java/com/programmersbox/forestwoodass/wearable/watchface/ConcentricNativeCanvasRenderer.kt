@@ -92,7 +92,7 @@ class ConcentricNativeCanvasRenderer(
     )
 
     private val colorBlack = context.resources.getColor(R.color.black, context.theme)
-    private var shadowLeft : Bitmap = BitmapFactory.decodeResource(context.getResources(),
+    private var shadowLeft : Bitmap = BitmapFactory.decodeResource(context.resources,
         R.drawable.shadow_left)
     // Initializes paint object for painting the clock hands with default values.
     private val translucentPaint = Paint().apply {
@@ -147,7 +147,7 @@ class ConcentricNativeCanvasRenderer(
         textSize = context.resources.getDimensionPixelSize(R.dimen.minute_text_size).toFloat()
         typeface = context.resources.getFont(R.font.rubik_regular)
     }
-    private val minuteHightlightPaint = Paint().apply {
+    private val minuteHighlightPaint = Paint().apply {
         isAntiAlias = true
         textSize = context.resources.getDimensionPixelSize(R.dimen.minute_text_size).toFloat()
         // typeface = Typeface.createFromAsset(context.resources.assets, "Roboto.ttf");
@@ -202,8 +202,8 @@ class ConcentricNativeCanvasRenderer(
                 updateWatchFaceData(userStyle)
             }
         }
-        val batteryStatus: Intent? = IntentFilter(Intent.ACTION_BATTERY_CHANGED).let { ifilter ->
-            context.registerReceiver(batteryLevelChanged, ifilter)
+        val batteryStatus: Intent? = IntentFilter(Intent.ACTION_BATTERY_CHANGED).let { filter ->
+            context.registerReceiver(batteryLevelChanged, filter)
         }
         batteryLevelChanged.onReceive(context, batteryStatus)
     }
@@ -543,7 +543,7 @@ class ConcentricNativeCanvasRenderer(
         } else {
             watchFaceColors.activePrimaryTextColor
         }
-        minuteHightlightPaint.color = if (drawAmbient) {
+        minuteHighlightPaint.color = if (drawAmbient) {
             watchFaceColors.ambientPrimaryColor
         } else {
             watchFaceColors.activePrimaryColor
@@ -603,20 +603,20 @@ class ConcentricNativeCanvasRenderer(
             val cx = bounds.exactCenterX() + hourOffset * 0.45f
             val cy = bounds.exactCenterY() - sizeRadius / 2f
 
-            minuteHightlightPaint.style = Paint.Style.FILL
-            minuteHightlightPaint.color = watchFaceColors.activeBackgroundColor
+            minuteHighlightPaint.style = Paint.Style.FILL
+            minuteHighlightPaint.color = watchFaceColors.activeBackgroundColor
 
 
-            // Draw the underside of the hightlight
+            // Draw the underside of the highlight
             canvas.drawArc(
                 bounds.width().toFloat() * 0.15f, bounds.height().toFloat() * 0.15f,
                 bounds.width().toFloat() * 0.85f, bounds.height().toFloat() * 0.85f,
-                -17f, 34f, true, minuteHightlightPaint
+                -17f, 34f, true, minuteHighlightPaint
             )
             canvas.drawRect(
                 bounds.width().toFloat() * 0.70f, bounds.height().toFloat() * 0.39f,
                 bounds.width().toFloat() * 0.82f, bounds.height().toFloat() * 0.61f,
-                minuteHightlightPaint
+                minuteHighlightPaint
             )
 
 
@@ -634,9 +634,9 @@ class ConcentricNativeCanvasRenderer(
                 minutePaintToUse
             )
 
-            minuteHightlightPaint.style = Paint.Style.STROKE
-            minuteHightlightPaint.strokeWidth = 3.0f
-            minuteHightlightPaint.color = if (drawAmbient) {
+            minuteHighlightPaint.style = Paint.Style.STROKE
+            minuteHighlightPaint.strokeWidth = 3.0f
+            minuteHighlightPaint.color = if (drawAmbient) {
                 watchFaceColors.ambientSecondaryColor
             } else {
                 watchFaceColors.activePrimaryColor
@@ -654,7 +654,7 @@ class ConcentricNativeCanvasRenderer(
             canvas.drawRoundRect(
                 cx, cy,
                 rightSide, cy + sizeRadius,
-                sizeRadius, sizeRadius, minuteHightlightPaint
+                sizeRadius, sizeRadius, minuteHighlightPaint
             )
 
         }
