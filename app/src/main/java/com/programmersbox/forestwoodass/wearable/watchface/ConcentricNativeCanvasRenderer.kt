@@ -362,7 +362,7 @@ class ConcentricNativeCanvasRenderer(
                 drawShadows(canvas, bounds, isAmbient, isHalfFace, scaledImage)
             }
             if (!isAmbient || watchFaceData.timeAOD) {
-                drawDigitalTime(canvas, bounds, zonedDateTime)
+                drawDigitalTime(canvas, bounds, zonedDateTime, isHalfFace)
             }
         }
     }
@@ -552,7 +552,8 @@ class ConcentricNativeCanvasRenderer(
     private fun drawDigitalTime(
         canvas: Canvas,
         bounds: Rect,
-        zonedDateTime: ZonedDateTime
+        zonedDateTime: ZonedDateTime,
+        isHalfFace: Boolean
     ) {
 
         if (currentWatchFaceSize != bounds || armLengthChangedRecalculateClockHands) {
@@ -582,25 +583,21 @@ class ConcentricNativeCanvasRenderer(
             }
             val txHour = "%02d".format(formattedTime)
             val biggestText = "88"
-            val hourPaintToUse = if (drawAmbient) {
-                hourTextAmbientPaint
-            } else {
-                hourTextPaint
+            var hourPaintToUse = hourTextPaint
+            var minutePaintToUse = minuteTextPaint
+            if (drawAmbient) {
+                hourPaintToUse = hourTextAmbientPaint
+                minutePaintToUse = minuteTextAmbientPaint
             }
             hourTextPaint.getTextBounds(biggestText, 0, biggestText.length, textBounds)
             hourTextPaint.getTextBounds(txHour, 0, txHour.length, realTextBounds)
             val cxHour = bounds.exactCenterX() - realTextBounds.width().toFloat() * 0.63f
             val cyHour = bounds.exactCenterY() + textBounds.height().toFloat() * 0.5f
             val hourOffset = textBounds.width()
-
             val tx = "%02d".format(minuteOfDay)
-            val paintToUse = if (drawAmbient) {
-                minuteTextAmbientPaint
-            } else {
-                minuteTextPaint
-            }
-            paintToUse.getTextBounds(biggestText, 0, biggestText.length, textBounds)
-            paintToUse.getTextBounds(tx, 0, tx.length, realTextBounds)
+
+            minutePaintToUse.getTextBounds(biggestText, 0, biggestText.length, textBounds)
+            minutePaintToUse.getTextBounds(tx, 0, tx.length, realTextBounds)
 
             val sizeRadius = textBounds.height().toFloat() * 2.5f
             val cx = bounds.exactCenterX() + hourOffset * 0.45f
@@ -634,7 +631,7 @@ class ConcentricNativeCanvasRenderer(
                 tx,
                 bounds.exactCenterX() + hourOffset * (0.55f) + (textBounds.width() - realTextBounds.width())/2.0f,
                 bounds.exactCenterY() + textBounds.height() / 2,
-                paintToUse
+                minutePaintToUse
             )
 
             minuteHightlightPaint.style = Paint.Style.STROKE
@@ -648,8 +645,7 @@ class ConcentricNativeCanvasRenderer(
             val rightSide : Float = if ( drawAmbient ) {
                 cx+sizeRadius
             } else {
-                if (watchFaceData.layoutStyle.id == LayoutStyleIdAndResourceIds.HALFFACE.id ||
-                    watchFaceData.layoutStyle.id == LayoutStyleIdAndResourceIds.SCALED_HALFFACE.id) {
+                if (isHalfFace) {
                     bounds.width().toFloat()+10f
                 } else {
                     bounds.width()*1.5f
