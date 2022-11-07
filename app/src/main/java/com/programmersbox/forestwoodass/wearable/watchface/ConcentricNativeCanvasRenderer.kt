@@ -447,7 +447,9 @@ class ConcentricNativeCanvasRenderer(
             } else {
                 bounds.width() * LAYOUT_ALT_CLOCK_SHIFT
             }
+            translucentPaint.isAntiAlias = false
             canvas.drawBitmap(shadowLeft, shadowLeftX, 0f, translucentPaint)
+            translucentPaint.isAntiAlias = true
             translucentPaint.color = currentColor
         } else {
             if ( watchFaceData.layoutStyle.id == LayoutStyleIdAndResourceIds.FULLFACE.id &&
@@ -550,6 +552,40 @@ class ConcentricNativeCanvasRenderer(
             watchFaceColors.activePrimaryColor
         }
     }
+
+    private fun drawMinuteHighlight(
+        canvas: Canvas,
+        bounds: Rect,
+        drawAmbient: Boolean,
+        isHalfFace: Boolean,
+        cx : Float,
+        cy : Float,
+        sizeRadius: Float
+    ) {
+        minuteHighlightPaint.style = Paint.Style.STROKE
+        minuteHighlightPaint.strokeWidth = 3.0f
+        minuteHighlightPaint.color = if (drawAmbient) {
+            watchFaceColors.ambientSecondaryColor
+        } else {
+            watchFaceColors.activePrimaryColor
+        }
+
+        val rightSide : Float = if ( drawAmbient ) {
+            cx+sizeRadius
+        } else {
+            if (isHalfFace) {
+                bounds.width().toFloat()+10f
+            } else {
+                bounds.width()*1.5f
+            }
+        }
+        canvas.drawRoundRect(
+            cx, cy,
+            rightSide, cy + sizeRadius,
+            sizeRadius, sizeRadius, minuteHighlightPaint
+        )
+    }
+
     private fun drawDigitalTime(
         canvas: Canvas,
         bounds: Rect,
@@ -635,29 +671,7 @@ class ConcentricNativeCanvasRenderer(
                 minutePaintToUse
             )
 
-            minuteHighlightPaint.style = Paint.Style.STROKE
-            minuteHighlightPaint.strokeWidth = 3.0f
-            minuteHighlightPaint.color = if (drawAmbient) {
-                watchFaceColors.ambientSecondaryColor
-            } else {
-                watchFaceColors.activePrimaryColor
-            }
-
-            val rightSide : Float = if ( drawAmbient ) {
-                cx+sizeRadius
-            } else {
-                if (isHalfFace) {
-                    bounds.width().toFloat()+10f
-                } else {
-                    bounds.width()*1.5f
-                }
-            }
-            canvas.drawRoundRect(
-                cx, cy,
-                rightSide, cy + sizeRadius,
-                sizeRadius, sizeRadius, minuteHighlightPaint
-            )
-
+            drawMinuteHighlight(canvas, bounds, drawAmbient, isHalfFace, cx, cy, sizeRadius)
         }
     }
 
