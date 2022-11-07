@@ -406,6 +406,7 @@ class ConcentricNativeCanvasRenderer(
         var scaledShiftX = -bounds.width() * LAYOUT_ALT_CLOCK_SHIFT
         var scaledShiftY = 0f
 
+        val restoreCount = canvas.save()
         if ( scaledImage ) {
             canvas.scale(1.40f, 1.40f)
             scaledShiftX *= 1.05f
@@ -414,7 +415,6 @@ class ConcentricNativeCanvasRenderer(
 
         canvas.drawColor(backgroundColor)
 
-        val restoreCount = canvas.save()
         if (isHalfFace) {
             canvas.translate(scaledShiftX, scaledShiftY)
         }
