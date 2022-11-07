@@ -350,23 +350,22 @@ class ConcentricNativeCanvasRenderer(
                 isAmbient
             )
         }
-        if (renderParameters.watchFaceLayers.contains(WatchFaceLayer.COMPLICATIONS_OVERLAY) &&
-            (!isAmbient || watchFaceData.timeAOD)
+        if (renderParameters.watchFaceLayers.contains(WatchFaceLayer.BASE) && (!isAmbient ||
+                (!isBatteryLow() && isAmbient && watchFaceData.minuteDialAOD))
         ) {
-            if ( renderParameters.drawMode != DrawMode.AMBIENT ||
-                (!isBatteryLow() && isAmbient && watchFaceData.minuteDialAOD)) {
-                drawMinutesDial(
-                    canvas,
-                    bounds,
-                    zonedDateTime,
-                    isAmbient
-                )
-                drawShadows(canvas, bounds, isAmbient, isHalfFace, scaledImage)
-            }
-            if (!isAmbient || watchFaceData.timeAOD) {
-                drawDigitalTime(canvas, bounds, zonedDateTime, isHalfFace)
-            }
+            drawMinutesDial(
+                canvas,
+                bounds,
+                zonedDateTime,
+                isAmbient
+            )
+            drawShadows(canvas, bounds, isAmbient, isHalfFace, scaledImage)
         }
+        if (renderParameters.watchFaceLayers.contains(WatchFaceLayer.COMPLICATIONS_OVERLAY) &&
+            !isAmbient || watchFaceData.timeAOD ) {
+            drawDigitalTime(canvas, bounds, zonedDateTime, isHalfFace)
+        }
+
     }
 
 
@@ -667,39 +666,41 @@ class ConcentricNativeCanvasRenderer(
         bounds: Rect,
         zonedDateTime: ZonedDateTime
     ) {
-        val textBounds = Rect()
-        var tx = zonedDateTime.toLocalDate().month.toString().substring(0, 3)
-        calendarMonthPaint.getTextBounds(tx, 0, tx.length, textBounds)
+        if (renderParameters.watchFaceLayers.contains(WatchFaceLayer.BASE)) {
+            val textBounds = Rect()
+            var tx = zonedDateTime.toLocalDate().month.toString().substring(0, 3)
+            calendarMonthPaint.getTextBounds(tx, 0, tx.length, textBounds)
 
-        calendarMonthPaint.color = watchFaceColors.activeSecondaryColor
-        canvas.drawCircle(
-            bounds.exactCenterX(),
-            bounds.exactCenterY() * 2 - 15f,
-            textBounds.height().toFloat() * 1.75f,
-            calendarMonthPaint
-        )
+            calendarMonthPaint.color = watchFaceColors.activeSecondaryColor
+            canvas.drawCircle(
+                bounds.exactCenterX(),
+                bounds.exactCenterY() * 2 - 15f,
+                textBounds.height().toFloat() * 1.75f,
+                calendarMonthPaint
+            )
 
-        calendarMonthPaint.color = if (renderParameters.drawMode == DrawMode.AMBIENT) {
-            watchFaceColors.ambientSecondaryColor
-        } else {
-            watchFaceColors.activePrimaryColor
+            calendarMonthPaint.color = if (renderParameters.drawMode == DrawMode.AMBIENT) {
+                watchFaceColors.ambientSecondaryColor
+            } else {
+                watchFaceColors.activePrimaryColor
+            }
+            canvas.drawText(
+                tx,
+                bounds.exactCenterX() - (textBounds.width().toFloat() / 2.0f),
+                bounds.exactCenterY() * 2 - (textBounds.height().toFloat() / 2.0f) * 4.5f,
+                calendarMonthPaint
+            )
+
+            tx = zonedDateTime.toLocalDate().dayOfMonth.toString()
+            calendarDayPaint.getTextBounds(tx, 0, tx.length, textBounds)
+            calendarDayPaint.color = hourTextPaint.color
+            canvas.drawText(
+                tx,
+                bounds.exactCenterX() - (textBounds.width().toFloat() / 2.0f),
+                bounds.exactCenterY() * 2 - (textBounds.height().toFloat() / 2.0f),
+                calendarDayPaint
+            )
         }
-        canvas.drawText(
-            tx,
-            bounds.exactCenterX() - (textBounds.width().toFloat() / 2.0f),
-            bounds.exactCenterY() * 2 - (textBounds.height().toFloat() / 2.0f) * 4.5f,
-            calendarMonthPaint
-        )
-
-        tx = zonedDateTime.toLocalDate().dayOfMonth.toString()
-        calendarDayPaint.getTextBounds(tx, 0, tx.length, textBounds)
-        calendarDayPaint.color = hourTextPaint.color
-        canvas.drawText(
-            tx,
-            bounds.exactCenterX() - (textBounds.width().toFloat() / 2.0f),
-            bounds.exactCenterY() * 2 - (textBounds.height().toFloat() / 2.0f),
-            calendarDayPaint
-        )
     }
 
     private fun drawSecondsDial(
