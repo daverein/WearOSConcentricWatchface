@@ -564,11 +564,7 @@ class ConcentricNativeCanvasRenderer(
     ) {
         minuteHighlightPaint.style = Paint.Style.STROKE
         minuteHighlightPaint.strokeWidth = 3.0f
-        minuteHighlightPaint.color = if (drawAmbient) {
-            watchFaceColors.ambientSecondaryColor
-        } else {
-            watchFaceColors.activePrimaryColor
-        }
+        minuteHighlightPaint.color =  watchFaceColors.activePrimaryColor
 
         val rightSide : Float = if ( drawAmbient ) {
             cx+sizeRadius
@@ -802,8 +798,6 @@ class ConcentricNativeCanvasRenderer(
 
             }
         }
-
-        canvas.save()
     }
 
 
