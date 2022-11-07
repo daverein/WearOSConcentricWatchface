@@ -25,11 +25,11 @@
 
     <!-- Style colors (based on custom colors below). -->
     <!-- Ambient Style (used when wearable in ambient mode. -->
-    <color name="ambient_primary_color">#80bbbbbb</color>
-    <color name="ambient_primary_text_color">@color/white_90</color>
-    <color name="ambient_secondary_color">#80bbbbbb</color>
+    <color name="ambient_primary_color">#ffbbbbbb</color>
+    <color name="ambient_primary_text_color">@color/white</color>
+    <color name="ambient_secondary_color">#ffbbbbbb</color>
     <color name="ambient_background_color">@color/black</color>
-    <color name="ambient_outer_element_color">#80888888</color>
+    <color name="ambient_outer_element_color">#ff888888</color>
 
     <!-- Red Style -->
     <color name="red_primary_color">@color/maroon_light</color>
