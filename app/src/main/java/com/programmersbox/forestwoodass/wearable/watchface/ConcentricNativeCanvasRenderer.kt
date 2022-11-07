@@ -331,6 +331,43 @@ class ConcentricNativeCanvasRenderer(
         }
     }
 
+    private fun drawWatchFace(canvas: Canvas,
+                                bounds: Rect,
+                                zonedDateTime: ZonedDateTime,
+                                isAmbient: Boolean,
+                                isHalfFace: Boolean,
+                                scaledImage: Boolean)
+    {
+        if (renderParameters.watchFaceLayers.contains(WatchFaceLayer.BASE) && !isBatteryLow())
+        {
+            drawSecondsDial(
+                canvas,
+                bounds,
+                watchFaceData.numberRadiusFraction,
+                watchFaceColors.activePrimaryColor,
+                watchFaceColors.activeOuterElementColor,
+                zonedDateTime
+            )
+        }
+        if (renderParameters.watchFaceLayers.contains(WatchFaceLayer.COMPLICATIONS_OVERLAY) &&
+            (!isAmbient || watchFaceData.timeAOD)
+        ) {
+            if ( renderParameters.drawMode != DrawMode.AMBIENT ||
+                (!isBatteryLow() && isAmbient && watchFaceData.minuteDialAOD)) {
+                drawMinutesDial(
+                    canvas,
+                    bounds,
+                    zonedDateTime
+                )
+                drawShadows(canvas, bounds, isAmbient, isHalfFace, scaledImage)
+            }
+            if (!isAmbient || watchFaceData.timeAOD) {
+                drawDigitalTime(canvas, bounds, zonedDateTime)
+            }
+        }
+    }
+
+
     override fun render(
         canvas: Canvas,
         bounds: Rect,
@@ -365,8 +402,6 @@ class ConcentricNativeCanvasRenderer(
             canvas.translate(cx, cy)
         }
 
-
-        val restoreCount = canvas.save()
         var scaledShiftX = -bounds.width() * LAYOUT_ALT_CLOCK_SHIFT
         var scaledShiftY = 0f
 
@@ -378,46 +413,18 @@ class ConcentricNativeCanvasRenderer(
 
         canvas.drawColor(backgroundColor)
 
+        val restoreCount = canvas.save()
         if (isHalfFace) {
             canvas.translate(scaledShiftX, scaledShiftY)
         }
-
-        if (renderParameters.watchFaceLayers.contains(WatchFaceLayer.BASE) && !isBatteryLow())
-        {
-            drawSecondsDial(
-                canvas,
-                bounds,
-                watchFaceData.numberRadiusFraction,
-                watchFaceColors.activePrimaryColor,
-                watchFaceColors.activeOuterElementColor,
-                zonedDateTime
-            )
-        }
-        if (renderParameters.watchFaceLayers.contains(WatchFaceLayer.COMPLICATIONS_OVERLAY) &&
-            (!isAmbient || watchFaceData.timeAOD)
-        ) {
-            if ( renderParameters.drawMode != DrawMode.AMBIENT ||
-                (!isBatteryLow() && isAmbient && watchFaceData.minuteDialAOD)) {
-                drawMinutesDial(
-                    canvas,
-                    bounds,
-                    zonedDateTime
-                )
-                drawShadows(canvas, bounds, isAmbient, isHalfFace, scaledImage)
-            }
-            if (!isAmbient || watchFaceData.timeAOD) {
-                drawDigitalTime(canvas, bounds, zonedDateTime)
-            }
-        }
-       if (isHalfFace ) {
-            canvas.translate(-scaledShiftX, -scaledShiftY)
-        }
+        drawWatchFace(canvas, bounds, zonedDateTime, isAmbient, isHalfFace, scaledImage)
 
         canvas.restoreToCount(restoreCount)
 
         if (!isAmbient) {
             drawDateElement(canvas, bounds, zonedDateTime)
         }
+
         // CanvasComplicationDrawable already obeys rendererParameters.
         if ((!isAmbient || (!isBatteryLow() && watchFaceData.compAOD))) {
             drawComplications(canvas, zonedDateTime)
