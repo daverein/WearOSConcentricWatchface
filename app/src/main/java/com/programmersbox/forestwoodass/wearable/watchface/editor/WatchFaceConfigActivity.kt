@@ -125,7 +125,7 @@ class WatchFaceConfigActivity : ComponentActivity() {
     private fun setColorObject(id: String)
     {
         val colorStyleIdAndResourceIdsList = enumValues<ColorStyleIdAndResourceIds>()
-        for ( i in 0 until colorStyleIdAndResourceIdsList.size-1) {
+        for ( i in 0 until colorStyleIdAndResourceIdsList.size) {
             val r = colorStyleIdAndResourceIdsList[i]
             if ( id == r.id ) {
                 binding.currentColorStyleIcon.setImageResource(colorStyleIdAndResourceIdsList[(i)%colorStyleIdAndResourceIdsList.size].iconResourceId)
@@ -138,7 +138,7 @@ class WatchFaceConfigActivity : ComponentActivity() {
 
         val colorStyleIdAndResourceIdsList = enumValues<ColorStyleIdAndResourceIds>()
         var newColorStyle = ""
-        for ( i in 0 until colorStyleIdAndResourceIdsList.size-1) {
+        for ( i in 0 until colorStyleIdAndResourceIdsList.size) {
             val r = colorStyleIdAndResourceIdsList[i]
             if ( currentColorId == r.id ) {
                 newColorStyle = colorStyleIdAndResourceIdsList[(i+1)%colorStyleIdAndResourceIdsList.size].id
@@ -151,7 +151,7 @@ class WatchFaceConfigActivity : ComponentActivity() {
     private fun setLayoutObject(id: String)
     {
         val layoutStyleIdAndResourceIdsList = enumValues<LayoutStyleIdAndResourceIds>()
-        for ( i in 0..layoutStyleIdAndResourceIdsList.size-1) {
+        for ( i in 0 until layoutStyleIdAndResourceIdsList.size) {
             val r = layoutStyleIdAndResourceIdsList[i]
             if ( id == r.id ) {
                 binding.currentLayoutStyleIcon.setImageResource(layoutStyleIdAndResourceIdsList[(i)%layoutStyleIdAndResourceIdsList.size].iconResourceId)
@@ -164,7 +164,7 @@ class WatchFaceConfigActivity : ComponentActivity() {
 
         val layoutStyleIdAndResourceIdsList = enumValues<LayoutStyleIdAndResourceIds>()
         var newLayoutStyle = ""
-        for ( i in 0 until layoutStyleIdAndResourceIdsList.size-1) {
+        for ( i in 0 until layoutStyleIdAndResourceIdsList.size) {
             val r = layoutStyleIdAndResourceIdsList[i]
             if ( currentLayoutId == r.id ) {
                 newLayoutStyle = layoutStyleIdAndResourceIdsList[(i+1)%layoutStyleIdAndResourceIdsList.size].id
