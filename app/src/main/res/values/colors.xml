@@ -43,7 +43,14 @@
     <color name="green_background_color">@color/black</color>
     <color name="green_outer_element_color">@color/light_green_50</color>
 
+    <!-- Yellow Style -->
+    <color name="yellow_primary_color">@color/light_yellow</color>
+    <color name="yellow_secondary_color">#e8697234</color>
+    <color name="yellow_background_color">@color/black</color>
+    <color name="yellow_outer_element_color">@color/white_50</color>
+
     <!-- Blue Style -->
+    <color name="blue_color_text_primary">@color/white</color>
     <color name="blue_primary_color">@color/aquablue</color>
     <color name="blue_secondary_color">#e8183C75</color>
     <color name="blue_background_color">@color/black</color>
@@ -75,6 +82,12 @@
     <color name="light_green_50">#8000E676</color>
     <color name="light_green_60">#9600E676</color>
     <color name="light_green_70">#B300E676</color>
+
+    <color name="light_yellow">#EFFF3E</color>
+    <color name="light_yellow_30">#4DEFFF3E</color>
+    <color name="light_yellow_50">#80EFFF3E</color>
+    <color name="light_yellow_60">#96EFFF3E</color>
+    <color name="light_yellow_70">#B3EFFF3E</color>
     <color name="light_blue">#4FC3F7</color>
     <color name="light_blue_30">#4D4FC3F7</color>
     <color name="light_blue_50">#804FC3F7</color>

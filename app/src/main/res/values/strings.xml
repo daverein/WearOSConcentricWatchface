@@ -49,6 +49,10 @@
     <!-- Name of watchface style [CHAR LIMIT=20] -->
     <string name="green_style_name">Green Style</string>
 
+
+    <!-- Name of watchface style [CHAR LIMIT=20] -->
+    <string name="yellow_style_name">Yellow Style</string>
+
     <!-- Name of watchface style [CHAR LIMIT=20] -->
     <string name="blue_style_name">Blue Style</string>
 

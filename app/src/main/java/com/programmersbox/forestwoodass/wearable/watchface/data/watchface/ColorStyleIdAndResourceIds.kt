@@ -40,6 +40,10 @@ const val GREEN_COLOR_STYLE_ID = "green_style_id"
 private const val GREEN_COLOR_STYLE_NAME_RESOURCE_ID = R.string.green_style_name
 private const val GREEN_COLOR_STYLE_ICON_ID = R.drawable.green_style
 
+const val YELLOW_COLOR_STYLE_ID = "yellow_style_id"
+private const val YELLOW_COLOR_STYLE_NAME_RESOURCE_ID = R.string.yellow_style_name
+private const val YELLOW_COLOR_STYLE_ICON_ID = R.drawable.yellow_style
+
 const val BLUE_COLOR_STYLE_ID = "blue_style_id"
 private const val BLUE_COLOR_STYLE_NAME_RESOURCE_ID = R.string.blue_style_name
 private const val BLUE_COLOR_STYLE_ICON_ID = R.drawable.blue_style
@@ -74,7 +78,7 @@ enum class ColorStyleIdAndResourceIds(
         iconResourceId = BLUE_COLOR_STYLE_ICON_ID,
         complicationStyleDrawableId = R.drawable.complication_blue_style,
         primaryColorId = R.color.blue_primary_color,
-        primaryColorTextId = R.color.color_text_primary,
+        primaryColorTextId = R.color.blue_color_text_primary,
         secondaryColorId = R.color.blue_secondary_color,
         backgroundColorId = R.color.blue_background_color,
         outerElementColorId = R.color.blue_outer_element_color
@@ -116,6 +120,17 @@ enum class ColorStyleIdAndResourceIds(
         outerElementColorId = R.color.green_outer_element_color
     ),
 
+    YELLOW(
+        id = YELLOW_COLOR_STYLE_ID,
+        nameResourceId = YELLOW_COLOR_STYLE_NAME_RESOURCE_ID,
+        iconResourceId = YELLOW_COLOR_STYLE_ICON_ID,
+        complicationStyleDrawableId = R.drawable.complication_yellow_style,
+        primaryColorId = R.color.yellow_primary_color,
+        primaryColorTextId = R.color.color_text_primary,
+        secondaryColorId = R.color.yellow_secondary_color,
+        backgroundColorId = R.color.yellow_background_color,
+        outerElementColorId = R.color.yellow_outer_element_color
+    ),
 
 
     WHITE(
@@ -140,6 +155,7 @@ enum class ColorStyleIdAndResourceIds(
                 RED.id -> RED
                 GREEN.id -> GREEN
                 BLUE.id -> BLUE
+                YELLOW.id -> YELLOW
                 WHITE.id -> WHITE
                 else -> BLUE
             }
