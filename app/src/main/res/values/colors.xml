@@ -25,9 +25,9 @@
 
     <!-- Style colors (based on custom colors below). -->
     <!-- Ambient Style (used when wearable in ambient mode. -->
-    <color name="ambient_primary_color">#ff888888</color>
-    <color name="ambient_primary_text_color">#ffcccccc</color>
-    <color name="ambient_secondary_color">#ffbbbbbb</color>
+    <color name="ambient_primary_color">#ff666666</color>
+    <color name="ambient_primary_text_color">#ffa0a0a0</color>
+    <color name="ambient_secondary_color">#ff666666</color>
     <color name="ambient_background_color">@color/black</color>
     <color name="ambient_outer_element_color">#ff444444</color>
 
