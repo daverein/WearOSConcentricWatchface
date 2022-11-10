@@ -449,6 +449,7 @@ class ConcentricNativeCanvasRenderer(
             }
             translucentPaint.isAntiAlias = false
             canvas.drawBitmap(shadowLeft, shadowLeftX, 0f, translucentPaint)
+            canvas.drawRect(0f, 0f, shadowLeftX, bounds.height().toFloat(), translucentPaint)
             translucentPaint.isAntiAlias = true
             translucentPaint.color = currentColor
         } else {
@@ -636,22 +637,23 @@ class ConcentricNativeCanvasRenderer(
             val cx = bounds.exactCenterX() + hourOffset * 0.45f
             val cy = bounds.exactCenterY() - sizeRadius / 2f
 
-            minuteHighlightPaint.style = Paint.Style.FILL
-            minuteHighlightPaint.color = watchFaceColors.activeBackgroundColor
+            val currentColor = translucentPaint.color
+            translucentPaint.color = watchFaceColors.activeBackgroundColor
+            translucentPaint.style = Paint.Style.FILL
 
 
             // Draw the underside of the highlight
             canvas.drawArc(
                 bounds.width().toFloat() * 0.15f, bounds.height().toFloat() * 0.15f,
                 bounds.width().toFloat() * 0.85f, bounds.height().toFloat() * 0.85f,
-                -17f, 34f, true, minuteHighlightPaint
+                -17f, 34f, true, translucentPaint
             )
             canvas.drawRect(
                 bounds.width().toFloat() * 0.70f, bounds.height().toFloat() * 0.39f,
                 bounds.width().toFloat() * 0.82f, bounds.height().toFloat() * 0.61f,
-                minuteHighlightPaint
+                translucentPaint
             )
-
+            translucentPaint.color = currentColor
 
             canvas.drawText(
                 txHour,
