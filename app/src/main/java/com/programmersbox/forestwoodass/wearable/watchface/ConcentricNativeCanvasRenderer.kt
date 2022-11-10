@@ -42,6 +42,7 @@ import com.programmersbox.forestwoodass.wearable.watchface.data.watchface.WatchF
 import com.programmersbox.forestwoodass.wearable.watchface.utils.*
 import java.time.ZonedDateTime
 import kotlin.math.cos
+import kotlin.math.roundToInt
 import kotlin.math.sin
 import kotlinx.coroutines.*
 
@@ -554,6 +555,21 @@ class ConcentricNativeCanvasRenderer(
         }
     }
 
+
+    private fun manipulateColor(color: Int): Int {
+        val factor = 0.5f
+        val a = Color.alpha(color)
+        val r = (Color.red(color) * factor).roundToInt()
+        val g = (Color.green(color) * factor).roundToInt()
+        val b = (Color.blue(color) * factor).roundToInt()
+        return Color.argb(
+            a,
+            r.coerceAtMost(255),
+            g.coerceAtMost(255),
+            b.coerceAtMost(255)
+        )
+    }
+
     private fun drawMinuteHighlight(
         canvas: Canvas,
         bounds: Rect,
@@ -565,7 +581,7 @@ class ConcentricNativeCanvasRenderer(
     ) {
         minuteHighlightPaint.style = Paint.Style.STROKE
         minuteHighlightPaint.strokeWidth = 3.0f
-        minuteHighlightPaint.color =  watchFaceColors.activePrimaryColor
+        minuteHighlightPaint.color =  if ( !drawAmbient ) { watchFaceColors.activePrimaryColor }  else { manipulateColor(watchFaceColors.activePrimaryColor) }
 
         val rightSide : Float = if ( drawAmbient ) {
             cx+sizeRadius
