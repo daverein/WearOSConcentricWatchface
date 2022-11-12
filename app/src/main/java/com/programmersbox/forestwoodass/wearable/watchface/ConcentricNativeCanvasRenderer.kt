@@ -644,16 +644,30 @@ class ConcentricNativeCanvasRenderer(
 
 
             // Draw the underside of the highlight
-            canvas.drawArc(
-                bounds.width().toFloat() * 0.15f, bounds.height().toFloat() * 0.15f,
-                bounds.width().toFloat() * 0.85f, bounds.height().toFloat() * 0.85f,
-                -17f, 34f, true, translucentPaint
-            )
-            canvas.drawRect(
-                bounds.width().toFloat() * 0.70f, bounds.height().toFloat() * 0.39f,
-                bounds.width().toFloat() * 0.82f, bounds.height().toFloat() * 0.61f,
-                translucentPaint
-            )
+            if ( !drawAmbient ) {
+                canvas.drawArc(
+                    bounds.width().toFloat() * 0.15f, bounds.height().toFloat() * 0.15f,
+                    bounds.width().toFloat() * 0.85f, bounds.height().toFloat() * 0.85f,
+                    -21f, 42f, true, translucentPaint
+                )
+                canvas.drawRect(
+                    bounds.width().toFloat() * 0.70f, bounds.height().toFloat() * 0.38f,
+                    bounds.width().toFloat() * 0.82f, bounds.height().toFloat() * 0.62f,
+                    translucentPaint
+                )
+            } else {
+                canvas.drawArc(
+                    bounds.width().toFloat() * 0.15f, bounds.height().toFloat() * 0.15f,
+                    bounds.width().toFloat() * 0.85f, bounds.height().toFloat() * 0.85f,
+                    -18f, 36f, true, translucentPaint
+                )
+                canvas.drawRect(
+                    bounds.width().toFloat() * 0.70f, bounds.height().toFloat() * 0.3825f,
+                    bounds.width().toFloat() * 0.82f, bounds.height().toFloat() * 0.6175f,
+                    translucentPaint
+                )
+            }
+
             translucentPaint.color = currentColor
 
             canvas.drawText(
