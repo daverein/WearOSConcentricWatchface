@@ -182,22 +182,12 @@ class WatchFaceConfigStateHolder(
 
     fun setComplication(complicationLocation: Int) {
         val complicationSlotId = when (complicationLocation) {
-            LEFT_COMPLICATION_ID -> {
-                LEFT_COMPLICATION_ID
-            }
-            RIGHT_COMPLICATION_ID -> {
-                RIGHT_COMPLICATION_ID
-            }
-            MIDDLE_COMPLICATION_ID -> {
-                MIDDLE_COMPLICATION_ID
-            }
-            else -> {
-                return
-            }
+            LEFT_COMPLICATION_ID -> LEFT_COMPLICATION_ID
+            RIGHT_COMPLICATION_ID -> RIGHT_COMPLICATION_ID
+            MIDDLE_COMPLICATION_ID -> MIDDLE_COMPLICATION_ID
+            else -> return
         }
-        scope.launch(Dispatchers.Main.immediate) {
-            editorSession.openComplicationDataSourceChooser(complicationSlotId)
-        }
+        scope.launch { editorSession.openComplicationDataSourceChooser(complicationSlotId) }
     }
 
     fun setColorStyle(newColorStyleId: String) {
@@ -250,18 +240,21 @@ class WatchFaceConfigStateHolder(
             UserStyleSetting.BooleanUserStyleSetting.BooleanOption.from(enabled)
         )
     }
+
     fun setCompAOD(enabled: Boolean) {
         setUserStyleOption(
             compaodKey,
             UserStyleSetting.BooleanUserStyleSetting.BooleanOption.from(enabled)
         )
     }
+
     fun setMinuteDialAOD(enabled: Boolean) {
         setUserStyleOption(
             minutedialaodKey,
             UserStyleSetting.BooleanUserStyleSetting.BooleanOption.from(enabled)
         )
     }
+
     fun setShiftPixelAmount(newShiftPixel: Float) {
         val newShiftPixelRatio = newShiftPixel.toDouble() / MULTIPLE_FOR_SLIDER
 
