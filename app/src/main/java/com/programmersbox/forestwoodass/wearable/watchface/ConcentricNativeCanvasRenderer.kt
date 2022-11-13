@@ -15,12 +15,10 @@
  */
 package com.programmersbox.forestwoodass.wearable.watchface
 
-import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
 import android.content.IntentFilter
 import android.graphics.*
-import android.os.BatteryManager
 import android.util.Log
 import android.view.SurfaceHolder
 import androidx.core.graphics.withScale
@@ -69,7 +67,7 @@ class ConcentricNativeCanvasRenderer(
     canvasType,
     FRAME_PERIOD_MS_DEFAULT,
     clearWithBackgroundTintBeforeRenderingHighlightLayer = false
-) {
+), BatteryLevelChangeReceiver.BatteryLevelChangeListener {
     class AnalogSharedAssets : SharedAssets {
         override fun onDestroy() {
             // Not sure why we are overriding this method
@@ -93,8 +91,11 @@ class ConcentricNativeCanvasRenderer(
     )
 
     private val colorBlack = context.resources.getColor(R.color.black, context.theme)
-    private var shadowLeft : Bitmap = BitmapFactory.decodeResource(context.resources,
-        R.drawable.shadow_left)
+    private var shadowLeft: Bitmap = BitmapFactory.decodeResource(
+        context.resources,
+        R.drawable.shadow_left
+    )
+
     // Initializes paint object for painting the clock hands with default values.
     private val translucentPaint = Paint().apply {
         isAntiAlias = true
@@ -172,31 +173,21 @@ class ConcentricNativeCanvasRenderer(
     // valid dimensions from the system.
     private var currentWatchFaceSize = Rect(0, 0, 0, 0)
 
+    // Is this expensive?
+    private val batteryLevelChanged = BatteryLevelChangeReceiver(this)
 
-    class BatteryLevelChangeReceiver : BroadcastReceiver() {
+    private fun isBatteryLow(): Boolean {
+        return batteryLevelChanged.batteryLow
+    }
 
-        var batteryLow : Boolean = false
-        private var batteryPct : Float? = 0f
-
-        override fun onReceive(context: Context?, batteryStatus: Intent?) {
-
-            batteryPct = batteryStatus?.let { intent ->
-                val level: Int = intent.getIntExtra(BatteryManager.EXTRA_LEVEL, -1)
-                val scale: Int = intent.getIntExtra(BatteryManager.EXTRA_SCALE, -1)
-                level * 100 / scale.toFloat()
-            }
-            val low: Boolean = batteryStatus?.getBooleanExtra(BatteryManager.EXTRA_BATTERY_LOW, false)!!
-            batteryLow = low
+    override fun onBatteryLevelChanged(oldValue: Boolean, newValue: Boolean) {
+        interactiveDrawModeUpdateDelayMillis = if (isBatteryLow()) {
+            1000
+        } else {
+            FRAME_PERIOD_MS_DEFAULT
         }
     }
 
-    // Is this expensive?
-    private val batteryLevelChanged = BatteryLevelChangeReceiver()
-
-    private fun isBatteryLow() : Boolean
-    {
-        return batteryLevelChanged.batteryLow
-    }
     init {
         scope.launch {
             currentUserStyleRepository.userStyle.collect { userStyle ->
@@ -296,6 +287,11 @@ class ConcentricNativeCanvasRenderer(
                 watchFaceData.ambientColorStyle
             )
 
+            interactiveDrawModeUpdateDelayMillis = if (isBatteryLow()) {
+                1000
+            } else {
+                FRAME_PERIOD_MS_DEFAULT
+            }
             // Applies the user chosen complication color scheme changes. ComplicationDrawables for
             // each of the styles are defined in XML so we need to replace the complication's
             // drawables.
@@ -332,15 +328,15 @@ class ConcentricNativeCanvasRenderer(
         }
     }
 
-    private fun drawWatchFace(canvas: Canvas,
-                                bounds: Rect,
-                                zonedDateTime: ZonedDateTime,
-                                isAmbient: Boolean,
-                                isHalfFace: Boolean,
-                                scaledImage: Boolean)
-    {
-        if (renderParameters.watchFaceLayers.contains(WatchFaceLayer.BASE) && !isBatteryLow())
-        {
+    private fun drawWatchFace(
+        canvas: Canvas,
+        bounds: Rect,
+        zonedDateTime: ZonedDateTime,
+        isAmbient: Boolean,
+        isHalfFace: Boolean,
+        scaledImage: Boolean
+    ) {
+        if (renderParameters.watchFaceLayers.contains(WatchFaceLayer.BASE) && !isBatteryLow()) {
             drawSecondsDial(
                 canvas,
                 bounds,
@@ -363,7 +359,8 @@ class ConcentricNativeCanvasRenderer(
             drawShadows(canvas, bounds, isAmbient, isHalfFace, scaledImage)
         }
         if (renderParameters.watchFaceLayers.contains(WatchFaceLayer.COMPLICATIONS_OVERLAY) &&
-            !isAmbient || watchFaceData.timeAOD ) {
+            !isAmbient || watchFaceData.timeAOD
+        ) {
             drawDigitalTime(canvas, bounds, zonedDateTime, isHalfFace)
         }
 
@@ -376,7 +373,8 @@ class ConcentricNativeCanvasRenderer(
         zonedDateTime: ZonedDateTime,
         sharedAssets: AnalogSharedAssets
     ) {
-        val scaledImage = watchFaceData.layoutStyle.id == LayoutStyleIdAndResourceIds.SCALED_HALFFACE.id
+        val scaledImage =
+            watchFaceData.layoutStyle.id == LayoutStyleIdAndResourceIds.SCALED_HALFFACE.id
         val isHalfFace = watchFaceData.layoutStyle.id == LayoutStyleIdAndResourceIds.HALFFACE.id ||
             watchFaceData.layoutStyle.id == LayoutStyleIdAndResourceIds.SCALED_HALFFACE.id
         val isAmbient = renderParameters.drawMode == DrawMode.AMBIENT
@@ -388,10 +386,10 @@ class ConcentricNativeCanvasRenderer(
 
         // Zoom the ambient watchface a bit larger, for viewing purposes, in ambient mode.
         // XXX - but maybe not do this or as an option
-        if (isAmbient ) {
-            if ( watchFaceData.layoutStyle.id == LayoutStyleIdAndResourceIds.FULLFACE.id) {
+        if (isAmbient) {
+            if (watchFaceData.layoutStyle.id == LayoutStyleIdAndResourceIds.FULLFACE.id) {
                 canvas.scale(1.15f, 1.15f, bounds.exactCenterX(), bounds.exactCenterY())
-            } else if ( !watchFaceData.compAOD ){
+            } else if (!watchFaceData.compAOD) {
                 canvas.scale(1.20f, 1.20f, 0f, bounds.exactCenterY())
             }
         }
@@ -408,10 +406,10 @@ class ConcentricNativeCanvasRenderer(
         var scaledShiftY = 0f
 
         val restoreCount = canvas.save()
-        if ( scaledImage ) {
+        if (scaledImage) {
             canvas.scale(1.40f, 1.40f)
             scaledShiftX *= 1.05f
-            scaledShiftY = -(bounds.height()*1.30f-bounds.height())/2.0f
+            scaledShiftY = -(bounds.height() * 1.30f - bounds.height()) / 2.0f
         }
 
         canvas.drawColor(backgroundColor)
@@ -434,13 +432,14 @@ class ConcentricNativeCanvasRenderer(
     }
 
     // ----- All drawing functions -----
-    private fun drawShadows(canvas: Canvas,
-                            bounds: Rect,
-                            isAmbient : Boolean,
-                            isHalfFace : Boolean,
-                            scaledImage : Boolean)
-    {
-        if ( isHalfFace ) {
+    private fun drawShadows(
+        canvas: Canvas,
+        bounds: Rect,
+        isAmbient: Boolean,
+        isHalfFace: Boolean,
+        scaledImage: Boolean
+    ) {
+        if (isHalfFace) {
             val currentColor = translucentPaint.color
             translucentPaint.color = colorBlack
             val shadowLeftX = if (scaledImage) {
@@ -454,8 +453,9 @@ class ConcentricNativeCanvasRenderer(
             translucentPaint.isAntiAlias = true
             translucentPaint.color = currentColor
         } else {
-            if ( watchFaceData.layoutStyle.id == LayoutStyleIdAndResourceIds.FULLFACE.id &&
-                (!isAmbient || (isAmbient && watchFaceData.compAOD))) {
+            if (watchFaceData.layoutStyle.id == LayoutStyleIdAndResourceIds.FULLFACE.id &&
+                (!isAmbient || (isAmbient && watchFaceData.compAOD))
+            ) {
                 canvas.drawArc(
                     bounds.width().toFloat() * 0.15f, bounds.height().toFloat() * 0.15f,
                     bounds.width().toFloat() * 0.85f, bounds.height().toFloat() * 0.88f,
@@ -526,8 +526,7 @@ class ConcentricNativeCanvasRenderer(
         }
     }
 
-    private fun configColors(drawAmbient: Boolean)
-    {
+    private fun configColors(drawAmbient: Boolean) {
         hourTextPaint.color = if (drawAmbient) {
             watchFaceColors.ambientPrimaryTextColor
         } else {
@@ -560,21 +559,25 @@ class ConcentricNativeCanvasRenderer(
         bounds: Rect,
         drawAmbient: Boolean,
         isHalfFace: Boolean,
-        cx : Float,
-        cy : Float,
+        cx: Float,
+        cy: Float,
         sizeRadius: Float
     ) {
         minuteHighlightPaint.style = Paint.Style.STROKE
         minuteHighlightPaint.strokeWidth = 3.0f
-        minuteHighlightPaint.color =  if ( !drawAmbient ) { watchFaceColors.activePrimaryColor }  else { darkenColor(watchFaceColors.activePrimaryColor) }
+        minuteHighlightPaint.color = if (!drawAmbient) {
+            watchFaceColors.activePrimaryColor
+        } else {
+            darkenColor(watchFaceColors.activePrimaryColor)
+        }
 
-        val rightSide : Float = if ( drawAmbient ) {
-            cx+sizeRadius
+        val rightSide: Float = if (drawAmbient) {
+            cx + sizeRadius
         } else {
             if (isHalfFace) {
-                bounds.width().toFloat()+10f
+                bounds.width().toFloat() + 10f
             } else {
-                bounds.width()*1.5f
+                bounds.width() * 1.5f
             }
         }
         canvas.drawRoundRect(
@@ -644,7 +647,7 @@ class ConcentricNativeCanvasRenderer(
 
 
             // Draw the underside of the highlight
-            if ( !drawAmbient ) {
+            if (!drawAmbient) {
                 canvas.drawArc(
                     bounds.width().toFloat() * 0.15f, bounds.height().toFloat() * 0.15f,
                     bounds.width().toFloat() * 0.85f, bounds.height().toFloat() * 0.85f,
@@ -679,7 +682,7 @@ class ConcentricNativeCanvasRenderer(
 
             canvas.drawText(
                 tx,
-                bounds.exactCenterX() + hourOffset * (0.55f) + (textBounds.width() - realTextBounds.width())/2.0f,
+                bounds.exactCenterX() + hourOffset * (0.55f) + (textBounds.width() - realTextBounds.width()) / 2.0f,
                 bounds.exactCenterY() + textBounds.height() / 2,
                 minutePaintToUse
             )
@@ -757,22 +760,22 @@ class ConcentricNativeCanvasRenderer(
                     sin(rotation).toFloat() * (numberRadiusFraction - 0.01f) * bounds.width()
                         .toFloat()
                 val dy =
-                    -cos(rotation ).toFloat() * (numberRadiusFraction - 0.01f) * bounds.height()
+                    -cos(rotation).toFloat() * (numberRadiusFraction - 0.01f) * bounds.height()
                         .toFloat()
                 val tx = "%02d".format(((60 - i) % 60))
                 secondDialTextPaint.getTextBounds(tx, 0, tx.length, textBounds)
 
-                val stx = sin(rotation ).toFloat() * (numberRadiusFraction) * (bounds.width()
+                val stx = sin(rotation).toFloat() * (numberRadiusFraction) * (bounds.width()
                     .toFloat() + 30f)
                 val sty =
                     -cos(rotation * 1.0f).toFloat() * (numberRadiusFraction) * (bounds.height()
                         .toFloat() + 30f)
 
                 val stx1 =
-                    sin(rotation ).toFloat() * (numberRadiusFraction + 0.05f) * bounds.width()
+                    sin(rotation).toFloat() * (numberRadiusFraction + 0.05f) * bounds.width()
                         .toFloat()
                 val sty1 =
-                    -cos(rotation ).toFloat() * (numberRadiusFraction + 0.05f) * bounds.width()
+                    -cos(rotation).toFloat() * (numberRadiusFraction + 0.05f) * bounds.width()
                         .toFloat()
                 outerElementPaint.strokeWidth = 4f
                 canvas.drawLine(
@@ -794,7 +797,7 @@ class ConcentricNativeCanvasRenderer(
                 val stx = sin(rotation).toFloat() * (numberRadiusFraction) * (bounds.width()
                     .toFloat() + 30f)
                 val sty =
-                    -cos(rotation ).toFloat() * (numberRadiusFraction) * (bounds.height()
+                    -cos(rotation).toFloat() * (numberRadiusFraction) * (bounds.height()
                         .toFloat() + 30f)
 
                 val stx1 =
@@ -824,9 +827,12 @@ class ConcentricNativeCanvasRenderer(
         zonedDateTime: ZonedDateTime,
         isAmbient: Boolean
     ) {
-        outerElementPaint.color = if (!isAmbient) watchFaceColors.activeOuterElementColor else watchFaceColors.ambientOuterElementColor
-        minuteDialTextPaint.color = if (!isAmbient) watchFaceColors.activeOuterElementColor else watchFaceColors.ambientOuterElementColor
-        secondDialTextPaint.color = if (!isAmbient) watchFaceColors.activePrimaryColor else watchFaceColors.ambientPrimaryColor
+        outerElementPaint.color =
+            if (!isAmbient) watchFaceColors.activeOuterElementColor else watchFaceColors.ambientOuterElementColor
+        minuteDialTextPaint.color =
+            if (!isAmbient) watchFaceColors.activeOuterElementColor else watchFaceColors.ambientOuterElementColor
+        secondDialTextPaint.color =
+            if (!isAmbient) watchFaceColors.activePrimaryColor else watchFaceColors.ambientPrimaryColor
         // Draw and move seconds
         val numberRadiusFraction = watchFaceData.numberRadiusFraction
         val textBounds = Rect()
@@ -840,26 +846,26 @@ class ConcentricNativeCanvasRenderer(
             if (i % 5 == 0) {
 
                 val dx =
-                    sin(rotation ).toFloat() * (numberRadiusFraction - 0.15f) * bounds.width()
+                    sin(rotation).toFloat() * (numberRadiusFraction - 0.15f) * bounds.width()
                         .toFloat()
                 val dy =
-                    -cos(rotation ).toFloat() * (numberRadiusFraction - 0.15f) * bounds.width()
+                    -cos(rotation).toFloat() * (numberRadiusFraction - 0.15f) * bounds.width()
                         .toFloat()
                 val tx = "%02d".format(i % 60)
                 minuteDialTextPaint.getTextBounds(tx, 0, tx.length, textBounds)
 
                 val stx =
-                    sin(rotation ).toFloat() * (numberRadiusFraction - 0.095f) * bounds.width()
+                    sin(rotation).toFloat() * (numberRadiusFraction - 0.095f) * bounds.width()
                         .toFloat()
                 val sty =
                     -cos(rotation).toFloat() * (numberRadiusFraction - 0.095f) * bounds.width()
                         .toFloat()
 
                 val stx1 =
-                    sin(rotation ).toFloat() * (numberRadiusFraction - 0.07f) * bounds.width()
+                    sin(rotation).toFloat() * (numberRadiusFraction - 0.07f) * bounds.width()
                         .toFloat()
                 val sty1 =
-                    -cos(rotation ).toFloat() * (numberRadiusFraction - 0.07f) * bounds.width()
+                    -cos(rotation).toFloat() * (numberRadiusFraction - 0.07f) * bounds.width()
                         .toFloat()
 
                 outerElementPaint.strokeWidth = 4f
@@ -880,17 +886,17 @@ class ConcentricNativeCanvasRenderer(
                 )
             } else {
                 val stx =
-                    sin(rotation ).toFloat() * (numberRadiusFraction - 0.085f) * bounds.width()
+                    sin(rotation).toFloat() * (numberRadiusFraction - 0.085f) * bounds.width()
                         .toFloat()
                 val sty =
-                    -cos(rotation ).toFloat() * (numberRadiusFraction - 0.085f) * bounds.width()
+                    -cos(rotation).toFloat() * (numberRadiusFraction - 0.085f) * bounds.width()
                         .toFloat()
 
                 val stx1 =
-                    sin(rotation ).toFloat() * (numberRadiusFraction - 0.07f) * bounds.width()
+                    sin(rotation).toFloat() * (numberRadiusFraction - 0.07f) * bounds.width()
                         .toFloat()
                 val sty1 =
-                    -cos(rotation ).toFloat() * (numberRadiusFraction - 0.07f) * bounds.width()
+                    -cos(rotation).toFloat() * (numberRadiusFraction - 0.07f) * bounds.width()
                         .toFloat()
 
                 outerElementPaint.strokeWidth = 2f
