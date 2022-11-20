@@ -1,12 +1,12 @@
 name: Release Workflow
- 
+
 on:
   push:
    tags:
       - 'v*'
-   paths-ignore: 
+   paths-ignore:
      - '.github/**'
-     
+
   workflow_dispatch:
     inputs:
       releaseToGooglePlay:
@@ -53,7 +53,7 @@ jobs:
 
       - uses: actions/upload-artifact@v3
         with:
-          name: Signed Anagramer App
+          name: Signed Concentric Native App
           path: concentricnative-release.aab
 
   release:
@@ -95,7 +95,7 @@ jobs:
       - name: Download APK from build
         uses: actions/download-artifact@v3
         with:
-          name: Signed Anagramer App
+          name: Signed Concentric Native App
 
       - uses: r0adkll/upload-google-play@v1
         with:
