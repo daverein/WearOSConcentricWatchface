@@ -32,7 +32,7 @@ jobs:
         with:
           gradlePath: app/build.gradle
           versionCode: ${{github.run_number}}
-          versionName: 1.0.0
+          #versionName: 1.0.0
 
       - name: Build Artifacts
         id: buildApks
