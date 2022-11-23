@@ -33,10 +33,8 @@ import androidx.wear.watchface.style.CurrentUserStyleRepository
 import androidx.wear.watchface.style.UserStyle
 import androidx.wear.watchface.style.UserStyleSetting
 import androidx.wear.watchface.style.WatchFaceLayer
-import com.programmersbox.forestwoodass.wearable.watchface.data.watchface.ColorStyleIdAndResourceIds
-import com.programmersbox.forestwoodass.wearable.watchface.data.watchface.LayoutStyleIdAndResourceIds
+import com.programmersbox.forestwoodass.wearable.watchface.data.watchface.*
 import com.programmersbox.forestwoodass.wearable.watchface.data.watchface.WatchFaceColorPalette.Companion.convertToWatchFaceColorPalette
-import com.programmersbox.forestwoodass.wearable.watchface.data.watchface.WatchFaceData
 import com.programmersbox.forestwoodass.wearable.watchface.utils.*
 import com.programmersbox.forestwoodass.wearable.watchface.utils.ColorUtils.Companion.darkenColor
 import java.time.ZonedDateTime
@@ -46,7 +44,8 @@ import kotlinx.coroutines.*
 
 // Default for how long each frame is displayed at expected frame rate.
 private const val FRAME_PERIOD_MS_DEFAULT: Long = 64L
-private const val LAYOUT_ALT_CLOCK_SHIFT = 0.30f
+private const val FRAME_PERIOD_MS_LOW_BATTERY: Long = 1000L
+
 
 /**
  * Renders watch face via data in Room database. Also, updates watch face state based on setting
@@ -167,7 +166,7 @@ class ConcentricNativeCanvasRenderer(
 
     // Changed when setting changes cause a change in the minute hand arm (triggered by user in
     // updateUserStyle() via userStyleRepository.addUserStyleListener()).
-    private var armLengthChangedRecalculateClockHands: Boolean = false
+    private var shiftPixelSettingChanged: Boolean = false
 
     // Default size of watch face drawing area, that is, a no size rectangle. Will be replaced with
     // valid dimensions from the system.
@@ -182,7 +181,7 @@ class ConcentricNativeCanvasRenderer(
 
     override fun onBatteryLevelChanged(oldValue: Boolean, newValue: Boolean) {
         interactiveDrawModeUpdateDelayMillis = if (isBatteryLow()) {
-            1000
+            FRAME_PERIOD_MS_LOW_BATTERY
         } else {
             FRAME_PERIOD_MS_DEFAULT
         }
@@ -267,7 +266,7 @@ class ConcentricNativeCanvasRenderer(
                     // The arm lengths are usually only calculated the first time the watch face is
                     // loaded to reduce the ops in the onDraw(). Because we updated the minute hand
                     // watch length, we need to trigger a recalculation.
-                    armLengthChangedRecalculateClockHands = true
+                    shiftPixelSettingChanged = true
 
                     newWatchFaceData = newWatchFaceData.copy(
                         shiftPixelAmount = doubleValue.value.toFloat()
@@ -288,7 +287,7 @@ class ConcentricNativeCanvasRenderer(
             )
 
             interactiveDrawModeUpdateDelayMillis = if (isBatteryLow()) {
-                1000
+                FRAME_PERIOD_MS_LOW_BATTERY
             } else {
                 FRAME_PERIOD_MS_DEFAULT
             }
@@ -388,9 +387,9 @@ class ConcentricNativeCanvasRenderer(
         // XXX - but maybe not do this or as an option
         if (isAmbient) {
             if (watchFaceData.layoutStyle.id == LayoutStyleIdAndResourceIds.FULLFACE.id) {
-                canvas.scale(1.15f, 1.15f, bounds.exactCenterX(), bounds.exactCenterY())
+                canvas.scale(AOD_ZOOM_LEVEL_1, AOD_ZOOM_LEVEL_1, bounds.exactCenterX(), bounds.exactCenterY())
             } else if (!watchFaceData.compAOD) {
-                canvas.scale(1.20f, 1.20f, 0f, bounds.exactCenterY())
+                canvas.scale(AOD_ZOOM_LEVEL_2, AOD_ZOOM_LEVEL_2, 0f, bounds.exactCenterY())
             }
         }
 
@@ -407,9 +406,9 @@ class ConcentricNativeCanvasRenderer(
 
         val restoreCount = canvas.save()
         if (scaledImage) {
-            canvas.scale(1.40f, 1.40f)
-            scaledShiftX *= 1.05f
-            scaledShiftY = -(bounds.height() * 1.30f - bounds.height()) / 2.0f
+            canvas.scale(SCALED_CLOCKFACE_AMOUNT, SCALED_CLOCKFACE_AMOUNT)
+            scaledShiftX *= SCALED_WATCHFACE_SHIFTX
+            scaledShiftY = -(bounds.height() * SCALED_WATCHFACE_SHIFTY - bounds.height()) / 2.0f
         }
 
         canvas.drawColor(backgroundColor)
@@ -443,7 +442,7 @@ class ConcentricNativeCanvasRenderer(
             val currentColor = translucentPaint.color
             translucentPaint.color = colorBlack
             val shadowLeftX = if (scaledImage) {
-                bounds.width() * 0.45f
+                bounds.width() * LAYOUT_ALT_CLOCK_SHIFT_SCALED
             } else {
                 bounds.width() * LAYOUT_ALT_CLOCK_SHIFT
             }
@@ -457,13 +456,13 @@ class ConcentricNativeCanvasRenderer(
                 (!isAmbient || (isAmbient && watchFaceData.compAOD))
             ) {
                 canvas.drawArc(
-                    bounds.width().toFloat() * 0.15f, bounds.height().toFloat() * 0.15f,
-                    bounds.width().toFloat() * 0.85f, bounds.height().toFloat() * 0.88f,
+                    bounds.width().toFloat() * FULL_WATCHFACE_COMPLICATION_SHADOW_EDGE_OUTTER, bounds.height().toFloat() * FULL_WATCHFACE_COMPLICATION_SHADOW_EDGE_OUTTER,
+                    bounds.width().toFloat() * FULL_WATCHFACE_COMPLICATION_SHADOW_EDGE_INNER, bounds.height().toFloat() * 0.88f,
                     70f, 40f, true, translucentPaint
                 )
                 canvas.drawArc(
-                    bounds.width().toFloat() * 0.15f, bounds.height().toFloat() * 0.11f,
-                    bounds.width().toFloat() * 0.85f, bounds.height().toFloat() * 0.85f,
+                    bounds.width().toFloat() * FULL_WATCHFACE_COMPLICATION_SHADOW_EDGE_OUTTER, bounds.height().toFloat() * 0.11f,
+                    bounds.width().toFloat() * FULL_WATCHFACE_COMPLICATION_SHADOW_EDGE_INNER, bounds.height().toFloat() * FULL_WATCHFACE_COMPLICATION_SHADOW_EDGE_INNER,
                     250f, 40f, true, translucentPaint
                 )
             }
@@ -515,9 +514,9 @@ class ConcentricNativeCanvasRenderer(
                     watchFaceData.layoutStyle.id != LayoutStyleIdAndResourceIds.HALFFACE.id
                 ) {
                     complication.complicationSlotBounds.perComplicationTypeBounds[ComplicationType.RANGED_VALUE]?.left =
-                        MIDDLE_COMPLICATION_LEFT_BOUND + offset + 1.5f
+                        MIDDLE_COMPLICATION_LEFT_BOUND + offset + MINUTE_HIGHLIGHT_WIDTH_FRACTION
                     complication.complicationSlotBounds.perComplicationTypeBounds[ComplicationType.RANGED_VALUE]?.right =
-                        MIDDLE_COMPLICATION_RIGHT_BOUND + offset + 1.5f
+                        MIDDLE_COMPLICATION_RIGHT_BOUND + offset + MINUTE_HIGHLIGHT_WIDTH_FRACTION
                     continue
                 }
 
@@ -577,7 +576,7 @@ class ConcentricNativeCanvasRenderer(
             if (isHalfFace) {
                 bounds.width().toFloat() + 10f
             } else {
-                bounds.width() * 1.5f
+                bounds.width() * MINUTE_HIGHLIGHT_WIDTH_FRACTION
             }
         }
         canvas.drawRoundRect(
@@ -594,8 +593,8 @@ class ConcentricNativeCanvasRenderer(
         isHalfFace: Boolean
     ) {
 
-        if (currentWatchFaceSize != bounds || armLengthChangedRecalculateClockHands) {
-            armLengthChangedRecalculateClockHands = false
+        if (currentWatchFaceSize != bounds || shiftPixelSettingChanged) {
+            shiftPixelSettingChanged = false
             currentWatchFaceSize = bounds
         }
 
@@ -604,8 +603,8 @@ class ConcentricNativeCanvasRenderer(
 
 
         canvas.withScale(
-            x = WATCH_HAND_SCALE,
-            y = WATCH_HAND_SCALE,
+            x = 1.0f,
+            y = 1.0f,
             pivotX = bounds.exactCenterX(),
             pivotY = bounds.exactCenterY()
         ) {
@@ -638,7 +637,7 @@ class ConcentricNativeCanvasRenderer(
             minutePaintToUse.getTextBounds(tx, 0, tx.length, realTextBounds)
 
             val sizeRadius = textBounds.height().toFloat() * 2.5f
-            val cx = bounds.exactCenterX() + hourOffset * 0.45f
+            val cx = bounds.exactCenterX() + hourOffset * HOUR_TEXT_CENTER_OFFSET_SHIFT
             val cy = bounds.exactCenterY() - sizeRadius / 2f
 
             val currentColor = translucentPaint.color
@@ -649,8 +648,8 @@ class ConcentricNativeCanvasRenderer(
             // Draw the underside of the highlight
             if (!drawAmbient) {
                 canvas.drawArc(
-                    bounds.width().toFloat() * 0.15f, bounds.height().toFloat() * 0.15f,
-                    bounds.width().toFloat() * 0.85f, bounds.height().toFloat() * 0.85f,
+                    bounds.width().toFloat() * FULL_WATCHFACE_COMPLICATION_SHADOW_EDGE_OUTTER, bounds.height().toFloat() * FULL_WATCHFACE_COMPLICATION_SHADOW_EDGE_OUTTER,
+                    bounds.width().toFloat() * FULL_WATCHFACE_COMPLICATION_SHADOW_EDGE_INNER, bounds.height().toFloat() * FULL_WATCHFACE_COMPLICATION_SHADOW_EDGE_INNER,
                     -21f, 42f, true, translucentPaint
                 )
                 canvas.drawRect(
@@ -660,8 +659,8 @@ class ConcentricNativeCanvasRenderer(
                 )
             } else {
                 canvas.drawArc(
-                    bounds.width().toFloat() * 0.15f, bounds.height().toFloat() * 0.15f,
-                    bounds.width().toFloat() * 0.85f, bounds.height().toFloat() * 0.85f,
+                    bounds.width().toFloat() * FULL_WATCHFACE_COMPLICATION_SHADOW_EDGE_OUTTER, bounds.height().toFloat() * FULL_WATCHFACE_COMPLICATION_SHADOW_EDGE_OUTTER,
+                    bounds.width().toFloat() * FULL_WATCHFACE_COMPLICATION_SHADOW_EDGE_INNER, bounds.height().toFloat() * FULL_WATCHFACE_COMPLICATION_SHADOW_EDGE_INNER,
                     -18f, 36f, true, translucentPaint
                 )
                 canvas.drawRect(
@@ -682,7 +681,7 @@ class ConcentricNativeCanvasRenderer(
 
             canvas.drawText(
                 tx,
-                bounds.exactCenterX() + hourOffset * (0.55f) + (textBounds.width() - realTextBounds.width()) / 2.0f,
+                bounds.exactCenterX() + hourOffset * (MINUTE_TEXT_CENTER_OFFSET_SHIFT) + (textBounds.width() - realTextBounds.width()) / 2.0f,
                 bounds.exactCenterY() + textBounds.height() / 2,
                 minutePaintToUse
             )
@@ -705,7 +704,7 @@ class ConcentricNativeCanvasRenderer(
             canvas.drawCircle(
                 bounds.exactCenterX(),
                 bounds.exactCenterY() * 2 - 15f,
-                textBounds.height().toFloat() * 1.75f,
+                textBounds.height().toFloat() * CAL_CIRCLE_RADIUS,
                 calendarMonthPaint
             )
 
@@ -717,7 +716,7 @@ class ConcentricNativeCanvasRenderer(
             canvas.drawText(
                 tx,
                 bounds.exactCenterX() - (textBounds.width().toFloat() / 2.0f),
-                bounds.exactCenterY() * 2 - (textBounds.height().toFloat() / 2.0f) * 4.5f,
+                bounds.exactCenterY() * 2 - (textBounds.height().toFloat() / 2.0f) * CAL_TEXT_OFFSET,
                 calendarMonthPaint
             )
 
@@ -846,10 +845,10 @@ class ConcentricNativeCanvasRenderer(
             if (i % 5 == 0) {
 
                 val dx =
-                    sin(rotation).toFloat() * (numberRadiusFraction - 0.15f) * bounds.width()
+                    sin(rotation).toFloat() * (numberRadiusFraction - FULL_WATCHFACE_COMPLICATION_SHADOW_EDGE_OUTTER) * bounds.width()
                         .toFloat()
                 val dy =
-                    -cos(rotation).toFloat() * (numberRadiusFraction - 0.15f) * bounds.width()
+                    -cos(rotation).toFloat() * (numberRadiusFraction - FULL_WATCHFACE_COMPLICATION_SHADOW_EDGE_OUTTER) * bounds.width()
                         .toFloat()
                 val tx = "%02d".format(i % 60)
                 minuteDialTextPaint.getTextBounds(tx, 0, tx.length, textBounds)
@@ -916,7 +915,5 @@ class ConcentricNativeCanvasRenderer(
     companion object {
         private const val TAG = "ConcentricNativeCanvasRenderer"
 
-        // Used to canvas.scale() to scale watch hands in proper bounds. This will always be 1.0.
-        private const val WATCH_HAND_SCALE = 1.0f
     }
 }
