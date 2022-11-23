@@ -854,17 +854,17 @@ class ConcentricNativeCanvasRenderer(
                 minuteDialTextPaint.getTextBounds(tx, 0, tx.length, textBounds)
 
                 val stx =
-                    sin(rotation).toFloat() * (numberRadiusFraction - 0.095f) * bounds.width()
+                    sin(rotation).toFloat() * (numberRadiusFraction - MINUTE_DIAL_MAJOR_MARK_END_OFFSET) * bounds.width()
                         .toFloat()
                 val sty =
-                    -cos(rotation).toFloat() * (numberRadiusFraction - 0.095f) * bounds.width()
+                    -cos(rotation).toFloat() * (numberRadiusFraction - MINUTE_DIAL_MAJOR_MARK_END_OFFSET) * bounds.width()
                         .toFloat()
 
                 val stx1 =
-                    sin(rotation).toFloat() * (numberRadiusFraction - 0.07f) * bounds.width()
+                    sin(rotation).toFloat() * (numberRadiusFraction - MINUTE_DIAL_START_OFFSET) * bounds.width()
                         .toFloat()
                 val sty1 =
-                    -cos(rotation).toFloat() * (numberRadiusFraction - 0.07f) * bounds.width()
+                    -cos(rotation).toFloat() * (numberRadiusFraction - MINUTE_DIAL_START_OFFSET) * bounds.width()
                         .toFloat()
 
                 outerElementPaint.strokeWidth = 4f
@@ -885,17 +885,17 @@ class ConcentricNativeCanvasRenderer(
                 )
             } else {
                 val stx =
-                    sin(rotation).toFloat() * (numberRadiusFraction - 0.085f) * bounds.width()
+                    sin(rotation).toFloat() * (numberRadiusFraction - MINUTE_DIAL_MINOR_MARK_END_OFFSET) * bounds.width()
                         .toFloat()
                 val sty =
-                    -cos(rotation).toFloat() * (numberRadiusFraction - 0.085f) * bounds.width()
+                    -cos(rotation).toFloat() * (numberRadiusFraction - MINUTE_DIAL_MINOR_MARK_END_OFFSET) * bounds.width()
                         .toFloat()
 
                 val stx1 =
-                    sin(rotation).toFloat() * (numberRadiusFraction - 0.07f) * bounds.width()
+                    sin(rotation).toFloat() * (numberRadiusFraction - MINUTE_DIAL_START_OFFSET) * bounds.width()
                         .toFloat()
                 val sty1 =
-                    -cos(rotation).toFloat() * (numberRadiusFraction - 0.07f) * bounds.width()
+                    -cos(rotation).toFloat() * (numberRadiusFraction - MINUTE_DIAL_START_OFFSET) * bounds.width()
                         .toFloat()
 
                 outerElementPaint.strokeWidth = 2f
