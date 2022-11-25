@@ -127,40 +127,33 @@ class ConcentricNativeCanvasRenderer(
     }
     private val hourTextPaint = Paint().apply {
         isAntiAlias = true
-        textSize = context.resources.getDimensionPixelSize(R.dimen.hour_text_size).toFloat()
         typeface = context.resources.getFont(R.font.rubik_regular)
 
     }
     private val hourTextAmbientPaint = Paint().apply {
         isAntiAlias = false
-        textSize = context.resources.getDimensionPixelSize(R.dimen.hour_text_size).toFloat()
         typeface = context.resources.getFont(R.font.rubik_light)
 
     }
     private val minuteTextAmbientPaint = Paint().apply {
         isAntiAlias = false
-        textSize = context.resources.getDimensionPixelSize(R.dimen.minute_text_size).toFloat()
         typeface = context.resources.getFont(R.font.rubik_light)
 
     }
     private val minuteTextPaint = Paint().apply {
         isAntiAlias = true
-        textSize = context.resources.getDimensionPixelSize(R.dimen.minute_text_size).toFloat()
         typeface = context.resources.getFont(R.font.rubik_regular)
     }
     private val minuteHighlightPaint = Paint().apply {
         isAntiAlias = true
-        textSize = context.resources.getDimensionPixelSize(R.dimen.minute_text_size).toFloat()
         // typeface = Typeface.createFromAsset(context.resources.assets, "Roboto.ttf");
     }
     private val minuteDialTextPaint = Paint().apply {
         isAntiAlias = true
-        textSize = context.resources.getDimensionPixelSize(R.dimen.minute_dial_text_size).toFloat()
         typeface = context.resources.getFont(R.font.rubik_medium)
     }
     private val secondDialTextPaint = Paint().apply {
         isAntiAlias = true
-        textSize = context.resources.getDimensionPixelSize(R.dimen.second_dial_text_size).toFloat()
         typeface = context.resources.getFont(R.font.rubik_regular)
     }
 
@@ -626,6 +619,10 @@ class ConcentricNativeCanvasRenderer(
                 hourPaintToUse = hourTextAmbientPaint
                 minutePaintToUse = minuteTextAmbientPaint
             }
+
+            hourPaintToUse.textSize = bounds.height()*(HOUR_FONT_SIZE)
+            minutePaintToUse.textSize = bounds.height()*(MINUTE_FONT_SIZE)
+
             hourTextPaint.getTextBounds(biggestText, 0, biggestText.length, textBounds)
             hourTextPaint.getTextBounds(txHour, 0, txHour.length, realTextBounds)
             val cxHour = bounds.exactCenterX() - realTextBounds.width().toFloat() * 0.63f
@@ -785,6 +782,7 @@ class ConcentricNativeCanvasRenderer(
                     outerElementPaint
                 )
 
+                secondDialTextPaint.textSize = bounds.height()*(SECOND_DIAL_FONT_SIZE)
                 canvas.drawText(
                     tx,
                     bounds.exactCenterX() + dx - textBounds.width() / 2.0f,
@@ -877,6 +875,7 @@ class ConcentricNativeCanvasRenderer(
                     outerElementPaint
                 )
 
+                minuteDialTextPaint.textSize = bounds.height()*(MINUTE_DIAL_FONT_SIZE)
                 canvas.drawText(
                     tx,
                     bounds.exactCenterX() + dx - textBounds.width() / 2.0f,
