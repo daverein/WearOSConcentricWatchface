@@ -2,6 +2,14 @@ Concentric Native (WearOS Watchface)
 ===============================
 My version of the Pixel Concentric watchface.
 
+Features
+--------
+* 3 faces
+* Large(r) fonts
+* 2-3 Complications on the watchfaces
+* Always On Display friendly, and can adjust watchface, complications, and even the time
+* Multiple highlight colors
+
 Introduction
 ------------
 This is my version of the Google Pixel Concentric Watchface.  It started off being as closely mirroring it as possible, but then I realized I was too old to see the time with those font sizes... and lack of complications for several of the different faces it provided.  So I made the fonts bigger and added complications.  And made the fonts even bigger when in Always on Display (ambient) mode.
