@@ -1,39 +1,42 @@
-WatchFace Sample (Kotlin)
+Concentric Native (WearOS Watchface)
 ===============================
-Demonstrates watch faces using the new androidX libraries (Kotlin).
+My version of the Pixel Concentric watchface.
 
 Introduction
 ------------
-With the release of the androidX watch face libraries (late 2020), Wear OS has simplified
-watch face development.
+This is my version of the Google Pixel Concentric Watchface.  It started off being as closely mirroring it as possible, but then I realized I was too old to see the time with those font sizes... and lack of complications for several of the different faces it provided.  So I made the fonts bigger and added complications.  And made the fonts even bigger when in Always on Display (ambient) mode.
 
-This sample gives you an early preview of how you can simplify your development with the new 100%
-Kotlin libraries.
+Always On Display
+-----------------
+The Watchface is optimized for AOD, allowing everything from parts of the watchface, the complications, and even the time to be optionally displayed.  It can even be stripped down to just showing just the new notification indicator, enabling those of us with OCD to avoid constantly flipping our wrists to see if we missed a message.
 
-Steps to build in Android Studio
---------------------------------
-Because a watch face only contains a service, that is, there is no Activity, you first need to turn
-off the launch setting that opens an Activity on your device.
-
-To do that (and once the project is open) go to Run -> Edit Configurations. Select the **app**
-module and the **General** tab. In the Launch Options, change **Launch:** to **Nothing**. This will
-allow you to successfully install the watch face on the Wear device.
-
-When installed, you will need to select the watch face in the watch face picker, i.e., the watch
-face will not launch on its own like a regular app.
-
-For more information, check out our code lab:
-[1]: https://codelabs.developers.google.com/codelabs/watchface/index.html
+Code
+----
+The code is a direct dirivative work from the Kotlin watchface example of the androidx code samples:
+https://github.com/android/wear-os-samples/tree/main/WatchFaceKotlin
 
 Screenshots
 -------------
 
+Face 1:
+
 <img src="screenshots/screenshot_full.png" width="400" alt="Concentric Native Watchface"/>
+
+Face 2:
+
 <img src="screenshots/screenshot_half.png" width="400" alt="Concentric Native Config"/>
+
+Face 3:
+
 <img src="screenshots/screenshot_halfzoom.png" width="400" alt="Concentric Native Config"/>
+
+Configuration screen:
+
 <img src="screenshots/config.png" width="400" alt="Concentric Native"/>
 
-Getting Started
+
+
+Getting Started to build
 ---------------
 
 This sample uses the Gradle build system. To build this project, use the "gradlew build" command or
@@ -45,7 +48,7 @@ Support
 - Stack Overflow: http://stackoverflow.com/questions/tagged/android
 
 If you've found an error in this sample, please file an issue:
-https://github.com/android/wear-os-samples
+https://github.com/daverein/WearOSConcentricWatchface/issues
 
 Patches are encouraged, and may be submitted by forking this project and
-submitting a pull request through GitHub. Please see CONTRIBUTING.md for more details.
+submitting a pull request through GitHub.
