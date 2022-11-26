@@ -28,10 +28,10 @@ For more information, check out our code lab:
 Screenshots
 -------------
 
-<img src="screenshots/analog-face.png" width="400" alt="Analog Watchface"/>
-<img src="screenshots/analog-watch-side-config-all.png" width="400" alt="Analog Watchface Config"/>
-<img src="screenshots/analog-watch-side-config-1.png" width="400" alt="Analog Watchface Config"/>
-<img src="screenshots/analog-watch-side-config-2.png" width="400" alt="Analog Watchface"/>
+<img src="screenshots/screenshot_full.png" width="400" alt="Concentric Native Watchface"/>
+<img src="screenshots/screenshot_half.png" width="400" alt="Concentric Native Config"/>
+<img src="screenshots/screenshot_halfzoom.png" width="400" alt="Concentric Native Config"/>
+<img src="screenshots/analog-watch-side-config-2.png" width="400" alt="Concentric Native"/>
 
 Getting Started
 ---------------
