@@ -9,6 +9,7 @@ Features
 * 2-3 Complications on the watchfaces
 * Always On Display friendly, and can adjust watchface, complications, and even the time
 * Multiple highlight colors
+* Pixel-shifting to avoid burn-in during AOD
 
 Introduction
 ------------
