@@ -31,7 +31,7 @@ Screenshots
 <img src="screenshots/screenshot_full.png" width="400" alt="Concentric Native Watchface"/>
 <img src="screenshots/screenshot_half.png" width="400" alt="Concentric Native Config"/>
 <img src="screenshots/screenshot_halfzoom.png" width="400" alt="Concentric Native Config"/>
-<img src="screenshots/analog-watch-side-config-2.png" width="400" alt="Concentric Native"/>
+<img src="screenshots/config.png" width="400" alt="Concentric Native"/>
 
 Getting Started
 ---------------
