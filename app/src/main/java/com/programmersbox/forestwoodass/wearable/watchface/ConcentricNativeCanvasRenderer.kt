@@ -97,7 +97,8 @@ class ConcentricNativeCanvasRenderer(
 
     // Initializes paint object for painting the clock hands with default values.
     private val translucentPaint = Paint().apply {
-        isAntiAlias = true
+        isAntiAlias = false
+        isFilterBitmap = true
         color = context.resources.getColor(R.color.black_50, context.theme)
     }
     private val outerElementPaint = Paint().apply {
