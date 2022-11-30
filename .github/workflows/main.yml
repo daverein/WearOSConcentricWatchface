@@ -69,6 +69,35 @@ jobs:
           name: Signed Concentric Native App
           path: concentricnative-release.aab
 
+      - name: Build Artifacts
+          id: buildRealApks
+          uses: gradle/gradle-build-action@v2
+          with:
+            gradle-version: current
+            wrapper-cache-enabled: true
+            dependencies-cache-enabled: true
+            configuration-cache-enabled: true
+            arguments: app:assembleRelease
+
+      - uses: r0adkll/sign-android-release@v1
+        name: Sign app APK
+        id: concentricnative_sign_apk
+        with:
+          releaseDirectory: app/build/outputs/apk/release/
+          signingKeyBase64: ${{ secrets.SIGNING_KEY }}
+          alias: ${{ secrets.ALIAS }}
+          keyStorePassword: ${{ secrets.KEYSTORE_PASSWORD }}
+          keyPassword: ${{ secrets.KEY_PASSWORD }}
+
+      - name: Clean up build artifacts
+        run: |
+          cp ${{ steps.concentricnative_sign_apk.outputs.signedReleaseFile }} concentricnative-release.apk
+
+      - uses: actions/upload-artifact@v3
+        with:
+          name: Signed Concentric Native App APK
+          path: concentricnative-release.apk
+
   release:
     name: Release APK
     needs: apk
