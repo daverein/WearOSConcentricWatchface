@@ -19,6 +19,7 @@ import android.content.Context
 import android.content.Intent
 import android.content.IntentFilter
 import android.graphics.*
+import android.text.format.DateFormat
 import android.util.Log
 import android.view.SurfaceHolder
 import androidx.core.graphics.withScale
@@ -607,10 +608,14 @@ class ConcentricNativeCanvasRenderer(
 
             val textBounds = Rect()
             val realTextBounds = Rect()
-            val formattedTime = if (hourOfDay % 12 == 0) {
-                12
+            val formattedTime = if ( DateFormat.is24HourFormat(context)) {
+                hourOfDay
             } else {
-                hourOfDay % 12
+                if (hourOfDay % 12 == 0) {
+                    12
+                } else {
+                    hourOfDay % 12
+                }
             }
             val txHour = "%02d".format(formattedTime)
             val biggestText = "88"
