@@ -70,14 +70,14 @@ jobs:
           path: concentricnative-release.aab
 
       - name: Build Artifacts
-          id: buildRealApks
-          uses: gradle/gradle-build-action@v2
-          with:
-            gradle-version: current
-            wrapper-cache-enabled: true
-            dependencies-cache-enabled: true
-            configuration-cache-enabled: true
-            arguments: app:assembleRelease
+        id: buildRealApks
+        uses: gradle/gradle-build-action@v2
+        with:
+          gradle-version: current
+          wrapper-cache-enabled: true
+          dependencies-cache-enabled: true
+          configuration-cache-enabled: true
+          arguments: app:assembleRelease
 
       - uses: r0adkll/sign-android-release@v1
         name: Sign app APK
