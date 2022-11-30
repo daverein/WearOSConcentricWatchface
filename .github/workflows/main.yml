@@ -69,7 +69,7 @@ jobs:
           name: Signed Concentric Native App
           path: concentricnative-release.aab
 
-      - name: Build Artifacts
+      - name: Build Artifacts APK
         id: buildRealApks
         uses: gradle/gradle-build-action@v2
         with:
@@ -89,7 +89,7 @@ jobs:
           keyStorePassword: ${{ secrets.KEYSTORE_PASSWORD }}
           keyPassword: ${{ secrets.KEY_PASSWORD }}
 
-      - name: Clean up build artifacts
+      - name: Clean up build artifacts APK
         run: |
           cp ${{ steps.concentricnative_sign_apk.outputs.signedReleaseFile }} concentricnative-release.apk
 
@@ -104,10 +104,8 @@ jobs:
     if: startsWith(github.ref, 'refs/tags/')
     runs-on: ubuntu-latest
     steps:
-      - name: Download APK from build
+      - name: Download All Artifacts from build
         uses: actions/download-artifact@v3
-        with:
-          name: Signed Concentric Native App
 
       - name: Get tag name
         id: get_tag_name
@@ -127,6 +125,7 @@ jobs:
           name: Release ${{ env.VERSION_TAG }}
           files: |
             concentricnative-release.aab
+            concentricnative-release.apk
 
   releaseToGooglePlay:
     name: Release to Google Play
