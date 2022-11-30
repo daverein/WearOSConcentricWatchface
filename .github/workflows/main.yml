@@ -106,15 +106,6 @@ jobs:
     steps:
       - name: Download APP from build
         uses: actions/download-artifact@v3
-        with:
-          name: Signed Concentric Native App
-          path: /
-
-      - name: Download APP from build
-        uses: actions/download-artifact@v3
-        with:
-          name: Signed Concentric Native App APK
-          path: /
 
       - name: Get tag name
         id: get_tag_name
@@ -133,8 +124,8 @@ jobs:
           tag_name: ${{ env.VERSION_TAG }}
           name: Release ${{ env.VERSION_TAG }}
           files: |
-            concentricnative-release.aab
-            concentricnative-release.apk
+            Signed Concentric Native App/concentricnative-release.aab
+            Signed Concentric Native App APK/concentricnative-release.apk
 
   releaseToGooglePlay:
     name: Release to Google Play
