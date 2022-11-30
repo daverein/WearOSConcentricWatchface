@@ -108,11 +108,13 @@ jobs:
         uses: actions/download-artifact@v3
         with:
           name: Signed Concentric Native App
+          path: /
 
       - name: Download APP from build
         uses: actions/download-artifact@v3
         with:
           name: Signed Concentric Native App APK
+          path: /
 
       - name: Get tag name
         id: get_tag_name
