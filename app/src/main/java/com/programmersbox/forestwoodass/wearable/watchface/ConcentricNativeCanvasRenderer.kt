@@ -90,6 +90,10 @@ class ConcentricNativeCanvasRenderer(
         watchFaceData.ambientColorStyle
     )
 
+
+    var is24Format: Boolean = DateFormat.is24HourFormat(context)
+    var renderCount: Int = 0
+
     private val colorBlack = context.resources.getColor(R.color.black, context.theme)
     private var shadowLeft: Bitmap = BitmapFactory.decodeResource(
         context.resources,
@@ -367,11 +371,13 @@ class ConcentricNativeCanvasRenderer(
         zonedDateTime: ZonedDateTime,
         sharedAssets: AnalogSharedAssets
     ) {
+        val isAmbient = renderParameters.drawMode == DrawMode.AMBIENT
+        update24Format(isAmbient)
         val scaledImage =
             watchFaceData.layoutStyle.id == LayoutStyleIdAndResourceIds.SCALED_HALFFACE.id
         val isHalfFace = watchFaceData.layoutStyle.id == LayoutStyleIdAndResourceIds.HALFFACE.id ||
             watchFaceData.layoutStyle.id == LayoutStyleIdAndResourceIds.SCALED_HALFFACE.id
-        val isAmbient = renderParameters.drawMode == DrawMode.AMBIENT
+
         val backgroundColor = if (isAmbient) {
             watchFaceColors.ambientBackgroundColor
         } else {
@@ -581,6 +587,15 @@ class ConcentricNativeCanvasRenderer(
         )
     }
 
+    private fun update24Format(drawAmbient: Boolean)
+    {
+        if ( renderCount % ((1000L/interactiveDrawModeUpdateDelayMillis)*10L) == 0L || drawAmbient) {
+            is24Format = DateFormat.is24HourFormat(context)
+            Log.d(TAG, "Updating 24 hour time")
+        }
+        renderCount++
+    }
+
     private fun drawDigitalTime(
         canvas: Canvas,
         bounds: Rect,
@@ -608,7 +623,7 @@ class ConcentricNativeCanvasRenderer(
 
             val textBounds = Rect()
             val realTextBounds = Rect()
-            val formattedTime = if ( DateFormat.is24HourFormat(context)) {
+            val formattedTime = if ( is24Format ) {
                 hourOfDay
             } else {
                 if (hourOfDay % 12 == 0) {
