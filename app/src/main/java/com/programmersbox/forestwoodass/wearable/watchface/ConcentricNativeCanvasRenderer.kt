@@ -15,6 +15,7 @@
  */
 package com.programmersbox.forestwoodass.wearable.watchface
 
+import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
 import android.content.IntentFilter
@@ -92,7 +93,6 @@ class ConcentricNativeCanvasRenderer(
 
 
     var is24Format: Boolean = DateFormat.is24HourFormat(context)
-    var renderCount: Int = 0
 
     private val colorBlack = context.resources.getColor(R.color.black, context.theme)
     private var shadowLeft: Bitmap = BitmapFactory.decodeResource(
@@ -186,6 +186,13 @@ class ConcentricNativeCanvasRenderer(
         }
     }
 
+    private val timeSetReceiver = object : BroadcastReceiver() {
+        override fun onReceive(contxt: Context?, intent: Intent?) {
+            is24Format = DateFormat.is24HourFormat(context)
+            Log.d(TAG, "time format is now 24?:" + is24Format)
+        }
+    }
+
     init {
         scope.launch {
             currentUserStyleRepository.userStyle.collect { userStyle ->
@@ -196,6 +203,10 @@ class ConcentricNativeCanvasRenderer(
             context.registerReceiver(batteryLevelChanged, filter)
         }
         batteryLevelChanged.onReceive(context, batteryStatus)
+
+        IntentFilter("android.intent.action.TIME_SET").let { filter ->
+            context.registerReceiver(timeSetReceiver, filter)
+        }
     }
 
     override suspend fun createSharedAssets(): AnalogSharedAssets {
@@ -308,6 +319,7 @@ class ConcentricNativeCanvasRenderer(
         Log.d(TAG, "onDestroy()")
         scope.cancel("ConcentricNativeCanvasRenderer scope clear() request")
         context.unregisterReceiver(batteryLevelChanged)
+        context.unregisterReceiver(timeSetReceiver)
         super.onDestroy()
     }
 
@@ -372,7 +384,6 @@ class ConcentricNativeCanvasRenderer(
         sharedAssets: AnalogSharedAssets
     ) {
         val isAmbient = renderParameters.drawMode == DrawMode.AMBIENT
-        update24Format(isAmbient)
         val scaledImage =
             watchFaceData.layoutStyle.id == LayoutStyleIdAndResourceIds.SCALED_HALFFACE.id
         val isHalfFace = watchFaceData.layoutStyle.id == LayoutStyleIdAndResourceIds.HALFFACE.id ||
@@ -585,15 +596,6 @@ class ConcentricNativeCanvasRenderer(
             rightSide, cy + sizeRadius,
             sizeRadius, sizeRadius, minuteHighlightPaint
         )
-    }
-
-    private fun update24Format(drawAmbient: Boolean)
-    {
-        if ( renderCount % ((1000L/interactiveDrawModeUpdateDelayMillis)*10L) == 0L || drawAmbient) {
-            is24Format = DateFormat.is24HourFormat(context)
-            Log.d(TAG, "Updating 24 hour time")
-        }
-        renderCount++
     }
 
     private fun drawDigitalTime(
