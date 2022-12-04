@@ -33,15 +33,15 @@ import com.programmersbox.forestwoodass.wearable.watchface.R
 // Creates bounds for the locations of both right and left complications. (This is the
 // location from 0.0 - 1.0.)
 // Both left and right complications use the same top and bottom bounds.
-private const val LEFT_COMPLICATIONS_TOP_BOUND = 0.04f
-private const val LEFT_COMPLICATIONS_BOTTOM_BOUND = 0.34f
-const val LEFT_COMPLICATION_LEFT_BOUND = 0.32f
-const val LEFT_COMPLICATION_RIGHT_BOUND = 0.68f
+private const val LEFT_COMPLICATIONS_TOP_BOUND = 0.15f
+private const val LEFT_COMPLICATIONS_BOTTOM_BOUND = 0.40f
+const val LEFT_COMPLICATION_LEFT_BOUND = 0.375f
+const val LEFT_COMPLICATION_RIGHT_BOUND = 0.625f
 
 private const val RIGHT_COMPLICATIONS_TOP_BOUND = 0.67f
-private const val RIGHT_COMPLICATIONS_BOTTOM_BOUND = 0.97f
-const val RIGHT_COMPLICATION_LEFT_BOUND = 0.32f
-const val RIGHT_COMPLICATION_RIGHT_BOUND = 0.68f
+private const val RIGHT_COMPLICATIONS_BOTTOM_BOUND = 0.92f
+const val RIGHT_COMPLICATION_LEFT_BOUND = 0.375f
+const val RIGHT_COMPLICATION_RIGHT_BOUND = 0.625f
 
 private const val MIDDLE_COMPLICATIONS_TOP_BOUND = 0.35f
 private const val MIDDLE_COMPLICATIONS_BOTTOM_BOUND = 0.65f
@@ -64,28 +64,24 @@ sealed class ComplicationConfig(val id: Int, val supportedTypes: List<Complicati
     object Left : ComplicationConfig(
         LEFT_COMPLICATION_ID,
         listOf(
-            ComplicationType.SHORT_TEXT,
             ComplicationType.RANGED_VALUE,
-            ComplicationType.MONOCHROMATIC_IMAGE,
-            ComplicationType.SMALL_IMAGE
+            ComplicationType.SHORT_TEXT
         )
     )
 
     object Right : ComplicationConfig(
         RIGHT_COMPLICATION_ID,
         listOf(
-            ComplicationType.SHORT_TEXT,
             ComplicationType.RANGED_VALUE,
-            ComplicationType.MONOCHROMATIC_IMAGE,
-            ComplicationType.SMALL_IMAGE
+            ComplicationType.SHORT_TEXT
         )
     )
 
     object Middle : ComplicationConfig(
         MIDDLE_COMPLICATION_ID,
         listOf(
-            ComplicationType.SHORT_TEXT,
-            ComplicationType.RANGED_VALUE
+            ComplicationType.RANGED_VALUE,
+            ComplicationType.SHORT_TEXT
         )
     )
 }
