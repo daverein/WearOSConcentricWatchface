@@ -64,9 +64,9 @@ sealed class ComplicationConfig(val id: Int, val supportedTypes: List<Complicati
     object Left : ComplicationConfig(
         LEFT_COMPLICATION_ID,
         listOf(
+            ComplicationType.SHORT_TEXT,
             ComplicationType.RANGED_VALUE,
             ComplicationType.MONOCHROMATIC_IMAGE,
-            ComplicationType.SHORT_TEXT,
             ComplicationType.SMALL_IMAGE
         )
     )
@@ -74,9 +74,9 @@ sealed class ComplicationConfig(val id: Int, val supportedTypes: List<Complicati
     object Right : ComplicationConfig(
         RIGHT_COMPLICATION_ID,
         listOf(
+            ComplicationType.SHORT_TEXT,
             ComplicationType.RANGED_VALUE,
             ComplicationType.MONOCHROMATIC_IMAGE,
-            ComplicationType.SHORT_TEXT,
             ComplicationType.SMALL_IMAGE
         )
     )
@@ -85,9 +85,7 @@ sealed class ComplicationConfig(val id: Int, val supportedTypes: List<Complicati
         MIDDLE_COMPLICATION_ID,
         listOf(
             ComplicationType.SHORT_TEXT,
-            ComplicationType.RANGED_VALUE,
-            ComplicationType.MONOCHROMATIC_IMAGE,
-            ComplicationType.SMALL_IMAGE
+            ComplicationType.RANGED_VALUE
         )
     )
 }
@@ -132,7 +130,7 @@ fun createComplicationSlotManager(
         canvasComplicationFactory = defaultCanvasComplicationFactory,
         supportedTypes = ComplicationConfig.Middle.supportedTypes,
         defaultDataSourcePolicy = DefaultComplicationDataSourcePolicy(
-            SystemDataSources.DATA_SOURCE_STEP_COUNT,
+            SystemDataSources.NO_DATA_SOURCE,
             ComplicationType.SHORT_TEXT
         ),
         bounds = ComplicationSlotBounds(
@@ -152,7 +150,7 @@ fun createComplicationSlotManager(
         canvasComplicationFactory = defaultCanvasComplicationFactory,
         supportedTypes = ComplicationConfig.Right.supportedTypes,
         defaultDataSourcePolicy = DefaultComplicationDataSourcePolicy(
-            SystemDataSources.DATA_SOURCE_STEP_COUNT,
+            SystemDataSources.NO_DATA_SOURCE,
             ComplicationType.SHORT_TEXT
         ),
         bounds = ComplicationSlotBounds(

@@ -443,6 +443,37 @@ class ConcentricNativeCanvasRenderer(
     }
 
     // ----- All drawing functions -----
+    private fun drawArcShadows(
+        canvas: Canvas,
+        bounds: Rect
+    ) {
+        val top = complicationSlotsManager.complicationSlots[RIGHT_COMPLICATION_ID]
+        val bottom = complicationSlotsManager.complicationSlots[LEFT_COMPLICATION_ID]
+        if ( (top?.renderer as CanvasComplicationDrawable).getData().type != ComplicationType.EMPTY) {
+            canvas.drawArc(
+                bounds.width().toFloat() * FULL_WATCHFACE_COMPLICATION_SHADOW_EDGE_OUTTER,
+                bounds.height().toFloat() * FULL_WATCHFACE_COMPLICATION_SHADOW_EDGE_OUTTER,
+                bounds.width().toFloat() * FULL_WATCHFACE_COMPLICATION_SHADOW_EDGE_INNER,
+                bounds.height().toFloat() * 0.88f,
+                70f,
+                40f,
+                true,
+                translucentPaint
+            )
+        }
+        if ( (bottom?.renderer as CanvasComplicationDrawable).getData().type != ComplicationType.EMPTY) {
+            canvas.drawArc(
+                bounds.width().toFloat() * FULL_WATCHFACE_COMPLICATION_SHADOW_EDGE_OUTTER,
+                bounds.height().toFloat() * 0.11f,
+                bounds.width().toFloat() * FULL_WATCHFACE_COMPLICATION_SHADOW_EDGE_INNER,
+                bounds.height().toFloat() * FULL_WATCHFACE_COMPLICATION_SHADOW_EDGE_INNER,
+                250f,
+                40f,
+                true,
+                translucentPaint
+            )
+        }
+    }
     private fun drawShadows(
         canvas: Canvas,
         bounds: Rect,
@@ -467,16 +498,7 @@ class ConcentricNativeCanvasRenderer(
             if (watchFaceData.layoutStyle.id == LayoutStyleIdAndResourceIds.FULLFACE.id &&
                 (!isAmbient || (isAmbient && watchFaceData.compAOD))
             ) {
-                canvas.drawArc(
-                    bounds.width().toFloat() * FULL_WATCHFACE_COMPLICATION_SHADOW_EDGE_OUTTER, bounds.height().toFloat() * FULL_WATCHFACE_COMPLICATION_SHADOW_EDGE_OUTTER,
-                    bounds.width().toFloat() * FULL_WATCHFACE_COMPLICATION_SHADOW_EDGE_INNER, bounds.height().toFloat() * 0.88f,
-                    70f, 40f, true, translucentPaint
-                )
-                canvas.drawArc(
-                    bounds.width().toFloat() * FULL_WATCHFACE_COMPLICATION_SHADOW_EDGE_OUTTER, bounds.height().toFloat() * 0.11f,
-                    bounds.width().toFloat() * FULL_WATCHFACE_COMPLICATION_SHADOW_EDGE_INNER, bounds.height().toFloat() * FULL_WATCHFACE_COMPLICATION_SHADOW_EDGE_INNER,
-                    250f, 40f, true, translucentPaint
-                )
+                drawArcShadows(canvas, bounds)
             }
         }
     }
