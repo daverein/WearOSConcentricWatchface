@@ -31,7 +31,7 @@ wear-watchface = { module = "androidx.wear.watchface:watchface", version.ref = "
 wear-watchface-client = { module = "androidx.wear.watchface:watchface-client", version.ref = "androidx-wear-watchface" }
 wear-watchface-complications-data = { module = "androidx.wear.watchface:watchface-complications-data", version.ref = "androidx-wear-complications-data" }
 wear-watchface-complications-data-source = { module = "androidx.wear.watchface:watchface-complications-data-source", version.ref = "androidx-wear-watchface" }
-wear-watchface-complications-rendering = { module = "androidx.wear.watchface:watchface-complications-rendering", version.ref = "androidx-wear-watchface" }
+#wear-watchface-complications-rendering = { module = "androidx.wear.watchface:watchface-complications-rendering", version.ref = "androidx-wear-watchface" }
 wear-watchface-data = { module = "androidx.wear.watchface:watchface-data", version.ref = "androidx-wear-watchface" }
 wear-watchface-editor = { module = "androidx.wear.watchface:watchface-editor", version.ref = "androidx-wear-watchface" }
 wear-watchface-style = { module = "androidx.wear.watchface:watchface-style", version.ref = "androidx-wear-watchface" }
