@@ -64,7 +64,7 @@ import java.util.Objects;
  */
 
 @SuppressLint("RestrictedApi")
-class ComplicationRenderer {
+public class ComplicationRenderer {
 
     public interface OnInvalidateListener {
         void onInvalidate();
@@ -181,7 +181,7 @@ class ComplicationRenderer {
      * @param activeStyle  ComplicationSlot style to be used when in active mode.
      * @param ambientStyle ComplicationSlot style to be used when in ambient mode.
      */
-    ComplicationRenderer(
+    public ComplicationRenderer(
             Context context, ComplicationStyle activeStyle, ComplicationStyle ambientStyle) {
         mContext = context;
         updateStyle(activeStyle, ambientStyle);
@@ -358,6 +358,7 @@ class ComplicationRenderer {
         // Draw background first
         drawBackground(canvas, currentPaintSet);
         // Draw content
+
         drawIcon(canvas, currentPaintSet);
         drawSmallImage(canvas, currentPaintSet);
         drawLargeImage(canvas, currentPaintSet);
@@ -371,7 +372,7 @@ class ComplicationRenderer {
             drawHighlight(canvas, currentPaintSet);
         }
         // Draw borders last (to ensure that they are always visible)
-        drawBorders(canvas, currentPaintSet);
+       // drawBorders(canvas, currentPaintSet);
         canvas.restore();
     }
 
@@ -1145,7 +1146,7 @@ class ComplicationRenderer {
                 && mRangedValueBounds.equals(drawable.mRangedValueBounds);
     }
 
-    ComplicationData getComplicationData() {
+    public ComplicationData getComplicationData() {
         return mComplicationData;
     }
 

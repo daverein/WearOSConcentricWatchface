@@ -447,6 +447,7 @@ class ConcentricNativeCanvasRenderer(
         canvas: Canvas,
         bounds: Rect
     ) {
+        return
         val top = complicationSlotsManager.complicationSlots[RIGHT_COMPLICATION_ID]
         val bottom = complicationSlotsManager.complicationSlots[LEFT_COMPLICATION_ID]
         if ( (top?.renderer as CanvasComplicationDrawable).getData().type != ComplicationType.EMPTY) {
