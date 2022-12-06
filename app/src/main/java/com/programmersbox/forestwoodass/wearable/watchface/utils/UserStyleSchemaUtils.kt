@@ -28,6 +28,7 @@ import com.programmersbox.forestwoodass.wearable.watchface.data.watchface.*
 const val COLOR_STYLE_SETTING = "color_style_setting"
 const val LAYOUT_STYLE_SETTING = "layout_style_setting"
 const val DRAW_TIME_AOD_STYLE_SETTING = "draw_time_aod_style_setting"
+const val DRAW_DATE_STYLE_SETTING = "draw_date_style_setting"
 const val DRAW_COMP_CIRCLES_STYLE_SETTING = "draw_comp_circles_style_setting"
 const val COMPAOD_STYLE_SETTING = "compaod_style_setting"
 const val MINUTEDIALAOD_STYLE_SETTING = "minutedialaod_style_setting"
@@ -72,6 +73,15 @@ fun createUserStyleSchema(context: Context): UserStyleSchema {
 
     // 2. Allows user to toggle on/off the hour pips (dashes around the outer edge of the watch
     // face).
+    val drawDateStyleSetting = UserStyleSetting.BooleanUserStyleSetting(
+        UserStyleSetting.Id(DRAW_DATE_STYLE_SETTING),
+        context.resources,
+        R.string.watchface_draw_date_setting,
+        R.string.watchface_draw_date_setting_description,
+        null,
+        listOf(WatchFaceLayer.BASE),
+        DRAW_DATE
+    )
     val drawTimeOnAODStyleSetting = UserStyleSetting.BooleanUserStyleSetting(
         UserStyleSetting.Id(DRAW_TIME_AOD_STYLE_SETTING),
         context.resources,
@@ -88,7 +98,7 @@ fun createUserStyleSchema(context: Context): UserStyleSchema {
         R.string.watchface_draw_comp_circles_setting_description,
         null,
         listOf(WatchFaceLayer.BASE),
-        DRAW_TIME_AOD
+        DRAW_COMP_CIRCLES
     )
     val compaodStyleSetting = UserStyleSetting.BooleanUserStyleSetting(
         UserStyleSetting.Id(COMPAOD_STYLE_SETTING),
@@ -126,6 +136,7 @@ fun createUserStyleSchema(context: Context): UserStyleSchema {
         listOf(
             colorStyleSetting,
             layoutStyleSetting,
+            drawDateStyleSetting,
             drawCompCirclesStyleSetting,
             drawTimeOnAODStyleSetting,
             compaodStyleSetting,

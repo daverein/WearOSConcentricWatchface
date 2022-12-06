@@ -253,6 +253,14 @@ class ConcentricNativeCanvasRenderer(
                         timeAOD = booleanValue.value
                     )
                 }
+                DRAW_DATE_STYLE_SETTING -> {
+                    val booleanValue = options.value as
+                        UserStyleSetting.BooleanUserStyleSetting.BooleanOption
+
+                    newWatchFaceData = newWatchFaceData.copy(
+                        drawDate = booleanValue.value
+                    )
+                }
                 DRAW_COMP_CIRCLES_STYLE_SETTING -> {
                     val booleanValue = options.value as
                         UserStyleSetting.BooleanUserStyleSetting.BooleanOption
@@ -376,7 +384,7 @@ class ConcentricNativeCanvasRenderer(
                 zonedDateTime,
                 isAmbient
             )
-            drawShadows(canvas, bounds, isAmbient, isHalfFace, scaledImage)
+            drawShadows(canvas, bounds, isHalfFace, scaledImage)
         }
         if (renderParameters.watchFaceLayers.contains(WatchFaceLayer.COMPLICATIONS_OVERLAY) &&
             !isAmbient || watchFaceData.timeAOD
@@ -456,7 +464,6 @@ class ConcentricNativeCanvasRenderer(
     private fun drawShadows(
         canvas: Canvas,
         bounds: Rect,
-        isAmbient: Boolean,
         isHalfFace: Boolean,
         scaledImage: Boolean
     ) {
@@ -710,6 +717,8 @@ class ConcentricNativeCanvasRenderer(
         bounds: Rect,
         zonedDateTime: ZonedDateTime
     ) {
+        if ( !watchFaceData.drawDate )
+            return
         if (renderParameters.watchFaceLayers.contains(WatchFaceLayer.BASE)) {
             val textBounds = Rect()
             var tx = zonedDateTime.toLocalDate().month.toString().substring(0, 3)

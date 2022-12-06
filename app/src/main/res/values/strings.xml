@@ -60,6 +60,13 @@
     <string name="white_style_name">White Style</string>
 
     <!-- An option within the analog watch face to draw pips to mark each hour [CHAR LIMIT=20] -->
+    <string name="watchface_draw_date_setting">Show date on watchface</string>
+
+    <!-- Subtitle for the menu option to configure if we should draw pips to mark each hour
+     on the watch face -->
+    <string name="watchface_draw_date_setting_description">Show the date on the watchface</string>
+
+    <!-- An option within the analog watch face to draw pips to mark each hour [CHAR LIMIT=20] -->
     <string name="watchface_pips_setting">Show time on AOD</string>
 
     <!-- Subtitle for the menu option to configure if we should draw pips to mark each hour
@@ -127,6 +134,7 @@
     <string name="activity_config_color_style_picker_label">Color\nStyle</string>
     <string name="activity_config_layout_style_picker_label">Layout\nStyle</string>
     <string name="activity_config_ticks_enabled_label">Show time\non AOD</string>
+    <string name="activity_config_drawdate_enabled_label">Draw date on watchface</string>
     <string name="activity_config_draw_comp_enabled_label">Draw circles\nunder Complications</string>
     <string name="activity_config_compaod_enabled_label">Complications\non AOD</string>
     <string name="activity_config_secondsaod_enabled_label">Minute Dial\non AOD</string>
@@ -139,6 +147,7 @@
     <string name="activity_config_ticks_enabled_switch_content_description">Show time on AOD</string>
     <string name="activity_config_draw_comp_enabled_label_description">Draw circles under Complications</string>
     <string name="activity_config_compaod_enabled_switch_content_description">Display Complications on AOD</string>
+    <string name="activity_config_drawdate_enabled_switch_content_description">Display the date on the watchface</string>
     <string name="activity_config_secondsaod_enabled_switch_content_description">Display Minute Dial on AOD</string>
     <string name="activity_config_minute_hand_slider_text_label_content_description">Shift pixels on the AOD to avoid burn in</string>
     <string name="activity_config_minute_hand_length_slider_content_description">Slider for adjusting pixels to shift (0&#8211;16).</string>

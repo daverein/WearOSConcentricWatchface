@@ -58,6 +58,7 @@ class WatchFaceConfigActivity : ComponentActivity() {
 
         // Disable widgets until data loads and values are set.
         binding.colorStylePickerButton.isEnabled = false
+        binding.drawdateEnabledSwitch.isEnabled = false
         binding.timeaodEnabledSwitch.isEnabled = false
         binding.shiftPixelAmountSlider.isEnabled = false
         binding.drawcompcirclesEnabledSwitch.isEnabled = false
@@ -103,6 +104,7 @@ class WatchFaceConfigActivity : ComponentActivity() {
         val colorStyleId: String = userStylesAndPreview.colorStyleId
         Log.d(TAG, "\tselected color style: $colorStyleId")
 
+        binding.drawdateEnabledSwitch.isChecked = userStylesAndPreview.drawDateEnabled
         binding.timeaodEnabledSwitch.isChecked = userStylesAndPreview.timeaodEnabled
         binding.compaodEnabledSwitch.isChecked = userStylesAndPreview.compaodEnabled
         binding.drawcompcirclesEnabledSwitch.isChecked = userStylesAndPreview.drawCompCirclesEnabled
@@ -118,6 +120,7 @@ class WatchFaceConfigActivity : ComponentActivity() {
 
     private fun enabledWidgets() {
         binding.colorStylePickerButton.isEnabled = true
+        binding.drawdateEnabledSwitch.isEnabled = true
         binding.timeaodEnabledSwitch.isEnabled = true
         binding.drawcompcirclesEnabledSwitch.isEnabled = true
         binding.shiftPixelAmountSlider.isEnabled = true
@@ -192,6 +195,11 @@ class WatchFaceConfigActivity : ComponentActivity() {
     fun onClickRightComplicationButton(view: View) {
         Log.d(TAG, "onClickRightComplicationButton() $view")
         stateHolder.setComplication(RIGHT_COMPLICATION_ID)
+    }
+
+    fun onClickDrawDateEnabledSwitch(view: View) {
+        Log.d(TAG, "onClickDrawDateEnabledSwitch() $view")
+        stateHolder.setDrawDate(binding.drawdateEnabledSwitch.isChecked)
     }
 
     fun onClickTimeAODEnabledSwitch(view: View) {

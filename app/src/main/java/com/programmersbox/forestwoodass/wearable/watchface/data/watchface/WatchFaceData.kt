@@ -19,6 +19,7 @@ package com.programmersbox.forestwoodass.wearable.watchface.data.watchface
 // to be exposed as settings defaults.
 const val DRAW_COMP_CIRCLES = true
 const val DRAW_TIME_AOD = true
+const val DRAW_DATE = true
 const val COMPAOD_DEFAULT = true
 const val MINUTEDIALAOD_DEFAULT = true
 
@@ -61,6 +62,7 @@ data class WatchFaceData(
     val activeColorStyle: ColorStyleIdAndResourceIds = ColorStyleIdAndResourceIds.BLUE,
     val ambientColorStyle: ColorStyleIdAndResourceIds = ColorStyleIdAndResourceIds.AMBIENT,
     val layoutStyle: LayoutStyleIdAndResourceIds = LayoutStyleIdAndResourceIds.FULLFACE,
+    val drawDate: Boolean = DRAW_DATE,
     val timeAOD: Boolean = DRAW_TIME_AOD,
     val drawCompCircles: Boolean = DRAW_COMP_CIRCLES,
     val compAOD: Boolean = COMPAOD_DEFAULT,
