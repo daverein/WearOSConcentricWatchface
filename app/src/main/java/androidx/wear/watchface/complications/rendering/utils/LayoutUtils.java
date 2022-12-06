@@ -66,7 +66,7 @@ public class LayoutUtils {
 
     /** Sets the output to the top half of the input. */
     public static void getTopHalfMarquee(@NonNull Rect outRect, @NonNull Rect inRect) {
-        float height = (inRect.top + inRect.bottom) * 0.75f;
+        float height = (inRect.top + inRect.bottom) * 0.70f;
         int iHeight = (int) height;
         outRect.set(inRect.left, inRect.top, inRect.right, iHeight);
     }
@@ -81,6 +81,12 @@ public class LayoutUtils {
         outRect.set(inRect.left, (inRect.top + inRect.bottom) / 2, inRect.right, inRect.bottom);
     }
 
+    /** Sets the output to the bottom half of the input. */
+    public static void getBottomHalfSmall(@NonNull Rect outRect, @NonNull Rect inRect) {
+        float top = (inRect.top + inRect.bottom) * 0.60f;
+        float bottom = (inRect.top + inRect.bottom) * 0.80f;
+        outRect.set(inRect.left, (int)top, inRect.right, (int)bottom);
+    }
     /**
      * Sets the output to the biggest square that fits in input rectangle and has the same center,
      * works for all aspect ratios.

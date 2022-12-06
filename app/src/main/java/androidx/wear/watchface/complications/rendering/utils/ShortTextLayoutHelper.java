@@ -17,6 +17,7 @@
 package androidx.wear.watchface.complications.rendering.utils;
 
 import static androidx.wear.watchface.complications.rendering.utils.LayoutUtils.getBottomHalf;
+import static androidx.wear.watchface.complications.rendering.utils.LayoutUtils.getBottomHalfSmall;
 import static androidx.wear.watchface.complications.rendering.utils.LayoutUtils.getCentralSquare;
 import static androidx.wear.watchface.complications.rendering.utils.LayoutUtils.getLeftPart;
 import static androidx.wear.watchface.complications.rendering.utils.LayoutUtils.getRightPart;
@@ -60,10 +61,10 @@ public class ShortTextLayoutHelper extends LayoutHelper {
                 getLeftPart(outRect, outRect);
             } else {
                 // Use top half of the central square
-           //     getCentralSquare(outRect, outRect);
-                getTopHalfMarquee(outRect, outRect);
-                Log.d("HERE", "************* MARQUEE ************");
                 getCentralSquare(outRect, outRect);
+                getTopHalf(outRect, outRect);
+                getCentralSquare(outRect, outRect);
+                getTopHalfMarquee(outRect, outRect);
             }
         }
     }
@@ -114,12 +115,14 @@ public class ShortTextLayoutHelper extends LayoutHelper {
                 getRightPart(outRect, outRect);
             } else {
                 // Text on bottom half of central square
-                getTopHalfMarquee(outRect, outRect);
+                if (!hasShortTitle()) {
+                    getCentralSquare(outRect, outRect);
+                }
             //    getBottomHalf(outRect, outRect);
             }
         } else if (hasShortTitle()) {
             // Text above title
-            getTopHalf(outRect, outRect);
+            getTopHalfMarquee(outRect, outRect);
         }
         // Text only, no-op here.
     }
@@ -142,7 +145,7 @@ public class ShortTextLayoutHelper extends LayoutHelper {
         } else {
             // Title is always on bottom half
             getBounds(outRect);
-            getBottomHalf(outRect, outRect);
+            getBottomHalfSmall(outRect, outRect);
         }
     }
 }

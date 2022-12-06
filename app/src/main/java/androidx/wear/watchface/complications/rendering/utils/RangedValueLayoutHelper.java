@@ -21,12 +21,14 @@ import static androidx.wear.watchface.complications.rendering.utils.LayoutUtils.
 import static androidx.wear.watchface.complications.rendering.utils.LayoutUtils.getLeftPart;
 import static androidx.wear.watchface.complications.rendering.utils.LayoutUtils.getRightPart;
 import static androidx.wear.watchface.complications.rendering.utils.LayoutUtils.getTopHalf;
+import static androidx.wear.watchface.complications.rendering.utils.LayoutUtils.getTopHalfMarquee;
 import static androidx.wear.watchface.complications.rendering.utils.LayoutUtils.isWideRectangle;
 import static androidx.wear.watchface.complications.rendering.utils.LayoutUtils.scaledAroundCenter;
 
 import android.graphics.Rect;
 import android.support.wearable.complications.ComplicationData;
 import android.text.Layout;
+import android.util.Log;
 import android.view.Gravity;
 
 import androidx.annotation.NonNull;
@@ -65,10 +67,10 @@ public class RangedValueLayoutHelper extends LayoutHelper {
     private void updateShortTextLayoutHelper() {
         if (getComplicationData() != null) {
             getRangedValueBounds(mRangedValueInnerSquare);
-            scaledAroundCenter(
-                    mRangedValueInnerSquare,
-                    mRangedValueInnerSquare,
-                    (1 - INNER_SQUARE_PADDING_FRACTION * 2) * INNER_SQUARE_SIZE_FRACTION);
+//            scaledAroundCenter(
+//                    mRangedValueInnerSquare,
+//                    mRangedValueInnerSquare,
+//                    (1 - INNER_SQUARE_PADDING_FRACTION * 2) * INNER_SQUARE_SIZE_FRACTION);
             mShortTextLayoutHelper.update(
                     mRangedValueInnerSquare.width(),
                     mRangedValueInnerSquare.height(),
@@ -112,14 +114,16 @@ public class RangedValueLayoutHelper extends LayoutHelper {
             outRect.setEmpty();
         } else {
             getBounds(outRect);
-            if (!hasShortText() || isWideRectangle(outRect)) {
-                // Show only an icon inside ranged value indicator
-                scaledAroundCenter(outRect, mRangedValueInnerSquare, 1 - ICON_PADDING_FRACTION * 2);
+            Log.d("rangedvalue", "Bounds are:" + outRect);
+            if (isWideRectangle(outRect)) {
+                // Left square part of the inner bounds
+                getLeftPart(outRect, outRect);
             } else {
-                // Draw a short text complication inside ranged value bounds
-                mShortTextLayoutHelper.getIconBounds(outRect);
-                outRect.offset(mRangedValueInnerSquare.left, mRangedValueInnerSquare.top);
-                outRect.top = 0;
+                // Use top half of the central square
+                getCentralSquare(outRect, outRect);
+                getTopHalf(outRect, outRect);
+                getCentralSquare(outRect, outRect);
+                getTopHalfMarquee(outRect, outRect);
             }
         }
     }
@@ -166,8 +170,11 @@ public class RangedValueLayoutHelper extends LayoutHelper {
                 }
             } else {
                 // Draw a short text complication inside ranged value bounds
+
+                Log.d("rangedvalue", "getShortTextBounds are:" + outRect);
                 mShortTextLayoutHelper.getShortTextBounds(outRect);
                 outRect.offset(mRangedValueInnerSquare.left, mRangedValueInnerSquare.top);
+                Log.d("rangedvalue", "getShortTextBounds2 are:" + outRect);
             }
         }
     }
@@ -195,8 +202,11 @@ public class RangedValueLayoutHelper extends LayoutHelper {
                 getBottomHalf(outRect, outRect);
             } else {
                 // Draw a short text complication inside ranged value bounds
+
+                Log.d("rangedvalue", "getShortTitleBounds are:" + outRect);
                 mShortTextLayoutHelper.getShortTitleBounds(outRect);
                 outRect.offset(mRangedValueInnerSquare.left, mRangedValueInnerSquare.top);
+                Log.d("rangedvalue", "getShortTitleBounds2 are:" + outRect);
             }
         }
     }

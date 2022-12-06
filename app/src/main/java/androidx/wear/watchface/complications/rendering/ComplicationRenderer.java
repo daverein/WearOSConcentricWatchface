@@ -79,7 +79,7 @@ class ComplicationRenderer {
      * it's only meant to be true on local builds.
      */
     @VisibleForTesting
-    static final boolean DEBUG_MODE = true;
+    static final boolean DEBUG_MODE = false;
 
     /** The gap between the in progress stroke and the remain stroke. */
     @VisibleForTesting
@@ -477,9 +477,12 @@ class ComplicationRenderer {
     private void updateComplicationTexts(long currentTimeMillis) {
         if (mComplicationData.hasShortText()) {
             mMainTextRenderer.setMaxLines(1);
+            CharSequence text = mComplicationData.getShortText().getTextAt(
+                mContext.getResources(), currentTimeMillis);
+            String sText = text.toString();
+            String sText2 = sText.replace(" bpm", "");
             mMainTextRenderer.setText(
-                    mComplicationData.getShortText().getTextAt(
-                            mContext.getResources(), currentTimeMillis));
+                sText2.subSequence(0, sText2.length()));
             if (mComplicationData.getShortTitle() != null) {
                 mSubTextRenderer.setText(
                         mComplicationData.getShortTitle().getTextAt(
@@ -659,6 +662,9 @@ class ComplicationRenderer {
     }
 
     private void drawIconOutlindBorder(Canvas canvas, PaintSet paintSet) {
+        if ( true ) {
+            return;
+        }
         RectF bounds = mRangedValueBoundsF;
         if (DEBUG_MODE) {
             canvas.drawRect(bounds, mDebugPaint);
@@ -666,12 +672,19 @@ class ComplicationRenderer {
 
 
         int insetAmount = (int) Math.ceil(paintSet.mInProgressPaint.getStrokeWidth());
+        float start = -65f;
+        float sweep = 310f;
+
+        if ( getIcon() == null ) {
+            start = -90f;
+            sweep = 360f;
+        }
         bounds.inset(insetAmount, insetAmount);
         // Draw the progress arc.
         canvas.drawArc(
             bounds,
-            -65f,
-            310f,
+            start,
+            sweep,
             false,
             paintSet.mInProgressPaint);
         bounds.inset(-insetAmount, -insetAmount);
@@ -692,8 +705,9 @@ class ComplicationRenderer {
             icon.setColorFilter(mIsPlaceholder ? PLACEHOLDER_COLOR_FILTER :
                     paintSet.mIconColorFilter);
             Rect b = new Rect(mIconBounds);
-            //b.top -= 30;
-            //b.bottom -= 30;
+            float shiftup = ((b.bottom - b.top)/3f);
+            b.top -= shiftup;
+            b.bottom -= shiftup;
             drawIconOnCanvas(canvas, b, icon);
         } else if (isPlaceholder) {
             canvas.drawRect(mIconBounds, PLACEHOLDER_PAINT);
@@ -860,11 +874,12 @@ class ComplicationRenderer {
             mSubTextRenderer.setAlignment(currentLayoutHelper.getShortTitleAlignment());
             mSubTextRenderer.setGravity(currentLayoutHelper.getShortTitleGravity());
         }
-        if (alignment != Layout.Alignment.ALIGN_CENTER) {
-            float paddingAmount = TEXT_PADDING_HEIGHT_FRACTION * mBounds.height();
-            mMainTextRenderer.setRelativePadding(paddingAmount / mMainTextBounds.width(), 0, 0, 0);
-            mSubTextRenderer.setRelativePadding(paddingAmount / mMainTextBounds.width(), 0, 0, 0);
-        } else {
+//        if (alignment != Layout.Alignment.ALIGN_CENTER) {
+//            float paddingAmount = TEXT_PADDING_HEIGHT_FRACTION * mBounds.height();
+//            mMainTextRenderer.setRelativePadding(paddingAmount / mMainTextBounds.width(), 0, 0, 0);
+//            mSubTextRenderer.setRelativePadding(paddingAmount / mMainTextBounds.width(), 0, 0, 0);
+//        } else
+        {
             mMainTextRenderer.setRelativePadding(0, 0, 0, 0);
             mSubTextRenderer.setRelativePadding(0, 0, 0, 0);
         }
@@ -873,6 +888,7 @@ class ComplicationRenderer {
                 innerBounds,
                 mBackgroundBounds,
                 Math.max(getBorderRadius(mActiveStyle), getBorderRadius(mAmbientStyle)));
+        innerBounds = new Rect(mBackgroundBounds);
         // Intersect text bounds with inner bounds to avoid overflow
         if (!mMainTextBounds.intersect(innerBounds)) {
             mMainTextBounds.setEmpty();

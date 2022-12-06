@@ -24,7 +24,7 @@
     app:highlightColor="@color/aquablue"
     app:rangedValueProgressHidden="false"
     app:iconColor="@color/aquablue"
-    app:rangedValuePrimaryColor="@color/aquablue"
+    app:rangedValuePrimaryColor="@color/blue_secondary_color"
     app:rangedValueRingWidth="2dp"
     app:rangedValueSecondaryColor="@color/gray"
     app:textColor="@color/white"
@@ -32,7 +32,7 @@
     app:textTypeface="sans-serif-black"
     app:titleColor="@color/aquablue"
     app:titleSize="@dimen/complication_title_size"
-    app:titleTypeface="sans-serif-black">
+    app:titleTypeface="sans-serif-regular">
   <ambient
       app:borderColor="@color/transparent"
       app:iconColor="@color/ambient_primary_color"
