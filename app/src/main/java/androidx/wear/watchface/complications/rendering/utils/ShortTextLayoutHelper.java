@@ -18,6 +18,7 @@ package androidx.wear.watchface.complications.rendering.utils;
 
 import static androidx.wear.watchface.complications.rendering.utils.LayoutUtils.getBottomHalf;
 import static androidx.wear.watchface.complications.rendering.utils.LayoutUtils.getBottomHalfSmall;
+import static androidx.wear.watchface.complications.rendering.utils.LayoutUtils.getCenteredMarquee;
 import static androidx.wear.watchface.complications.rendering.utils.LayoutUtils.getCentralSquare;
 import static androidx.wear.watchface.complications.rendering.utils.LayoutUtils.getLeftPart;
 import static androidx.wear.watchface.complications.rendering.utils.LayoutUtils.getRightPart;
@@ -39,7 +40,6 @@ import androidx.annotation.RestrictTo;
 /**
  * Layout helper for {@link ComplicationData#TYPE_SHORT_TEXT}.
  *
- * @hide
  */
 @RestrictTo(RestrictTo.Scope.LIBRARY)
 @SuppressLint("RestrictedApi")
@@ -86,7 +86,7 @@ public class ShortTextLayoutHelper extends LayoutHelper {
     public void getRangedValueBounds(@NonNull Rect outRect) {
         getBounds(outRect);
         ComplicationData data = getComplicationData();
-        if (data.getShortText() == null || !isWideRectangle(outRect)) {
+        if ((data!= null && data.getShortText() == null) || !isWideRectangle(outRect)) {
             getCentralSquare(outRect, outRect);
             scaledAroundCenter(outRect, outRect, RANGED_VALUE_SIZE_FRACTION);
         } else {
@@ -116,9 +116,8 @@ public class ShortTextLayoutHelper extends LayoutHelper {
             } else {
                 // Text on bottom half of central square
                 if (!hasShortTitle()) {
-                    getCentralSquare(outRect, outRect);
+                    getCenteredMarquee(outRect, outRect);
                 }
-            //    getBottomHalf(outRect, outRect);
             }
         } else if (hasShortTitle()) {
             // Text above title

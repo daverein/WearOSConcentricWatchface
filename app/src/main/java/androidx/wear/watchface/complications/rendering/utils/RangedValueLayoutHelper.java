@@ -38,19 +38,9 @@ import androidx.annotation.RestrictTo;
 /**
  * Layout helper for {@link ComplicationData#TYPE_RANGED_VALUE}.
  *
- * @hide
  */
 @RestrictTo(RestrictTo.Scope.LIBRARY)
 public class RangedValueLayoutHelper extends LayoutHelper {
-
-    /** As ranged value indicator is circle, this is used to calculate the inner square of it. */
-    private static final float INNER_SQUARE_SIZE_FRACTION = (float) (1.0f / Math.sqrt(2.0f));
-
-    /** Padding applied to inner square of the ranged value indicator. */
-    private static final float INNER_SQUARE_PADDING_FRACTION = 0.05f;
-
-    /** Padding applied to icon inside the ranged value indicator. */
-    private static final float ICON_PADDING_FRACTION = 0.15f;
 
     /** Used to apply padding to ranged value indicator. */
     private static final float RANGED_VALUE_SIZE_FRACTION = 0.99f;
@@ -67,10 +57,6 @@ public class RangedValueLayoutHelper extends LayoutHelper {
     private void updateShortTextLayoutHelper() {
         if (getComplicationData() != null) {
             getRangedValueBounds(mRangedValueInnerSquare);
-//            scaledAroundCenter(
-//                    mRangedValueInnerSquare,
-//                    mRangedValueInnerSquare,
-//                    (1 - INNER_SQUARE_PADDING_FRACTION * 2) * INNER_SQUARE_SIZE_FRACTION);
             mShortTextLayoutHelper.update(
                     mRangedValueInnerSquare.width(),
                     mRangedValueInnerSquare.height(),
@@ -114,7 +100,6 @@ public class RangedValueLayoutHelper extends LayoutHelper {
             outRect.setEmpty();
         } else {
             getBounds(outRect);
-            Log.d("rangedvalue", "Bounds are:" + outRect);
             if (isWideRectangle(outRect)) {
                 // Left square part of the inner bounds
                 getLeftPart(outRect, outRect);
@@ -171,10 +156,8 @@ public class RangedValueLayoutHelper extends LayoutHelper {
             } else {
                 // Draw a short text complication inside ranged value bounds
 
-                Log.d("rangedvalue", "getShortTextBounds are:" + outRect);
                 mShortTextLayoutHelper.getShortTextBounds(outRect);
                 outRect.offset(mRangedValueInnerSquare.left, mRangedValueInnerSquare.top);
-                Log.d("rangedvalue", "getShortTextBounds2 are:" + outRect);
             }
         }
     }
@@ -203,10 +186,8 @@ public class RangedValueLayoutHelper extends LayoutHelper {
             } else {
                 // Draw a short text complication inside ranged value bounds
 
-                Log.d("rangedvalue", "getShortTitleBounds are:" + outRect);
                 mShortTextLayoutHelper.getShortTitleBounds(outRect);
                 outRect.offset(mRangedValueInnerSquare.left, mRangedValueInnerSquare.top);
-                Log.d("rangedvalue", "getShortTitleBounds2 are:" + outRect);
             }
         }
     }

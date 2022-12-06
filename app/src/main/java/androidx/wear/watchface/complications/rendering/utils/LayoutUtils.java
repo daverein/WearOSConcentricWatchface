@@ -24,7 +24,6 @@ import androidx.annotation.RestrictTo;
 /**
  * Utilities for calculations related to bounds.
  *
- * @hide
  */
 @RestrictTo(RestrictTo.Scope.LIBRARY)
 public class LayoutUtils {
@@ -69,6 +68,13 @@ public class LayoutUtils {
         float height = (inRect.top + inRect.bottom) * 0.70f;
         int iHeight = (int) height;
         outRect.set(inRect.left, inRect.top, inRect.right, iHeight);
+    }
+
+    /** Sets the output to the bottom half of the input. */
+    public static void getCenteredMarquee(@NonNull Rect outRect, @NonNull Rect inRect) {
+        float top = (inRect.top + inRect.bottom) * 0.20f;
+        float bottom = (inRect.top + inRect.bottom) * 0.70f;
+        outRect.set(inRect.left, (int)top, inRect.right, (int)bottom);
     }
 
     /** Sets the output to the top half of the input. */
