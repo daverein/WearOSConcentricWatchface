@@ -134,12 +134,12 @@ class ConcentricNativeCanvasRenderer(
 
     }
     private val hourTextAmbientPaint = Paint().apply {
-        isAntiAlias = false
+        isAntiAlias = true
         typeface = context.resources.getFont(R.font.rubik_light)
 
     }
     private val minuteTextAmbientPaint = Paint().apply {
-        isAntiAlias = false
+        isAntiAlias = true
         typeface = context.resources.getFont(R.font.rubik_light)
 
     }
