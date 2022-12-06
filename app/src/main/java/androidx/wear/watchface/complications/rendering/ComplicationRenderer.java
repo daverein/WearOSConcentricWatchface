@@ -662,9 +662,6 @@ class ComplicationRenderer {
     }
 
     private void drawIconOutlindBorder(Canvas canvas, PaintSet paintSet) {
-        if ( true ) {
-            return;
-        }
         RectF bounds = mRangedValueBoundsF;
         if (DEBUG_MODE) {
             canvas.drawRect(bounds, mDebugPaint);
