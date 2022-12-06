@@ -24,7 +24,7 @@
     app:highlightColor="@color/maroon_30"
     app:iconColor="@color/maroon_light"
     app:rangedValuePrimaryColor="@color/maroon_70"
-    app:rangedValueRingWidth="4dp"
+    app:rangedValueRingWidth="@dimen/progress_thickness"
     app:rangedValueSecondaryColor="#ff222222"
     app:textColor="@color/white"
     app:textSize="@dimen/complication_text_size"

@@ -24,7 +24,7 @@
     app:highlightColor="@color/light_yellow_30"
     app:iconColor="@color/light_yellow"
     app:rangedValuePrimaryColor="@color/light_yellow_70"
-    app:rangedValueRingWidth="4dp"
+    app:rangedValueRingWidth="@dimen/progress_thickness"
     app:rangedValueSecondaryColor="#ff222222"
     app:textColor="@color/white"
     app:textSize="@dimen/complication_text_size"

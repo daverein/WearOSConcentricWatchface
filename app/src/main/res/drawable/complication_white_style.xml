@@ -23,7 +23,7 @@
     app:highlightColor="@color/white_30"
     app:iconColor="@color/white"
     app:rangedValuePrimaryColor="@color/white_90"
-    app:rangedValueRingWidth="4dp"
+    app:rangedValueRingWidth="@dimen/progress_thickness"
     app:rangedValueSecondaryColor="#ff222222"
     app:textColor="@color/white"
     app:textSize="@dimen/complication_text_size"

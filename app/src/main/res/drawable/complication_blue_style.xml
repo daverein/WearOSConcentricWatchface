@@ -25,7 +25,7 @@
     app:rangedValueProgressHidden="false"
     app:iconColor="@color/aquablue"
     app:rangedValuePrimaryColor="@color/blue_secondary_color"
-    app:rangedValueRingWidth="4dp"
+    app:rangedValueRingWidth="@dimen/progress_thickness"
     app:rangedValueSecondaryColor="#ff222222"
     app:textColor="@color/white"
     app:textSize="@dimen/complication_text_size"

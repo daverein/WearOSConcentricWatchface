@@ -136,4 +136,5 @@
     <string name="activity_config_complication_button_right_content_description">Button to edit the right complication data</string>
     <string name="activity_config_complication_button_left_content_description">Button to edit the left complication data</string>
     <string name="activity_config_complication_button_middle_content_description">Button to edit the middle complication data</string>
+    <string name="activity_config_aod_options">Always On Display Options</string>
 </resources>
