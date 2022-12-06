@@ -253,6 +253,14 @@ class ConcentricNativeCanvasRenderer(
                         timeAOD = booleanValue.value
                     )
                 }
+                DRAW_COMP_CIRCLES_STYLE_SETTING -> {
+                    val booleanValue = options.value as
+                        UserStyleSetting.BooleanUserStyleSetting.BooleanOption
+
+                    newWatchFaceData = newWatchFaceData.copy(
+                        drawCompCircles = booleanValue.value
+                    )
+                }
                 COMPAOD_STYLE_SETTING -> {
                     val booleanValue = options.value as
                         UserStyleSetting.BooleanUserStyleSetting.BooleanOption
@@ -309,6 +317,8 @@ class ConcentricNativeCanvasRenderer(
                     context,
                     watchFaceColors.complicationStyleDrawableId
                 )?.let {
+                    // Set to draw the progress and under circles on the complications or not
+                    it.isDrawComplicationCircles = watchFaceData.drawCompCircles
                     (complication.renderer as CanvasComplicationDrawable).drawable = it
                 }
             }
@@ -442,39 +452,7 @@ class ConcentricNativeCanvasRenderer(
         }
     }
 
-    // ----- All drawing functions -----
-    private fun drawArcShadows(
-        canvas: Canvas,
-        bounds: Rect
-    ) {
-        return
-        val top = complicationSlotsManager.complicationSlots[RIGHT_COMPLICATION_ID]
-        val bottom = complicationSlotsManager.complicationSlots[LEFT_COMPLICATION_ID]
-        if ( (top?.renderer as CanvasComplicationDrawable).getData().type != ComplicationType.EMPTY) {
-            canvas.drawArc(
-                bounds.width().toFloat() * FULL_WATCHFACE_COMPLICATION_SHADOW_EDGE_OUTTER,
-                bounds.height().toFloat() * FULL_WATCHFACE_COMPLICATION_SHADOW_EDGE_OUTTER,
-                bounds.width().toFloat() * FULL_WATCHFACE_COMPLICATION_SHADOW_EDGE_INNER,
-                bounds.height().toFloat() * 0.88f,
-                70f,
-                40f,
-                true,
-                translucentPaint
-            )
-        }
-        if ( (bottom?.renderer as CanvasComplicationDrawable).getData().type != ComplicationType.EMPTY) {
-            canvas.drawArc(
-                bounds.width().toFloat() * FULL_WATCHFACE_COMPLICATION_SHADOW_EDGE_OUTTER,
-                bounds.height().toFloat() * 0.11f,
-                bounds.width().toFloat() * FULL_WATCHFACE_COMPLICATION_SHADOW_EDGE_INNER,
-                bounds.height().toFloat() * FULL_WATCHFACE_COMPLICATION_SHADOW_EDGE_INNER,
-                250f,
-                40f,
-                true,
-                translucentPaint
-            )
-        }
-    }
+
     private fun drawShadows(
         canvas: Canvas,
         bounds: Rect,
@@ -495,12 +473,6 @@ class ConcentricNativeCanvasRenderer(
             canvas.drawRect(0f, 0f, shadowLeftX, bounds.height().toFloat(), translucentPaint)
             translucentPaint.isAntiAlias = true
             translucentPaint.color = currentColor
-        } else {
-            if (watchFaceData.layoutStyle.id == LayoutStyleIdAndResourceIds.FULLFACE.id &&
-                (!isAmbient || (isAmbient && watchFaceData.compAOD))
-            ) {
-                drawArcShadows(canvas, bounds)
-            }
         }
     }
 

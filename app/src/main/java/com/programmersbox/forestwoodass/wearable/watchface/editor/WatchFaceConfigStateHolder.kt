@@ -72,6 +72,7 @@ class WatchFaceConfigStateHolder(
     private lateinit var colorStyleKey: UserStyleSetting.ListUserStyleSetting
     private lateinit var layoutStyleKey: UserStyleSetting.ListUserStyleSetting
     private lateinit var timeaodKey: UserStyleSetting.BooleanUserStyleSetting
+    private lateinit var compCirclesKey: UserStyleSetting.BooleanUserStyleSetting
     private lateinit var compaodKey: UserStyleSetting.BooleanUserStyleSetting
     private lateinit var minutedialaodKey: UserStyleSetting.BooleanUserStyleSetting
     private lateinit var shiftpixelamountKey: UserStyleSetting.DoubleRangeUserStyleSetting
@@ -117,6 +118,9 @@ class WatchFaceConfigStateHolder(
                 DRAW_TIME_AOD_STYLE_SETTING -> {
                     timeaodKey = setting as UserStyleSetting.BooleanUserStyleSetting
                 }
+                DRAW_COMP_CIRCLES_STYLE_SETTING -> {
+                    compCirclesKey = setting as UserStyleSetting.BooleanUserStyleSetting
+                }
                 COMPAOD_STYLE_SETTING -> {
                     compaodKey = setting as UserStyleSetting.BooleanUserStyleSetting
                 }
@@ -159,6 +163,8 @@ class WatchFaceConfigStateHolder(
             userStyle[layoutStyleKey] as UserStyleSetting.ListUserStyleSetting.ListOption
         val timeaodEnabledStyle =
             userStyle[timeaodKey] as UserStyleSetting.BooleanUserStyleSetting.BooleanOption
+        val drawCompCirclesEnabledStyle =
+            userStyle[compCirclesKey] as UserStyleSetting.BooleanUserStyleSetting.BooleanOption
         val compaodEnabledStyle =
             userStyle[compaodKey] as UserStyleSetting.BooleanUserStyleSetting.BooleanOption
         val minuteDialAODEnabledStyle =
@@ -173,6 +179,7 @@ class WatchFaceConfigStateHolder(
             colorStyleId = colorStyle.id.toString(),
             layoutStyleId = layoutStyle.id.toString(),
             timeaodEnabled = timeaodEnabledStyle.value,
+            drawCompCirclesEnabled = drawCompCirclesEnabledStyle.value,
             compaodEnabled = compaodEnabledStyle.value,
             minutedialaodEnabled = minuteDialAODEnabledStyle.value,
             shiftpixelamount = multiplyByMultipleForSlider(shiftpixelamountStyle.value).toFloat(),
@@ -241,6 +248,13 @@ class WatchFaceConfigStateHolder(
         )
     }
 
+    fun setDrawCompCircles(enabled: Boolean) {
+        setUserStyleOption(
+            compCirclesKey,
+            UserStyleSetting.BooleanUserStyleSetting.BooleanOption.from(enabled)
+        )
+    }
+
     fun setCompAOD(enabled: Boolean) {
         setUserStyleOption(
             compaodKey,
@@ -287,6 +301,7 @@ class WatchFaceConfigStateHolder(
         val layoutStyleId: String,
         val timeaodEnabled: Boolean,
         val compaodEnabled: Boolean,
+        val drawCompCirclesEnabled: Boolean,
         val minutedialaodEnabled: Boolean,
         val shiftpixelamount: Float,
         val previewImage: Bitmap

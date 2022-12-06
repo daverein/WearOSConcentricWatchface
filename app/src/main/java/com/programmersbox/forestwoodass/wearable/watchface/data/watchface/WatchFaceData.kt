@@ -17,6 +17,7 @@ package com.programmersbox.forestwoodass.wearable.watchface.data.watchface
 
 // Defaults for the watch face. All private values aren't editable by the user, so they don't need
 // to be exposed as settings defaults.
+const val DRAW_COMP_CIRCLES = true
 const val DRAW_TIME_AOD = true
 const val COMPAOD_DEFAULT = true
 const val MINUTEDIALAOD_DEFAULT = true
@@ -61,6 +62,7 @@ data class WatchFaceData(
     val ambientColorStyle: ColorStyleIdAndResourceIds = ColorStyleIdAndResourceIds.AMBIENT,
     val layoutStyle: LayoutStyleIdAndResourceIds = LayoutStyleIdAndResourceIds.FULLFACE,
     val timeAOD: Boolean = DRAW_TIME_AOD,
+    val drawCompCircles: Boolean = DRAW_COMP_CIRCLES,
     val compAOD: Boolean = COMPAOD_DEFAULT,
     val minuteDialAOD: Boolean = MINUTEDIALAOD_DEFAULT,
     val shiftPixelAmount: Float = SHIFT_PIXEL_AOD_FRACTION_DEFAULT,

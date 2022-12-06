@@ -60,6 +60,7 @@ class WatchFaceConfigActivity : ComponentActivity() {
         binding.colorStylePickerButton.isEnabled = false
         binding.timeaodEnabledSwitch.isEnabled = false
         binding.shiftPixelAmountSlider.isEnabled = false
+        binding.drawcompcirclesEnabledSwitch.isEnabled = false
         binding.compaodEnabledSwitch.isEnabled = false
         binding.minutedialaodEnabledSwitch.isEnabled = false
         currentLayoutId = ""
@@ -104,6 +105,7 @@ class WatchFaceConfigActivity : ComponentActivity() {
 
         binding.timeaodEnabledSwitch.isChecked = userStylesAndPreview.timeaodEnabled
         binding.compaodEnabledSwitch.isChecked = userStylesAndPreview.compaodEnabled
+        binding.drawcompcirclesEnabledSwitch.isChecked = userStylesAndPreview.drawCompCirclesEnabled
         binding.minutedialaodEnabledSwitch.isChecked = userStylesAndPreview.minutedialaodEnabled
         binding.shiftPixelAmountSlider.value = userStylesAndPreview.shiftpixelamount
         currentLayoutId = userStylesAndPreview.layoutStyleId
@@ -117,6 +119,7 @@ class WatchFaceConfigActivity : ComponentActivity() {
     private fun enabledWidgets() {
         binding.colorStylePickerButton.isEnabled = true
         binding.timeaodEnabledSwitch.isEnabled = true
+        binding.drawcompcirclesEnabledSwitch.isEnabled = true
         binding.shiftPixelAmountSlider.isEnabled = true
         binding.compaodEnabledSwitch.isEnabled = true
         binding.minutedialaodEnabledSwitch.isEnabled = true
@@ -195,6 +198,12 @@ class WatchFaceConfigActivity : ComponentActivity() {
         Log.d(TAG, "onClickTimeAODEnabledSwitch() $view")
         stateHolder.setTimeAOD(binding.timeaodEnabledSwitch.isChecked)
     }
+
+    fun onClickDrawCompCirclesEnabledSwitch(view: View) {
+        Log.d(TAG, "onClickDrawCompCirclesEnabledSwitch() $view")
+        stateHolder.setDrawCompCircles(binding.drawcompcirclesEnabledSwitch.isChecked)
+    }
+
     fun onClickCompAODEnabledSwitch(view: View) {
         Log.d(TAG, "onClickCompAODEnabledSwitch() $view")
         stateHolder.setCompAOD(binding.compaodEnabledSwitch.isChecked)

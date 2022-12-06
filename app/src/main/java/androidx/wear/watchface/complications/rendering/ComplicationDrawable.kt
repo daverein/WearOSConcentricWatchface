@@ -561,6 +561,12 @@ public class ComplicationDrawable : Drawable {
             complicationRenderer?.isRangedValueProgressHidden = rangedValueProgressHidden
         }
 
+    public var isDrawComplicationCircles: Boolean = true
+        set(drawComplicationCircles) {
+            field = drawComplicationCircles
+            complicationRenderer?.setDrawComplicationCircles(drawComplicationCircles)
+        }
+
     /**
      * Sets the complication data to be drawn.
      *
@@ -581,6 +587,7 @@ public class ComplicationDrawable : Drawable {
             val nextRenderer = ComplicationRenderer(this.context, activeStyle, ambientStyle)
             nextRenderer.setNoDataText(noDataText)
             nextRenderer.isRangedValueProgressHidden = isRangedValueProgressHidden
+            nextRenderer.setDrawComplicationCircles(isDrawComplicationCircles)
             nextRenderer.bounds = bounds
             nextRenderer.setOnInvalidateListener {
                 complicationRenderer = nextRenderer

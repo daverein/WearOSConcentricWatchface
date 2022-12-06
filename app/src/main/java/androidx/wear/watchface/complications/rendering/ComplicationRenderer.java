@@ -145,6 +145,8 @@ class ComplicationRenderer {
 
     private boolean mRangedValueProgressHidden;
 
+    private boolean mDrawProgressCircles;
+
     private boolean mHasNoData;
 
     // Below drawables will be null until they are fully loaded.
@@ -395,11 +397,20 @@ class ComplicationRenderer {
         }
     }
 
+    /** Sets if the ranged value progress should be hidden. */
+    public void setDrawComplicationCircles(boolean hidden) {
+        if (mDrawProgressCircles != hidden) {
+            mDrawProgressCircles = hidden;
+            calculateBounds();
+        }
+    }
+
     /** Returns {@code true} if the ranged value progress should be hidden. */
     @VisibleForTesting(otherwise = VisibleForTesting.PACKAGE_PRIVATE)
     public boolean isRangedValueProgressHidden() {
         return mRangedValueProgressHidden;
     }
+
 
     /**
      * Renders complication data on a canvas. Does nothing if the current data is null, has type
@@ -662,7 +673,7 @@ class ComplicationRenderer {
     }
 
     private void drawIconOutlindBorder(Canvas canvas, PaintSet paintSet) {
-        if ( paintSet.mIsAmbientStyle ) {
+         if ( paintSet.mIsAmbientStyle || !mDrawProgressCircles) {
             return;
         }
         RectF bounds = mRangedValueBoundsF;
