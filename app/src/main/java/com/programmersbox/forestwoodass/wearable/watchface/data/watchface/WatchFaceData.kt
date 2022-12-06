@@ -52,6 +52,8 @@ const val HOUR_FONT_SIZE = 0.27848f
 const val MINUTE_FONT_SIZE = 0.12658f
 const val SECOND_DIAL_FONT_SIZE = 0.06323f
 const val MINUTE_DIAL_FONT_SIZE = 0.06323f
+const val MONTH_FONT_SIZE = 0.035f
+const val DAY_FONT_SIZE = 0.050f
 
 private const val NUMBER_RADIUS_FRACTION = 0.45f
 

@@ -113,15 +113,12 @@ class ConcentricNativeCanvasRenderer(
     // Used to paint the main hour hand text with the hour pips, i.e., 3, 6, 9, and 12 o'clock.
     private val calendarMonthPaint = Paint().apply {
         isAntiAlias = true
-        textSize =
-            context.resources.getDimensionPixelSize(R.dimen.calendar_month_font_size).toFloat()
         typeface = context.resources.getFont(R.font.rubik_medium)
     }
 
     // Used to paint the main hour hand text with the hour pips, i.e., 3, 6, 9, and 12 o'clock.
     private val calendarDayPaint = Paint().apply {
         isAntiAlias = true
-        textSize = context.resources.getDimensionPixelSize(R.dimen.calendar_day_font_size).toFloat()
         typeface = context.resources.getFont(R.font.rubik_bold)
     }
 
@@ -720,6 +717,8 @@ class ConcentricNativeCanvasRenderer(
         if ( !watchFaceData.drawDate )
             return
         if (renderParameters.watchFaceLayers.contains(WatchFaceLayer.BASE)) {
+            calendarMonthPaint.textSize = bounds.height()*(MONTH_FONT_SIZE)
+            calendarDayPaint.textSize = bounds.height()*(DAY_FONT_SIZE)
             val textBounds = Rect()
             var tx = zonedDateTime.toLocalDate().month.toString().substring(0, 3)
             calendarMonthPaint.getTextBounds(tx, 0, tx.length, textBounds)
