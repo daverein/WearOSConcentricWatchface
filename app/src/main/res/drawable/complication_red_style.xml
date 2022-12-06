@@ -21,18 +21,17 @@
     app:borderColor="@color/maroon_50"
     app:borderStyle="none"
     app:borderWidth="1dp"
-    app:rangedValueProgressHidden="true"
     app:highlightColor="@color/maroon_30"
     app:iconColor="@color/maroon_light"
     app:rangedValuePrimaryColor="@color/maroon_70"
-    app:rangedValueRingWidth="2dp"
-    app:rangedValueSecondaryColor="@color/gray"
+    app:rangedValueRingWidth="@dimen/progress_thickness"
+    app:rangedValueSecondaryColor="#ff222222"
     app:textColor="@color/white"
     app:textSize="@dimen/complication_text_size"
     app:textTypeface="sans-serif-black"
     app:titleColor="@color/maroon_60"
     app:titleSize="@dimen/complication_title_size"
-    app:titleTypeface="sans-serif-black">
+    app:titleTypeface="sans-serif-regular">
   <ambient
       app:borderColor="@color/transparent"
       app:iconColor="@color/ambient_primary_color"

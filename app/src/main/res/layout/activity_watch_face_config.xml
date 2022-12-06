@@ -123,12 +123,57 @@
             app:layout_constraintRight_toLeftOf="@id/color_style_picker_button"
             app:layout_constraintTop_toBottomOf="@+id/more_options_image_view" />
 
+        <com.google.android.material.switchmaterial.SwitchMaterial
+            android:id="@+id/drawcompcircles_enabled_switch"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:drawablePadding="@dimen/activity_config_ticks_enabled_switch_icon_padding"
+            android:gravity="start|center_vertical"
+            android:onClick="onClickDrawCompCirclesEnabledSwitch"
+            android:text="@string/activity_config_draw_comp_enabled_label"
+            android:textColor="@color/white"
+            android:textSize="@dimen/settings_default_text_size"
+            android:textAppearance="?attr/textAppearanceButton"
+            android:contentDescription="@string/activity_config_draw_comp_enabled_label_description"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/layout_style_picker_button" />
+
+        <com.google.android.material.switchmaterial.SwitchMaterial
+            android:id="@+id/drawdate_enabled_switch"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:drawablePadding="@dimen/activity_config_ticks_enabled_switch_icon_padding"
+            android:gravity="start|center_vertical"
+            android:onClick="onClickDrawDateEnabledSwitch"
+            android:text="@string/activity_config_drawdate_enabled_label"
+            android:textColor="@color/white"
+            android:textSize="@dimen/settings_default_text_size"
+            android:textAppearance="?attr/textAppearanceButton"
+            android:contentDescription="@string/activity_config_drawdate_enabled_switch_content_description"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/drawcompcircles_enabled_switch" />
+
+        <TextView
+            android:id="@+id/aod_options"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="5dp"
+            android:gravity="center"
+            android:text="@string/activity_config_aod_options"
+            android:textSize="@dimen/settings_default_text_size"
+            android:textColor="@color/white"
+            android:textAppearance="?attr/textAppearanceButton"
+            android:contentDescription="@string/activity_config_minute_hand_slider_text_label_content_description"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/drawdate_enabled_switch" />
 
         <com.google.android.material.switchmaterial.SwitchMaterial
             android:id="@+id/timeaod_enabled_switch"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:drawableStart="@drawable/watch_ticks"
             android:drawablePadding="@dimen/activity_config_ticks_enabled_switch_icon_padding"
             android:gravity="start|center_vertical"
             android:onClick="onClickTimeAODEnabledSwitch"
@@ -139,7 +184,7 @@
             android:contentDescription="@string/activity_config_ticks_enabled_switch_content_description"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/layout_style_picker_button" />
+            app:layout_constraintTop_toBottomOf="@+id/aod_options" />
 
 
         <Space
@@ -187,7 +232,6 @@
             android:id="@+id/compaod_enabled_switch"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:drawableStart="@drawable/watch_ticks"
             android:drawablePadding="@dimen/activity_config_ticks_enabled_switch_icon_padding"
             android:gravity="start|center_vertical"
             android:onClick="onClickCompAODEnabledSwitch"
@@ -214,7 +258,6 @@
             android:id="@+id/minutedialaod_enabled_switch"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:drawableStart="@drawable/watch_ticks"
             android:drawablePadding="@dimen/activity_config_ticks_enabled_switch_icon_padding"
             android:gravity="start|center_vertical"
             android:onClick="onClickMinuteDialAODEnabledSwitch"

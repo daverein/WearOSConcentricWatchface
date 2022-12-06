@@ -33,20 +33,20 @@ import com.programmersbox.forestwoodass.wearable.watchface.R
 // Creates bounds for the locations of both right and left complications. (This is the
 // location from 0.0 - 1.0.)
 // Both left and right complications use the same top and bottom bounds.
-private const val LEFT_COMPLICATIONS_TOP_BOUND = 0.04f
-private const val LEFT_COMPLICATIONS_BOTTOM_BOUND = 0.34f
-const val LEFT_COMPLICATION_LEFT_BOUND = 0.32f
-const val LEFT_COMPLICATION_RIGHT_BOUND = 0.68f
+private const val LEFT_COMPLICATIONS_TOP_BOUND = 0.12f
+private const val LEFT_COMPLICATIONS_BOTTOM_BOUND = 0.32f
+const val LEFT_COMPLICATION_LEFT_BOUND = 0.4f
+const val LEFT_COMPLICATION_RIGHT_BOUND = 0.6f
 
-private const val RIGHT_COMPLICATIONS_TOP_BOUND = 0.67f
-private const val RIGHT_COMPLICATIONS_BOTTOM_BOUND = 0.97f
-const val RIGHT_COMPLICATION_LEFT_BOUND = 0.32f
-const val RIGHT_COMPLICATION_RIGHT_BOUND = 0.68f
+private const val RIGHT_COMPLICATIONS_TOP_BOUND = 0.69f
+private const val RIGHT_COMPLICATIONS_BOTTOM_BOUND = 0.89f
+const val RIGHT_COMPLICATION_LEFT_BOUND = 0.4f
+const val RIGHT_COMPLICATION_RIGHT_BOUND = 0.6f
 
-private const val MIDDLE_COMPLICATIONS_TOP_BOUND = 0.35f
-private const val MIDDLE_COMPLICATIONS_BOTTOM_BOUND = 0.65f
-const val MIDDLE_COMPLICATION_LEFT_BOUND = 0.47f
-const val MIDDLE_COMPLICATION_RIGHT_BOUND = 0.82f
+private const val MIDDLE_COMPLICATIONS_TOP_BOUND = 0.4f
+private const val MIDDLE_COMPLICATIONS_BOTTOM_BOUND = 0.6f
+const val MIDDLE_COMPLICATION_LEFT_BOUND = 0.52f
+const val MIDDLE_COMPLICATION_RIGHT_BOUND = 0.72f
 
 
 private const val DEFAULT_COMPLICATION_STYLE_DRAWABLE_ID = R.drawable.complication_blue_style
@@ -64,28 +64,33 @@ sealed class ComplicationConfig(val id: Int, val supportedTypes: List<Complicati
     object Left : ComplicationConfig(
         LEFT_COMPLICATION_ID,
         listOf(
-            ComplicationType.SHORT_TEXT,
             ComplicationType.RANGED_VALUE,
+            ComplicationType.SHORT_TEXT,
             ComplicationType.MONOCHROMATIC_IMAGE,
-            ComplicationType.SMALL_IMAGE
+            ComplicationType.SMALL_IMAGE,
+            ComplicationType.PHOTO_IMAGE
         )
     )
 
     object Right : ComplicationConfig(
         RIGHT_COMPLICATION_ID,
         listOf(
-            ComplicationType.SHORT_TEXT,
             ComplicationType.RANGED_VALUE,
+            ComplicationType.SHORT_TEXT,
             ComplicationType.MONOCHROMATIC_IMAGE,
-            ComplicationType.SMALL_IMAGE
+            ComplicationType.SMALL_IMAGE,
+            ComplicationType.PHOTO_IMAGE
         )
     )
 
     object Middle : ComplicationConfig(
         MIDDLE_COMPLICATION_ID,
         listOf(
+            ComplicationType.RANGED_VALUE,
             ComplicationType.SHORT_TEXT,
-            ComplicationType.RANGED_VALUE
+            ComplicationType.MONOCHROMATIC_IMAGE,
+            ComplicationType.SMALL_IMAGE,
+            ComplicationType.PHOTO_IMAGE
         )
     )
 }
@@ -110,7 +115,7 @@ fun createComplicationSlotManager(
         canvasComplicationFactory = defaultCanvasComplicationFactory,
         supportedTypes = ComplicationConfig.Left.supportedTypes,
         defaultDataSourcePolicy = DefaultComplicationDataSourcePolicy(
-            SystemDataSources.NO_DATA_SOURCE,
+            SystemDataSources.DATA_SOURCE_STEP_COUNT,
             ComplicationType.SHORT_TEXT
         ),
         bounds = ComplicationSlotBounds(
@@ -150,8 +155,8 @@ fun createComplicationSlotManager(
         canvasComplicationFactory = defaultCanvasComplicationFactory,
         supportedTypes = ComplicationConfig.Right.supportedTypes,
         defaultDataSourcePolicy = DefaultComplicationDataSourcePolicy(
-            SystemDataSources.NO_DATA_SOURCE,
-            ComplicationType.SHORT_TEXT
+            SystemDataSources.DATA_SOURCE_WATCH_BATTERY,
+            ComplicationType.RANGED_VALUE
         ),
         bounds = ComplicationSlotBounds(
             RectF(

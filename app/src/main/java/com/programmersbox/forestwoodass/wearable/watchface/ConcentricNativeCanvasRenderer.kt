@@ -113,15 +113,12 @@ class ConcentricNativeCanvasRenderer(
     // Used to paint the main hour hand text with the hour pips, i.e., 3, 6, 9, and 12 o'clock.
     private val calendarMonthPaint = Paint().apply {
         isAntiAlias = true
-        textSize =
-            context.resources.getDimensionPixelSize(R.dimen.calendar_month_font_size).toFloat()
         typeface = context.resources.getFont(R.font.rubik_medium)
     }
 
     // Used to paint the main hour hand text with the hour pips, i.e., 3, 6, 9, and 12 o'clock.
     private val calendarDayPaint = Paint().apply {
         isAntiAlias = true
-        textSize = context.resources.getDimensionPixelSize(R.dimen.calendar_day_font_size).toFloat()
         typeface = context.resources.getFont(R.font.rubik_bold)
     }
 
@@ -253,6 +250,22 @@ class ConcentricNativeCanvasRenderer(
                         timeAOD = booleanValue.value
                     )
                 }
+                DRAW_DATE_STYLE_SETTING -> {
+                    val booleanValue = options.value as
+                        UserStyleSetting.BooleanUserStyleSetting.BooleanOption
+
+                    newWatchFaceData = newWatchFaceData.copy(
+                        drawDate = booleanValue.value
+                    )
+                }
+                DRAW_COMP_CIRCLES_STYLE_SETTING -> {
+                    val booleanValue = options.value as
+                        UserStyleSetting.BooleanUserStyleSetting.BooleanOption
+
+                    newWatchFaceData = newWatchFaceData.copy(
+                        drawCompCircles = booleanValue.value
+                    )
+                }
                 COMPAOD_STYLE_SETTING -> {
                     val booleanValue = options.value as
                         UserStyleSetting.BooleanUserStyleSetting.BooleanOption
@@ -309,6 +322,8 @@ class ConcentricNativeCanvasRenderer(
                     context,
                     watchFaceColors.complicationStyleDrawableId
                 )?.let {
+                    // Set to draw the progress and under circles on the complications or not
+                    it.isDrawComplicationCircles = watchFaceData.drawCompCircles
                     (complication.renderer as CanvasComplicationDrawable).drawable = it
                 }
             }
@@ -366,7 +381,7 @@ class ConcentricNativeCanvasRenderer(
                 zonedDateTime,
                 isAmbient
             )
-            drawShadows(canvas, bounds, isAmbient, isHalfFace, scaledImage)
+            drawShadows(canvas, bounds, isHalfFace, scaledImage)
         }
         if (renderParameters.watchFaceLayers.contains(WatchFaceLayer.COMPLICATIONS_OVERLAY) &&
             !isAmbient || watchFaceData.timeAOD
@@ -442,42 +457,10 @@ class ConcentricNativeCanvasRenderer(
         }
     }
 
-    // ----- All drawing functions -----
-    private fun drawArcShadows(
-        canvas: Canvas,
-        bounds: Rect
-    ) {
-        val top = complicationSlotsManager.complicationSlots[RIGHT_COMPLICATION_ID]
-        val bottom = complicationSlotsManager.complicationSlots[LEFT_COMPLICATION_ID]
-        if ( (top?.renderer as CanvasComplicationDrawable).getData().type != ComplicationType.EMPTY) {
-            canvas.drawArc(
-                bounds.width().toFloat() * FULL_WATCHFACE_COMPLICATION_SHADOW_EDGE_OUTTER,
-                bounds.height().toFloat() * FULL_WATCHFACE_COMPLICATION_SHADOW_EDGE_OUTTER,
-                bounds.width().toFloat() * FULL_WATCHFACE_COMPLICATION_SHADOW_EDGE_INNER,
-                bounds.height().toFloat() * 0.88f,
-                70f,
-                40f,
-                true,
-                translucentPaint
-            )
-        }
-        if ( (bottom?.renderer as CanvasComplicationDrawable).getData().type != ComplicationType.EMPTY) {
-            canvas.drawArc(
-                bounds.width().toFloat() * FULL_WATCHFACE_COMPLICATION_SHADOW_EDGE_OUTTER,
-                bounds.height().toFloat() * 0.11f,
-                bounds.width().toFloat() * FULL_WATCHFACE_COMPLICATION_SHADOW_EDGE_INNER,
-                bounds.height().toFloat() * FULL_WATCHFACE_COMPLICATION_SHADOW_EDGE_INNER,
-                250f,
-                40f,
-                true,
-                translucentPaint
-            )
-        }
-    }
+
     private fun drawShadows(
         canvas: Canvas,
         bounds: Rect,
-        isAmbient: Boolean,
         isHalfFace: Boolean,
         scaledImage: Boolean
     ) {
@@ -494,12 +477,6 @@ class ConcentricNativeCanvasRenderer(
             canvas.drawRect(0f, 0f, shadowLeftX, bounds.height().toFloat(), translucentPaint)
             translucentPaint.isAntiAlias = true
             translucentPaint.color = currentColor
-        } else {
-            if (watchFaceData.layoutStyle.id == LayoutStyleIdAndResourceIds.FULLFACE.id &&
-                (!isAmbient || (isAmbient && watchFaceData.compAOD))
-            ) {
-                drawArcShadows(canvas, bounds)
-            }
         }
     }
 
@@ -737,7 +714,11 @@ class ConcentricNativeCanvasRenderer(
         bounds: Rect,
         zonedDateTime: ZonedDateTime
     ) {
+        if ( !watchFaceData.drawDate )
+            return
         if (renderParameters.watchFaceLayers.contains(WatchFaceLayer.BASE)) {
+            calendarMonthPaint.textSize = bounds.height()*(MONTH_FONT_SIZE)
+            calendarDayPaint.textSize = bounds.height()*(DAY_FONT_SIZE)
             val textBounds = Rect()
             var tx = zonedDateTime.toLocalDate().month.toString().substring(0, 3)
             calendarMonthPaint.getTextBounds(tx, 0, tx.length, textBounds)

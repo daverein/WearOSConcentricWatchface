@@ -82,8 +82,8 @@ dependencies {
     implementation libs.wear.watchface.complications.data.source
 
     implementation libs.wear.watchface
+ // implementation files('C:\\Users\\reind\\StudioProjects\\MyComplicationDrawable\\app\\build\\outputs\\aar\\app-debug.aar')
     implementation libs.wear.watchface.client
-    implementation libs.wear.watchface.complications.rendering
     implementation libs.wear.watchface.data
     implementation libs.wear.watchface.editor
     implementation libs.wear.watchface.style
