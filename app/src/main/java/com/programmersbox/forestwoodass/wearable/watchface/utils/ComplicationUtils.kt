@@ -33,13 +33,13 @@ import com.programmersbox.forestwoodass.wearable.watchface.R
 // Creates bounds for the locations of both right and left complications. (This is the
 // location from 0.0 - 1.0.)
 // Both left and right complications use the same top and bottom bounds.
-private const val LEFT_COMPLICATIONS_TOP_BOUND = 0.10f
-private const val LEFT_COMPLICATIONS_BOTTOM_BOUND = 0.30f
+private const val LEFT_COMPLICATIONS_TOP_BOUND = 0.12f
+private const val LEFT_COMPLICATIONS_BOTTOM_BOUND = 0.32f
 const val LEFT_COMPLICATION_LEFT_BOUND = 0.4f
 const val LEFT_COMPLICATION_RIGHT_BOUND = 0.6f
 
-private const val RIGHT_COMPLICATIONS_TOP_BOUND = 0.70f
-private const val RIGHT_COMPLICATIONS_BOTTOM_BOUND = 0.90f
+private const val RIGHT_COMPLICATIONS_TOP_BOUND = 0.69f
+private const val RIGHT_COMPLICATIONS_BOTTOM_BOUND = 0.89f
 const val RIGHT_COMPLICATION_LEFT_BOUND = 0.4f
 const val RIGHT_COMPLICATION_RIGHT_BOUND = 0.6f
 
