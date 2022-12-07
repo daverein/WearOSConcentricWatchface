@@ -34,19 +34,19 @@ import com.programmersbox.forestwoodass.wearable.watchface.R
 // location from 0.0 - 1.0.)
 // Both left and right complications use the same top and bottom bounds.
 private const val LEFT_COMPLICATIONS_TOP_BOUND = 0.12f
-private const val LEFT_COMPLICATIONS_BOTTOM_BOUND = 0.32f
-const val LEFT_COMPLICATION_LEFT_BOUND = 0.4f
-const val LEFT_COMPLICATION_RIGHT_BOUND = 0.6f
+private const val LEFT_COMPLICATIONS_BOTTOM_BOUND = 0.34f
+const val LEFT_COMPLICATION_LEFT_BOUND = 0.39f
+const val LEFT_COMPLICATION_RIGHT_BOUND = 0.61f
 
-private const val RIGHT_COMPLICATIONS_TOP_BOUND = 0.69f
+private const val RIGHT_COMPLICATIONS_TOP_BOUND = 0.65f
 private const val RIGHT_COMPLICATIONS_BOTTOM_BOUND = 0.89f
-const val RIGHT_COMPLICATION_LEFT_BOUND = 0.4f
-const val RIGHT_COMPLICATION_RIGHT_BOUND = 0.6f
+const val RIGHT_COMPLICATION_LEFT_BOUND = 0.39f
+const val RIGHT_COMPLICATION_RIGHT_BOUND = 0.61f
 
-private const val MIDDLE_COMPLICATIONS_TOP_BOUND = 0.4f
-private const val MIDDLE_COMPLICATIONS_BOTTOM_BOUND = 0.6f
-const val MIDDLE_COMPLICATION_LEFT_BOUND = 0.52f
-const val MIDDLE_COMPLICATION_RIGHT_BOUND = 0.72f
+private const val MIDDLE_COMPLICATIONS_TOP_BOUND = 0.39f
+private const val MIDDLE_COMPLICATIONS_BOTTOM_BOUND = 0.61f
+const val MIDDLE_COMPLICATION_LEFT_BOUND = 0.50f
+const val MIDDLE_COMPLICATION_RIGHT_BOUND = 0.70f
 
 
 private const val DEFAULT_COMPLICATION_STYLE_DRAWABLE_ID = R.drawable.complication_blue_style
