@@ -72,7 +72,7 @@ public class LayoutUtils {
 
     /** Sets the output to the bottom half of the input. */
     public static void getCenteredMarquee(@NonNull Rect outRect, @NonNull Rect inRect) {
-        float top = (inRect.top + inRect.bottom) * 0.20f;
+        float top = (inRect.top + inRect.bottom) * 0.25f;
         float bottom = (inRect.top + inRect.bottom) * 0.75f;
         outRect.set(inRect.left, (int)top, inRect.right, (int)bottom);
     }
