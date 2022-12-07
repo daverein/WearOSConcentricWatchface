@@ -28,6 +28,7 @@
     <color name="ambient_primary_color">#ff666666</color>
     <color name="ambient_primary_text_color">#ffa0a0a0</color>
     <color name="ambient_secondary_color">#ff666666</color>
+    <color name="ambient_range_color">#ff444444</color>
     <color name="ambient_background_color">@color/black</color>
     <color name="ambient_outer_element_color">#ff444444</color>
 

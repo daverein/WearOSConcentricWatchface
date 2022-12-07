@@ -41,6 +41,6 @@
       app:textTypeface="sans-serif-regular"
       app:titleTypeface="sans-serif-regular"
 
-      app:rangedValuePrimaryColor="@color/ambient_secondary_color"
+      app:rangedValuePrimaryColor="@color/transparent"
       app:rangedValueSecondaryColor="@color/transparent" />
 </drawable>

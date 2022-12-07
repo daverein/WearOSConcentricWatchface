@@ -391,6 +391,23 @@ class ConcentricNativeCanvasRenderer(
 
     }
 
+    private fun scaleIfNeeded(
+        canvas : Canvas,
+        bounds : Rect,
+        isAmbient : Boolean
+    ) {
+        // Zoom the ambient watchface a bit larger, for viewing purposes, in ambient mode.
+        // XXX - but maybe not do this or as an option
+        if (isAmbient) {
+            if (watchFaceData.layoutStyle.id == LayoutStyleIdAndResourceIds.FULLFACE.id) {
+                canvas.scale(AOD_ZOOM_LEVEL_1, AOD_ZOOM_LEVEL_1, bounds.exactCenterX(), bounds.exactCenterY())
+            } else if (!watchFaceData.compAOD) {
+                canvas.scale(AOD_ZOOM_LEVEL_2, AOD_ZOOM_LEVEL_2, 0f, bounds.exactCenterY())
+            } else if ( watchFaceData.shiftPixelAmount >= 1.0f) {
+                canvas.scale(AOD_ZOOM_LEVEL_3, AOD_ZOOM_LEVEL_3, bounds.exactCenterX(), bounds.exactCenterY())
+            }
+        }
+    }
 
     override fun render(
         canvas: Canvas,
@@ -410,15 +427,7 @@ class ConcentricNativeCanvasRenderer(
             watchFaceColors.activeBackgroundColor
         }
 
-        // Zoom the ambient watchface a bit larger, for viewing purposes, in ambient mode.
-        // XXX - but maybe not do this or as an option
-        if (isAmbient) {
-            if (watchFaceData.layoutStyle.id == LayoutStyleIdAndResourceIds.FULLFACE.id) {
-                canvas.scale(AOD_ZOOM_LEVEL_1, AOD_ZOOM_LEVEL_1, bounds.exactCenterX(), bounds.exactCenterY())
-            } else if (!watchFaceData.compAOD) {
-                canvas.scale(AOD_ZOOM_LEVEL_2, AOD_ZOOM_LEVEL_2, 0f, bounds.exactCenterY())
-            }
-        }
+        scaleIfNeeded(canvas, bounds, isAmbient)
 
         if (isAmbient &&
             watchFaceData.shiftPixelAmount >= 1.0f
@@ -490,7 +499,7 @@ class ConcentricNativeCanvasRenderer(
                 val offset =
                     when (watchFaceData.layoutStyle.id) {
                         LayoutStyleIdAndResourceIds.HALFFACE.id -> {
-                            0.25f
+                            0.26f
                         }
                         LayoutStyleIdAndResourceIds.SCALED_HALFFACE.id -> {
                             -0.25f
