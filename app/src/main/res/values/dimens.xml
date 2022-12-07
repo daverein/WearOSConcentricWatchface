@@ -18,7 +18,7 @@
     <!-- constants for watch face element renderer. -->
     <dimen name="hour_mark_size">10sp</dimen>
     <dimen name="clock_hand_stroke_width">2dp</dimen>
-    <dimen name="complication_text_size">22sp</dimen>
+    <dimen name="complication_text_size">14sp</dimen>
     <dimen name="complication_title_size">10sp</dimen>
     <dimen name="progress_thickness">3dp</dimen>
 
