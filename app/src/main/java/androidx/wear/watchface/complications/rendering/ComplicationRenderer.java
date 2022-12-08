@@ -716,9 +716,11 @@ class ComplicationRenderer {
             icon.setColorFilter(mIsPlaceholder ? PLACEHOLDER_COLOR_FILTER :
                     paintSet.mIconColorFilter);
             Rect b = new Rect(mIconBounds);
-            float shiftup = ((b.bottom - b.top)/3f);
-            b.top -= shiftup;
-            b.bottom -= shiftup;
+            if ((mComplicationData.getType() == ComplicationData.TYPE_SHORT_TEXT && mComplicationData.hasShortText())) {
+                float shiftup = ((b.bottom - b.top) / 3f);
+                b.top -= shiftup;
+                b.bottom -= shiftup;
+            }
             drawIconOnCanvas(canvas, b, icon);
         } else if (isPlaceholder) {
             canvas.drawRect(mIconBounds, PLACEHOLDER_PAINT);
