@@ -720,9 +720,11 @@ class ComplicationRenderer {
             if (paintSet.isInBurnInProtectionMode() && mBurnInProtectionIcon != null) {
                 icon = mBurnInProtectionIcon;
             }
-            if ( mStyleIcon ) {
+            if ( mStyleIcon || paintSet.mIsAmbientStyle ) {
                 icon.setColorFilter(mIsPlaceholder ? PLACEHOLDER_COLOR_FILTER :
                     paintSet.mIconColorFilter);
+            } else {
+                icon.setColorFilter(null);
             }
             Rect b = new Rect(mIconBounds);
             if ((mComplicationData.getType() == ComplicationData.TYPE_SHORT_TEXT && mComplicationData.hasShortText())) {
