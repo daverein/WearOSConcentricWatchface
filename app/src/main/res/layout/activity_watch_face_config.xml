@@ -155,6 +155,19 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/drawcompcircles_enabled_switch" />
 
+        <com.google.android.material.divider.MaterialDivider
+            android:id="@+id/divider1"
+            android:layout_width="0dp"
+            android:layout_height="2dp"
+            app:dividerColor="@color/white"
+            app:dividerThickness="4dp"
+            android:drawablePadding="@dimen/activity_config_ticks_enabled_switch_icon_padding"
+            android:gravity="start|center_vertical"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/drawdate_enabled_switch" />
+
+
         <TextView
             android:id="@+id/aod_options"
             android:layout_width="0dp"
@@ -168,7 +181,7 @@
             android:contentDescription="@string/activity_config_minute_hand_slider_text_label_content_description"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/drawdate_enabled_switch" />
+            app:layout_constraintTop_toBottomOf="@+id/divider1" />
 
         <com.google.android.material.switchmaterial.SwitchMaterial
             android:id="@+id/timeaod_enabled_switch"
@@ -214,7 +227,8 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:contentDescription="@string/activity_config_minute_hand_length_slider_content_description"
-            app:labelBehavior="gone"
+            app:labelBehavior="floating"
+            android:stepSize="1"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/slider_label" />

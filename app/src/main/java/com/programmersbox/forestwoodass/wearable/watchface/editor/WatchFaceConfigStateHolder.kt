@@ -326,7 +326,7 @@ class WatchFaceConfigStateHolder(
 
         // To convert the double representing the arm length to valid float value in the range the
         // slider can support, we need to multiply the original value times 1,000.
-        private const val MULTIPLE_FOR_SLIDER: Float = 10f
+        private const val MULTIPLE_FOR_SLIDER: Float = 1f
 
         const val SHIFT_PIXEL_AOD_MINIMUM_FOR_SLIDER =
             SHIFT_PIXEL_AOD_FRACTION_MINIMUM * MULTIPLE_FOR_SLIDER
