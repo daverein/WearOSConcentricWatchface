@@ -65,7 +65,7 @@ public class LayoutUtils {
 
     /** Sets the output to the top half of the input. */
     public static void getTopHalfMarquee(@NonNull Rect outRect, @NonNull Rect inRect) {
-        float height = (inRect.top + inRect.bottom) * 0.70f;
+        float height = (inRect.top + inRect.bottom) * 0.65f;
         int iHeight = (int) height;
         outRect.set(inRect.left, inRect.top, inRect.right, iHeight);
     }
