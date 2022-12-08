@@ -71,6 +71,7 @@ class WatchFaceConfigStateHolder(
     // Keys from Watch Face Data Structure
     private lateinit var colorStyleKey: UserStyleSetting.ListUserStyleSetting
     private lateinit var layoutStyleKey: UserStyleSetting.ListUserStyleSetting
+    private lateinit var styleIconKey: UserStyleSetting.BooleanUserStyleSetting
     private lateinit var timeaodKey: UserStyleSetting.BooleanUserStyleSetting
     private lateinit var drawDateKey: UserStyleSetting.BooleanUserStyleSetting
     private lateinit var compCirclesKey: UserStyleSetting.BooleanUserStyleSetting
@@ -121,6 +122,9 @@ class WatchFaceConfigStateHolder(
                 DRAW_TIME_AOD_STYLE_SETTING -> {
                     timeaodKey = setting as UserStyleSetting.BooleanUserStyleSetting
                 }
+                STYLE_ICON_STYLE_SETTING -> {
+                    styleIconKey = setting as UserStyleSetting.BooleanUserStyleSetting
+                }
                 DRAW_COMP_CIRCLES_STYLE_SETTING -> {
                     compCirclesKey = setting as UserStyleSetting.BooleanUserStyleSetting
                 }
@@ -166,6 +170,8 @@ class WatchFaceConfigStateHolder(
             userStyle[layoutStyleKey] as UserStyleSetting.ListUserStyleSetting.ListOption
         val timeaodEnabledStyle =
             userStyle[timeaodKey] as UserStyleSetting.BooleanUserStyleSetting.BooleanOption
+        val styleIconEnabledStyle =
+            userStyle[styleIconKey] as UserStyleSetting.BooleanUserStyleSetting.BooleanOption
         val drawDateEnabledStyle =
             userStyle[drawDateKey] as UserStyleSetting.BooleanUserStyleSetting.BooleanOption
         val drawCompCirclesEnabledStyle =
@@ -184,6 +190,7 @@ class WatchFaceConfigStateHolder(
             colorStyleId = colorStyle.id.toString(),
             layoutStyleId = layoutStyle.id.toString(),
             timeaodEnabled = timeaodEnabledStyle.value,
+            styleIconEnabled = styleIconEnabledStyle.value,
             drawDateEnabled = drawDateEnabledStyle.value,
             drawCompCirclesEnabled = drawCompCirclesEnabledStyle.value,
             compaodEnabled = compaodEnabledStyle.value,
@@ -254,6 +261,14 @@ class WatchFaceConfigStateHolder(
         )
     }
 
+    fun setStyleIcon(enabled: Boolean) {
+        setUserStyleOption(
+            styleIconKey,
+            UserStyleSetting.BooleanUserStyleSetting.BooleanOption.from(enabled)
+        )
+    }
+
+
     fun setDrawDate(enabled: Boolean) {
         setUserStyleOption(
             drawDateKey,
@@ -313,6 +328,7 @@ class WatchFaceConfigStateHolder(
         val colorStyleId: String,
         val layoutStyleId: String,
         val drawDateEnabled: Boolean,
+        val styleIconEnabled: Boolean,
         val timeaodEnabled: Boolean,
         val compaodEnabled: Boolean,
         val drawCompCirclesEnabled: Boolean,

@@ -242,6 +242,14 @@ class ConcentricNativeCanvasRenderer(
                         )
                     )
                 }
+                STYLE_ICON_STYLE_SETTING -> {
+                    val booleanValue = options.value as
+                        UserStyleSetting.BooleanUserStyleSetting.BooleanOption
+
+                    newWatchFaceData = newWatchFaceData.copy(
+                        styleIcon = booleanValue.value
+                    )
+                }
                 DRAW_TIME_AOD_STYLE_SETTING -> {
                     val booleanValue = options.value as
                         UserStyleSetting.BooleanUserStyleSetting.BooleanOption
@@ -324,6 +332,7 @@ class ConcentricNativeCanvasRenderer(
                 )?.let {
                     // Set to draw the progress and under circles on the complications or not
                     it.isDrawComplicationCircles = watchFaceData.drawCompCircles
+                    it.isStyleIcon = watchFaceData.styleIcon
                     (complication.renderer as CanvasComplicationDrawable).drawable = it
                 }
             }

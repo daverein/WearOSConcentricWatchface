@@ -27,6 +27,7 @@ import com.programmersbox.forestwoodass.wearable.watchface.data.watchface.*
 // being rendered.
 const val COLOR_STYLE_SETTING = "color_style_setting"
 const val LAYOUT_STYLE_SETTING = "layout_style_setting"
+const val STYLE_ICON_STYLE_SETTING = "style_icon_style_setting"
 const val DRAW_TIME_AOD_STYLE_SETTING = "draw_time_aod_style_setting"
 const val DRAW_DATE_STYLE_SETTING = "draw_date_style_setting"
 const val DRAW_COMP_CIRCLES_STYLE_SETTING = "draw_comp_circles_style_setting"
@@ -81,6 +82,15 @@ fun createUserStyleSchema(context: Context): UserStyleSchema {
         null,
         listOf(WatchFaceLayer.BASE),
         DRAW_DATE
+    )
+    val styleIconStyleSetting = UserStyleSetting.BooleanUserStyleSetting(
+        UserStyleSetting.Id(STYLE_ICON_STYLE_SETTING),
+        context.resources,
+        R.string.watchface_style_icon_setting,
+        R.string.watchface_style_icon_setting_description,
+        null,
+        listOf(WatchFaceLayer.BASE),
+        STYLE_ICON
     )
     val drawTimeOnAODStyleSetting = UserStyleSetting.BooleanUserStyleSetting(
         UserStyleSetting.Id(DRAW_TIME_AOD_STYLE_SETTING),
@@ -137,6 +147,7 @@ fun createUserStyleSchema(context: Context): UserStyleSchema {
             colorStyleSetting,
             layoutStyleSetting,
             drawDateStyleSetting,
+            styleIconStyleSetting,
             drawCompCirclesStyleSetting,
             drawTimeOnAODStyleSetting,
             compaodStyleSetting,

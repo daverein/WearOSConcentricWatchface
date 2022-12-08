@@ -567,6 +567,11 @@ public class ComplicationDrawable : Drawable {
             complicationRenderer?.setDrawComplicationCircles(drawComplicationCircles)
         }
 
+    public var isStyleIcon: Boolean = true
+        set(styleIcon) {
+            field = styleIcon
+            complicationRenderer?.setStyleIcon(styleIcon)
+        }
     /**
      * Sets the complication data to be drawn.
      *
@@ -588,6 +593,7 @@ public class ComplicationDrawable : Drawable {
             nextRenderer.setNoDataText(noDataText)
             nextRenderer.isRangedValueProgressHidden = isRangedValueProgressHidden
             nextRenderer.setDrawComplicationCircles(isDrawComplicationCircles)
+            nextRenderer.setStyleIcon(isStyleIcon)
             nextRenderer.bounds = bounds
             nextRenderer.setOnInvalidateListener {
                 complicationRenderer = nextRenderer

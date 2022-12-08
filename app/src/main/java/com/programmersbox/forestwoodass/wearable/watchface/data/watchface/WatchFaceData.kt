@@ -22,6 +22,7 @@ const val DRAW_TIME_AOD = true
 const val DRAW_DATE = true
 const val COMPAOD_DEFAULT = true
 const val MINUTEDIALAOD_DEFAULT = true
+const val STYLE_ICON = true
 
 // Because the minute length is something the user can edit, we make it publicly
 // accessible as a default. We also specify the minimum and maximum values for the user
@@ -65,6 +66,7 @@ data class WatchFaceData(
     val activeColorStyle: ColorStyleIdAndResourceIds = ColorStyleIdAndResourceIds.BLUE,
     val ambientColorStyle: ColorStyleIdAndResourceIds = ColorStyleIdAndResourceIds.AMBIENT,
     val layoutStyle: LayoutStyleIdAndResourceIds = LayoutStyleIdAndResourceIds.FULLFACE,
+    val styleIcon: Boolean = STYLE_ICON,
     val drawDate: Boolean = DRAW_DATE,
     val timeAOD: Boolean = DRAW_TIME_AOD,
     val drawCompCircles: Boolean = DRAW_COMP_CIRCLES,

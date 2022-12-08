@@ -60,6 +60,7 @@ class WatchFaceConfigActivity : ComponentActivity() {
         binding.colorStylePickerButton.isEnabled = false
         binding.drawdateEnabledSwitch.isEnabled = false
         binding.timeaodEnabledSwitch.isEnabled = false
+        binding.styleIconEnabledSwitch.isEnabled = false
         binding.shiftPixelAmountSlider.isEnabled = false
         binding.drawcompcirclesEnabledSwitch.isEnabled = false
         binding.compaodEnabledSwitch.isEnabled = false
@@ -106,6 +107,7 @@ class WatchFaceConfigActivity : ComponentActivity() {
 
         binding.drawdateEnabledSwitch.isChecked = userStylesAndPreview.drawDateEnabled
         binding.timeaodEnabledSwitch.isChecked = userStylesAndPreview.timeaodEnabled
+        binding.styleIconEnabledSwitch.isChecked = userStylesAndPreview.styleIconEnabled
         binding.compaodEnabledSwitch.isChecked = userStylesAndPreview.compaodEnabled
         binding.drawcompcirclesEnabledSwitch.isChecked = userStylesAndPreview.drawCompCirclesEnabled
         binding.minutedialaodEnabledSwitch.isChecked = userStylesAndPreview.minutedialaodEnabled
@@ -122,6 +124,7 @@ class WatchFaceConfigActivity : ComponentActivity() {
         binding.colorStylePickerButton.isEnabled = true
         binding.drawdateEnabledSwitch.isEnabled = true
         binding.timeaodEnabledSwitch.isEnabled = true
+        binding.styleIconEnabledSwitch.isEnabled = true
         binding.drawcompcirclesEnabledSwitch.isEnabled = true
         binding.shiftPixelAmountSlider.isEnabled = true
         binding.compaodEnabledSwitch.isEnabled = true
@@ -180,6 +183,11 @@ class WatchFaceConfigActivity : ComponentActivity() {
 
         stateHolder.setLayoutStyle(newLayoutStyle)
 
+    }
+
+    fun onClickStyleIconEnabledSwitch(view: View) {
+        Log.d(TAG, "onClickStyleIconEnabledSwitch() $view")
+        stateHolder.setStyleIcon(binding.styleIconEnabledSwitch.isChecked)
     }
 
     fun onClickLeftComplicationButton(view: View) {

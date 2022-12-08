@@ -147,6 +147,8 @@ class ComplicationRenderer {
 
     private boolean mDrawProgressCircles;
 
+    private boolean mStyleIcon;
+
     private boolean mHasNoData;
 
     // Below drawables will be null until they are fully loaded.
@@ -404,7 +406,12 @@ class ComplicationRenderer {
             calculateBounds();
         }
     }
-
+    public void setStyleIcon(boolean styleit) {
+        if (mStyleIcon != styleit) {
+            mStyleIcon = styleit;
+            calculateBounds();
+        }
+    }
     /** Returns {@code true} if the ranged value progress should be hidden. */
     @VisibleForTesting(otherwise = VisibleForTesting.PACKAGE_PRIVATE)
     public boolean isRangedValueProgressHidden() {
@@ -713,8 +720,10 @@ class ComplicationRenderer {
             if (paintSet.isInBurnInProtectionMode() && mBurnInProtectionIcon != null) {
                 icon = mBurnInProtectionIcon;
             }
-            icon.setColorFilter(mIsPlaceholder ? PLACEHOLDER_COLOR_FILTER :
+            if ( mStyleIcon ) {
+                icon.setColorFilter(mIsPlaceholder ? PLACEHOLDER_COLOR_FILTER :
                     paintSet.mIconColorFilter);
+            }
             Rect b = new Rect(mIconBounds);
             if ((mComplicationData.getType() == ComplicationData.TYPE_SHORT_TEXT && mComplicationData.hasShortText())) {
                 float shiftup = ((b.bottom - b.top) / 3f);
