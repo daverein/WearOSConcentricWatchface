@@ -636,8 +636,8 @@ class ComplicationRenderer {
             rangedValue = 75.0f;
         }
 
-        int range = getIcon() == null ? 360 : 310;
-        int startValue = getIcon() == null ? RANGED_VALUE_START_ANGLE : -65;
+        int range = getIcon() == null ? 360 : 290;
+        int startValue = getIcon() == null ? RANGED_VALUE_START_ANGLE : -55;
         float value =
                 Math.min(rangedMaxValue, Math.max(rangedMinValue, rangedValue)) - rangedMinValue;
         float interval = rangedMaxValue - rangedMinValue;
@@ -690,8 +690,8 @@ class ComplicationRenderer {
 
 
         int insetAmount = (int) Math.ceil(paintSet.mInProgressPaint.getStrokeWidth());
-        float start = -65f;
-        float sweep = 310f;
+        float start = -55f;
+        float sweep = 290f;
 
         if ( getIcon() == null ) {
             start = -90f;
@@ -728,7 +728,7 @@ class ComplicationRenderer {
             }
             Rect b = new Rect(mIconBounds);
             if ((mComplicationData.getType() == ComplicationData.TYPE_SHORT_TEXT && mComplicationData.hasShortText())) {
-                float shiftup = ((b.bottom - b.top) / 3f);
+                float shiftup = ((b.bottom - b.top) / 5f);
                 b.top -= shiftup;
                 b.bottom -= shiftup;
             }

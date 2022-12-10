@@ -62,7 +62,7 @@ public class ShortTextLayoutHelper extends LayoutHelper {
             } else {
                 // Use top half of the central square
                 getCentralSquare(outRect, outRect);
-                getTopHalf(outRect, outRect);
+                getTopHalfMarquee(outRect, outRect);
                 getCentralSquare(outRect, outRect);
                 getTopHalfMarquee(outRect, outRect);
             }
