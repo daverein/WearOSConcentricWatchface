@@ -599,7 +599,7 @@ class ConcentricNativeCanvasRenderer(
             darkenColor(watchFaceColors.activePrimaryColor)
         }
 
-        val rightSide: Float = if (drawAmbient) {
+        val rightSide: Float = if (drawAmbient || isBatteryLow()) {
             cx + sizeRadius
         } else {
             if (isHalfFace) {
