@@ -126,7 +126,6 @@ class ConcentricNativeCanvasRenderer(
     private val textPaint = Paint().apply {
         isAntiAlias = true
         textSize = context.resources.getDimensionPixelSize(R.dimen.hour_mark_size).toFloat()
-        // typeface = Typeface.createFromAsset(context.resources.assets, "Roboto.ttf");
     }
     private val hourTextPaint = Paint().apply {
         isAntiAlias = true
@@ -149,7 +148,6 @@ class ConcentricNativeCanvasRenderer(
     }
     private val minuteHighlightPaint = Paint().apply {
         isAntiAlias = true
-        // typeface = Typeface.createFromAsset(context.resources.assets, "Roboto.ttf");
     }
     private val minuteDialTextPaint = Paint().apply {
         isAntiAlias = true
@@ -186,7 +184,6 @@ class ConcentricNativeCanvasRenderer(
     private val timeSetReceiver = object : BroadcastReceiver() {
         override fun onReceive(contxt: Context?, intent: Intent?) {
             is24Format = DateFormat.is24HourFormat(context)
-            Log.d(TAG, "time format is now 24?:" + is24Format)
         }
     }
 
@@ -406,7 +403,6 @@ class ConcentricNativeCanvasRenderer(
         isAmbient : Boolean
     ) {
         // Zoom the ambient watchface a bit larger, for viewing purposes, in ambient mode.
-        // XXX - but maybe not do this or as an option
         if (isAmbient) {
             if (watchFaceData.layoutStyle.id == LayoutStyleIdAndResourceIds.FULLFACE.id) {
                 canvas.scale(AOD_ZOOM_LEVEL_1, AOD_ZOOM_LEVEL_1, bounds.exactCenterX(), bounds.exactCenterY())
@@ -466,7 +462,7 @@ class ConcentricNativeCanvasRenderer(
         canvas.restoreToCount(restoreCount)
 
         if (!isAmbient) {
-            drawDateElement(canvas, bounds, zonedDateTime)
+            drawDateElement(canvas, bounds, zonedDateTime, isAmbient)
         }
 
         // CanvasComplicationDrawable already obeys rendererParameters.
@@ -555,30 +551,25 @@ class ConcentricNativeCanvasRenderer(
     }
 
     private fun configColors(drawAmbient: Boolean) {
-        hourTextPaint.color = if (drawAmbient) {
-            watchFaceColors.ambientPrimaryTextColor
-        } else {
-            watchFaceColors.activePrimaryTextColor
+        hourTextPaint.color = when {
+            drawAmbient -> watchFaceColors.ambientPrimaryTextColor
+            else -> watchFaceColors.activePrimaryTextColor
         }
-        hourTextAmbientPaint.color = if (drawAmbient) {
-            watchFaceColors.ambientPrimaryTextColor
-        } else {
-            watchFaceColors.activePrimaryTextColor
+        hourTextAmbientPaint.color = when {
+            drawAmbient -> watchFaceColors.ambientPrimaryTextColor
+            else -> watchFaceColors.activePrimaryTextColor
         }
-        minuteTextPaint.color = if (drawAmbient) {
-            watchFaceColors.ambientPrimaryTextColor
-        } else {
-            watchFaceColors.activePrimaryTextColor
+        minuteTextPaint.color = when {
+            drawAmbient -> watchFaceColors.ambientPrimaryTextColor
+            else -> watchFaceColors.activePrimaryTextColor
         }
-        minuteTextAmbientPaint.color = if (drawAmbient) {
-            watchFaceColors.ambientPrimaryTextColor
-        } else {
-            watchFaceColors.activePrimaryTextColor
+        minuteTextAmbientPaint.color = when {
+            drawAmbient -> watchFaceColors.ambientPrimaryTextColor
+            else -> watchFaceColors.activePrimaryTextColor
         }
-        minuteHighlightPaint.color = if (drawAmbient) {
-            watchFaceColors.ambientPrimaryColor
-        } else {
-            watchFaceColors.activePrimaryColor
+        minuteHighlightPaint.color = when {
+            drawAmbient -> watchFaceColors.ambientPrimaryColor
+            else -> watchFaceColors.activePrimaryColor
         }
     }
 
@@ -593,10 +584,9 @@ class ConcentricNativeCanvasRenderer(
     ) {
         minuteHighlightPaint.style = Paint.Style.STROKE
         minuteHighlightPaint.strokeWidth = 3.0f
-        minuteHighlightPaint.color = if (!drawAmbient) {
-            watchFaceColors.activePrimaryColor
-        } else {
-            darkenColor(watchFaceColors.activePrimaryColor)
+        minuteHighlightPaint.color = when {
+            !drawAmbient -> watchFaceColors.activePrimaryColor
+            else -> darkenColor(watchFaceColors.activePrimaryColor)
         }
 
         val rightSide: Float = if (drawAmbient || isBatteryLow()) {
@@ -730,7 +720,8 @@ class ConcentricNativeCanvasRenderer(
     private fun drawDateElement(
         canvas: Canvas,
         bounds: Rect,
-        zonedDateTime: ZonedDateTime
+        zonedDateTime: ZonedDateTime,
+        isAmbient: Boolean
     ) {
         if ( !watchFaceData.drawDate )
             return
@@ -749,10 +740,9 @@ class ConcentricNativeCanvasRenderer(
                 calendarMonthPaint
             )
 
-            calendarMonthPaint.color = if (renderParameters.drawMode == DrawMode.AMBIENT) {
-                watchFaceColors.ambientSecondaryColor
-            } else {
-                watchFaceColors.activePrimaryColor
+            calendarMonthPaint.color = when {
+                isAmbient ->watchFaceColors.ambientSecondaryColor
+                else -> watchFaceColors.activePrimaryColor
             }
             canvas.drawText(
                 tx,
@@ -868,12 +858,19 @@ class ConcentricNativeCanvasRenderer(
         zonedDateTime: ZonedDateTime,
         isAmbient: Boolean
     ) {
-        outerElementPaint.color =
-            if (!isAmbient) watchFaceColors.activeOuterElementColor else watchFaceColors.ambientOuterElementColor
-        minuteDialTextPaint.color =
-            if (!isAmbient) watchFaceColors.activeOuterElementColor else watchFaceColors.ambientOuterElementColor
-        secondDialTextPaint.color =
-            if (!isAmbient) watchFaceColors.activePrimaryColor else watchFaceColors.ambientPrimaryColor
+        outerElementPaint.color = when {
+            !isAmbient -> watchFaceColors.activeOuterElementColor
+            else -> watchFaceColors.ambientOuterElementColor
+        }
+        minuteDialTextPaint.color = when {
+            !isAmbient -> watchFaceColors.activeOuterElementColor
+            else -> watchFaceColors.ambientOuterElementColor
+        }
+        secondDialTextPaint.color = when {
+            !isAmbient -> watchFaceColors.activePrimaryColor
+            else -> watchFaceColors.ambientPrimaryColor
+        }
+
         // Draw and move seconds
         val numberRadiusFraction = watchFaceData.numberRadiusFraction
         val textBounds = Rect()
