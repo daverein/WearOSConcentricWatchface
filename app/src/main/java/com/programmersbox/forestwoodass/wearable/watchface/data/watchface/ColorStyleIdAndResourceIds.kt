@@ -204,7 +204,7 @@ enum class ColorStyleIdAndResourceIds(
             textPainter.color = 0xffffffff.toInt()
             val rect = Rect()
             textPainter.getTextBounds(nameString, 0, nameString.length, rect)
-            canvas.drawText(nameString, BITMAP_SIZE/2-rect.width()/2, BITMAP_SIZE/2-rect.height()/4, textPainter)
+            canvas.drawText(nameString, BITMAP_SIZE/2-rect.width()/2, BITMAP_SIZE/2+rect.height()/2, textPainter)
             return bitmap
         }
 
