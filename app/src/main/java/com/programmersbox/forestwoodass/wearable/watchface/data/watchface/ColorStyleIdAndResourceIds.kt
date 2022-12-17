@@ -16,7 +16,12 @@
 package com.programmersbox.forestwoodass.wearable.watchface.data.watchface
 
 import android.content.Context
+import android.graphics.Bitmap
+import android.graphics.Canvas
+import android.graphics.Paint
+import android.graphics.Rect
 import android.graphics.drawable.Icon
+import android.util.Log
 import androidx.annotation.ColorRes
 import androidx.annotation.DrawableRes
 import androidx.annotation.StringRes
@@ -30,27 +35,26 @@ import com.programmersbox.forestwoodass.wearable.watchface.R
 // X_COLOR_STYLE_ICON_ID - Icon to display in the user settings UI for the style.
 const val AMBIENT_COLOR_STYLE_ID = "ambient_style_id"
 private const val AMBIENT_COLOR_STYLE_NAME_RESOURCE_ID = R.string.ambient_style_name
-private const val AMBIENT_COLOR_STYLE_ICON_ID = R.drawable.white_style
 
 const val RED_COLOR_STYLE_ID = "red_style_id"
 private const val RED_COLOR_STYLE_NAME_RESOURCE_ID = R.string.red_style_name
-private const val RED_COLOR_STYLE_ICON_ID = R.drawable.red_style
 
 const val GREEN_COLOR_STYLE_ID = "green_style_id"
 private const val GREEN_COLOR_STYLE_NAME_RESOURCE_ID = R.string.green_style_name
-private const val GREEN_COLOR_STYLE_ICON_ID = R.drawable.green_style
 
 const val YELLOW_COLOR_STYLE_ID = "yellow_style_id"
 private const val YELLOW_COLOR_STYLE_NAME_RESOURCE_ID = R.string.yellow_style_name
-private const val YELLOW_COLOR_STYLE_ICON_ID = R.drawable.yellow_style
+
+const val PURPLE_COLOR_STYLE_ID = "purple_style_id"
+private const val PURPLE_COLOR_STYLE_NAME_RESOURCE_ID = R.string.purple_style_name
 
 const val BLUE_COLOR_STYLE_ID = "blue_style_id"
 private const val BLUE_COLOR_STYLE_NAME_RESOURCE_ID = R.string.blue_style_name
-private const val BLUE_COLOR_STYLE_ICON_ID = R.drawable.blue_style
 
 const val WHITE_COLOR_STYLE_ID = "white_style_id"
 private const val WHITE_COLOR_STYLE_NAME_RESOURCE_ID = R.string.white_style_name
-private const val WHITE_COLOR_STYLE_ICON_ID = R.drawable.white_style
+
+const val BITMAP_SIZE = 128f
 
 /**
  * Represents watch face color style options the user can select (includes the unique id, the
@@ -64,7 +68,6 @@ private const val WHITE_COLOR_STYLE_ICON_ID = R.drawable.white_style
 enum class ColorStyleIdAndResourceIds(
     val id: String,
     @StringRes val nameResourceId: Int,
-    @DrawableRes val iconResourceId: Int,
     @DrawableRes val complicationStyleDrawableId: Int,
     @ColorRes val primaryColorId: Int,
     @ColorRes val primaryColorTextId: Int,
@@ -75,7 +78,6 @@ enum class ColorStyleIdAndResourceIds(
     BLUE(
         id = BLUE_COLOR_STYLE_ID,
         nameResourceId = BLUE_COLOR_STYLE_NAME_RESOURCE_ID,
-        iconResourceId = BLUE_COLOR_STYLE_ICON_ID,
         complicationStyleDrawableId = R.drawable.complication_blue_style,
         primaryColorId = R.color.blue_primary_color,
         primaryColorTextId = R.color.blue_color_text_primary,
@@ -87,7 +89,6 @@ enum class ColorStyleIdAndResourceIds(
     RED(
         id = RED_COLOR_STYLE_ID,
         nameResourceId = RED_COLOR_STYLE_NAME_RESOURCE_ID,
-        iconResourceId = RED_COLOR_STYLE_ICON_ID,
         complicationStyleDrawableId = R.drawable.complication_red_style,
         primaryColorId = R.color.red_primary_color,
         primaryColorTextId = R.color.red_color_text_primary,
@@ -99,7 +100,6 @@ enum class ColorStyleIdAndResourceIds(
     GREEN(
         id = GREEN_COLOR_STYLE_ID,
         nameResourceId = GREEN_COLOR_STYLE_NAME_RESOURCE_ID,
-        iconResourceId = GREEN_COLOR_STYLE_ICON_ID,
         complicationStyleDrawableId = R.drawable.complication_green_style,
         primaryColorId = R.color.green_primary_color,
         primaryColorTextId = R.color.green_color_text_primary,
@@ -111,7 +111,6 @@ enum class ColorStyleIdAndResourceIds(
     YELLOW(
         id = YELLOW_COLOR_STYLE_ID,
         nameResourceId = YELLOW_COLOR_STYLE_NAME_RESOURCE_ID,
-        iconResourceId = YELLOW_COLOR_STYLE_ICON_ID,
         complicationStyleDrawableId = R.drawable.complication_yellow_style,
         primaryColorId = R.color.yellow_primary_color,
         primaryColorTextId = R.color.yellow_color_text_primary,
@@ -120,11 +119,20 @@ enum class ColorStyleIdAndResourceIds(
         outerElementColorId = R.color.yellow_outer_element_color
     ),
 
+    PURPLE (
+        id = PURPLE_COLOR_STYLE_ID,
+        nameResourceId = PURPLE_COLOR_STYLE_NAME_RESOURCE_ID,
+        complicationStyleDrawableId = R.drawable.complication_purple_style,
+        primaryColorId = R.color.purple_primary_color,
+        primaryColorTextId = R.color.purple_color_text_primary,
+        secondaryColorId = R.color.purple_secondary_color,
+        backgroundColorId = R.color.purple_background_color,
+        outerElementColorId = R.color.purple_outer_element_color
+    ),
 
     WHITE(
         id = WHITE_COLOR_STYLE_ID,
         nameResourceId = WHITE_COLOR_STYLE_NAME_RESOURCE_ID,
-        iconResourceId = WHITE_COLOR_STYLE_ICON_ID,
         complicationStyleDrawableId = R.drawable.complication_white_style,
         primaryColorId = R.color.white_primary_color,
         primaryColorTextId = R.color.white_color_text_primary,
@@ -136,7 +144,6 @@ enum class ColorStyleIdAndResourceIds(
     AMBIENT(
         id = AMBIENT_COLOR_STYLE_ID,
         nameResourceId = AMBIENT_COLOR_STYLE_NAME_RESOURCE_ID,
-        iconResourceId = AMBIENT_COLOR_STYLE_ICON_ID,
         complicationStyleDrawableId = R.drawable.complication_white_style,
         primaryColorId = R.color.ambient_primary_color,
         primaryColorTextId = R.color.ambient_primary_text_color,
@@ -147,6 +154,7 @@ enum class ColorStyleIdAndResourceIds(
     ;
 
     companion object {
+        private const val TAG = "ColorStyleIDAndResourceIds"
         /**
          * Translates the string id to the correct ColorStyleIdAndResourceIds object.
          */
@@ -158,8 +166,46 @@ enum class ColorStyleIdAndResourceIds(
                 BLUE.id -> BLUE
                 YELLOW.id -> YELLOW
                 WHITE.id -> WHITE
+                PURPLE.id -> PURPLE
                 else -> BLUE
             }
+        }
+
+
+        // Initializes paint object for painting the clock hands with default values.
+        private val stylePainter = Paint().apply {
+            isAntiAlias = false
+            isFilterBitmap = true
+        }
+
+        // Initializes paint object for painting the clock hands with default values.
+        private val textPainter = Paint().apply {
+            isAntiAlias = true
+            isFilterBitmap = true
+        }
+
+        fun getBitmap(context: Context, name: Int, color1: Int, color2: Int): Bitmap
+        {
+            Log.d(TAG, "getBitmap colors 1: ${Integer.toHexString(color1)} and color 2: ${Integer.toHexString(color2)}")
+            val bitmap: Bitmap = Bitmap.createBitmap(BITMAP_SIZE.toInt(), BITMAP_SIZE.toInt(), Bitmap.Config.ARGB_8888)
+
+            val canvas = Canvas(bitmap)
+
+            stylePainter.color = context.getColor(color1)
+            //canvas.drawCircle(0f, 0f, 24f, stylePainter)
+            canvas.drawArc(0f, 0f, BITMAP_SIZE, BITMAP_SIZE, 90f, 180f, false, stylePainter)
+            stylePainter.color = context.getColor(color2)
+            canvas.drawArc(0f, 0f, BITMAP_SIZE, BITMAP_SIZE, -90f, 180f, false, stylePainter)
+
+            val nameString: String = context.getString((name))
+
+            textPainter.typeface = context.resources.getFont(R.font.rubik_medium)
+            textPainter.textSize = BITMAP_SIZE*0.2f
+            textPainter.color = 0xffffffff.toInt()
+            val rect = Rect()
+            textPainter.getTextBounds(nameString, 0, nameString.length, rect)
+            canvas.drawText(nameString, BITMAP_SIZE/2-rect.width()/2, BITMAP_SIZE/2-rect.height()/4, textPainter)
+            return bitmap
         }
 
         /**
@@ -175,9 +221,11 @@ enum class ColorStyleIdAndResourceIds(
                     UserStyleSetting.Option.Id(colorStyleIdAndResourceIds.id),
                     context.resources,
                     colorStyleIdAndResourceIds.nameResourceId,
-                    Icon.createWithResource(
-                        context,
-                        colorStyleIdAndResourceIds.iconResourceId
+                    Icon.createWithBitmap(getBitmap(context,
+                        colorStyleIdAndResourceIds.nameResourceId,
+                        colorStyleIdAndResourceIds.primaryColorId,
+                        colorStyleIdAndResourceIds.secondaryColorId
+                    )
                     )
                 )
             }

@@ -60,6 +60,13 @@
     <color name="blue_background_color">@color/black</color>
     <color name="blue_outer_element_color">@color/white_50</color>
 
+    <!-- Purple Style -->
+    <color name="purple_color_text_primary">@color/white</color>
+    <color name="purple_primary_color">#FFBB86FC</color>
+    <color name="purple_secondary_color">#FF450396</color>
+    <color name="purple_background_color">@color/black</color>
+    <color name="purple_outer_element_color">@color/white_50</color>
+
     <!-- White Style -->
     <color name="white_color_text_primary">@color/white</color>
     <color name="white_primary_color">#FFE0E0E0</color>

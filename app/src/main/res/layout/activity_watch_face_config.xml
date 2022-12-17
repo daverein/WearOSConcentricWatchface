@@ -59,7 +59,6 @@
             android:padding="@dimen/activity_config_style_picker_icon_padding"
             android:onClick="onClickColorStylePickerButton"
             android:contentDescription="@string/activity_config_change_color_style_button_content_description"
-            android:src="@drawable/green_style"
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintBottom_toBottomOf="@+id/preview" />
 
