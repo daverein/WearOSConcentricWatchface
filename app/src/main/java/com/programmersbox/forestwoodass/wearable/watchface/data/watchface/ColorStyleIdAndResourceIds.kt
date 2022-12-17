@@ -84,18 +84,6 @@ enum class ColorStyleIdAndResourceIds(
         outerElementColorId = R.color.blue_outer_element_color
     ),
 
-    AMBIENT(
-        id = AMBIENT_COLOR_STYLE_ID,
-        nameResourceId = AMBIENT_COLOR_STYLE_NAME_RESOURCE_ID,
-        iconResourceId = AMBIENT_COLOR_STYLE_ICON_ID,
-        complicationStyleDrawableId = R.drawable.complication_white_style,
-        primaryColorId = R.color.ambient_primary_color,
-        primaryColorTextId = R.color.ambient_primary_text_color,
-        secondaryColorId = R.color.ambient_secondary_color,
-        backgroundColorId = R.color.ambient_background_color,
-        outerElementColorId = R.color.ambient_outer_element_color
-    ),
-
     RED(
         id = RED_COLOR_STYLE_ID,
         nameResourceId = RED_COLOR_STYLE_NAME_RESOURCE_ID,
@@ -143,7 +131,20 @@ enum class ColorStyleIdAndResourceIds(
         secondaryColorId = R.color.white_secondary_color,
         backgroundColorId = R.color.white_background_color,
         outerElementColorId = R.color.white_outer_element_color
-    );
+    ),
+
+    AMBIENT(
+        id = AMBIENT_COLOR_STYLE_ID,
+        nameResourceId = AMBIENT_COLOR_STYLE_NAME_RESOURCE_ID,
+        iconResourceId = AMBIENT_COLOR_STYLE_ICON_ID,
+        complicationStyleDrawableId = R.drawable.complication_white_style,
+        primaryColorId = R.color.ambient_primary_color,
+        primaryColorTextId = R.color.ambient_primary_text_color,
+        secondaryColorId = R.color.ambient_secondary_color,
+        backgroundColorId = R.color.ambient_background_color,
+        outerElementColorId = R.color.ambient_outer_element_color
+    )
+    ;
 
     companion object {
         /**

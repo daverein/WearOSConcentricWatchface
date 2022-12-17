@@ -35,7 +35,7 @@
     <!-- Red Style -->
     <color name="red_color_text_primary">@color/white</color>
     <color name="red_primary_color">@color/maroon_light</color>
-    <color name="red_secondary_color">@color/maroon_30</color>
+    <color name="red_secondary_color">@color/maroon_dark</color>
     <color name="red_background_color">@color/black</color>
     <color name="red_outer_element_color">@color/white_50</color>
 
@@ -49,7 +49,7 @@
     <!-- Yellow Style -->
     <color name="yellow_color_text_primary">@color/white</color>
     <color name="yellow_primary_color">@color/light_yellow</color>
-    <color name="yellow_secondary_color">#e8697234</color>
+    <color name="yellow_secondary_color">@color/dark_yellow</color>
     <color name="yellow_background_color">@color/black</color>
     <color name="yellow_outer_element_color">@color/white_50</color>
 
@@ -62,10 +62,10 @@
 
     <!-- White Style -->
     <color name="white_color_text_primary">@color/white</color>
-    <color name="white_primary_color">@color/white_70</color>
-    <color name="white_secondary_color">@color/white_50</color>
+    <color name="white_primary_color">#FFE0E0E0</color>
+    <color name="white_secondary_color">#FF777777</color>
     <color name="white_background_color">@color/black</color>
-    <color name="white_outer_element_color">@color/white_70</color>
+    <color name="white_outer_element_color">@color/white_50</color>
 
     <!-- custom colors. -->
     <color name="aquablue">#81ACF4</color>
@@ -81,14 +81,14 @@
     <color name="black_40">#66000000</color>
     <color name="black_50">#80000000</color>
     <color name="black_80">#c0000000</color>
-    <color name="dark_green">#008616</color>
+    <color name="dark_green">#226949</color>
     <color name="light_green">#00E676</color>
     <color name="light_green_30">#4D00E676</color>
     <color name="light_green_50">#8000E676</color>
     <color name="light_green_60">#9600E676</color>
     <color name="light_green_70">#B300E676</color>
-
     <color name="light_yellow">#EFFF3E</color>
+    <color name="dark_yellow">#6A7138</color>
     <color name="light_yellow_30">#4DEFFF3E</color>
     <color name="light_yellow_50">#80EFFF3E</color>
     <color name="light_yellow_60">#96EFFF3E</color>
@@ -105,6 +105,7 @@
     <color name="gray_70">#B3424242</color>
     <color name="dark_gray">#211E1D</color>
     <color name="maroon_light">#EEA19A</color>
+    <color name="maroon_dark">#6A5554</color>
     <color name="maroon_30">#4DEEA19A</color>
     <color name="maroon_50">#80EEA19A</color>
     <color name="maroon_60">#96EEA19A</color>
