@@ -102,7 +102,7 @@ enum class ColorStyleIdAndResourceIds(
         iconResourceId = RED_COLOR_STYLE_ICON_ID,
         complicationStyleDrawableId = R.drawable.complication_red_style,
         primaryColorId = R.color.red_primary_color,
-        primaryColorTextId = R.color.color_text_primary,
+        primaryColorTextId = R.color.red_color_text_primary,
         secondaryColorId = R.color.red_secondary_color,
         backgroundColorId = R.color.red_background_color,
         outerElementColorId = R.color.red_outer_element_color
@@ -114,7 +114,7 @@ enum class ColorStyleIdAndResourceIds(
         iconResourceId = GREEN_COLOR_STYLE_ICON_ID,
         complicationStyleDrawableId = R.drawable.complication_green_style,
         primaryColorId = R.color.green_primary_color,
-        primaryColorTextId = R.color.color_text_primary,
+        primaryColorTextId = R.color.green_color_text_primary,
         secondaryColorId = R.color.green_secondary_color,
         backgroundColorId = R.color.green_background_color,
         outerElementColorId = R.color.green_outer_element_color
@@ -126,7 +126,7 @@ enum class ColorStyleIdAndResourceIds(
         iconResourceId = YELLOW_COLOR_STYLE_ICON_ID,
         complicationStyleDrawableId = R.drawable.complication_yellow_style,
         primaryColorId = R.color.yellow_primary_color,
-        primaryColorTextId = R.color.color_text_primary,
+        primaryColorTextId = R.color.yellow_color_text_primary,
         secondaryColorId = R.color.yellow_secondary_color,
         backgroundColorId = R.color.yellow_background_color,
         outerElementColorId = R.color.yellow_outer_element_color
@@ -139,7 +139,7 @@ enum class ColorStyleIdAndResourceIds(
         iconResourceId = WHITE_COLOR_STYLE_ICON_ID,
         complicationStyleDrawableId = R.drawable.complication_white_style,
         primaryColorId = R.color.white_primary_color,
-        primaryColorTextId = R.color.color_text_primary,
+        primaryColorTextId = R.color.white_color_text_primary,
         secondaryColorId = R.color.white_secondary_color,
         backgroundColorId = R.color.white_background_color,
         outerElementColorId = R.color.white_outer_element_color
