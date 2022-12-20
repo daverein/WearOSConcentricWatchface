@@ -22,6 +22,7 @@ const val DRAW_TIME_AOD = true
 const val DRAW_DATE = true
 const val COMPAOD_DEFAULT = true
 const val MINUTEDIALAOD_DEFAULT = true
+const val AAA_DEFAULT = false
 const val STYLE_ICON = true
 
 // Because the minute length is something the user can edit, we make it publicly
@@ -72,6 +73,7 @@ data class WatchFaceData(
     val drawCompCircles: Boolean = DRAW_COMP_CIRCLES,
     val compAOD: Boolean = COMPAOD_DEFAULT,
     val minuteDialAOD: Boolean = MINUTEDIALAOD_DEFAULT,
+    val activeAsAmbient: Boolean = AAA_DEFAULT,
     val shiftPixelAmount: Float = SHIFT_PIXEL_AOD_FRACTION_DEFAULT,
     val numberRadiusFraction: Float = NUMBER_RADIUS_FRACTION,
 )

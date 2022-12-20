@@ -161,4 +161,8 @@
     <string name="activity_config_style_icon_enabled_label">Stylize complications icons</string>
     <string name="activity_config_style_icon_enabled_label_description">Stylize complications icons</string>
     <string name="purple_style_name">Purple</string>
+    <string name="activity_config_activeasambient_enabled_label">Active Colors for Ambient</string>
+    <string name="activity_config_activeasambient_enabled_switch_content_description">Use the Active colors on the Ambient display</string>
+    <string name="watchface_active_as_ambient_setting">Use Active colors in Ambient Mode</string>
+    <string name="watchface_active_as_ambient_setting_description">Use Active colors in Ambient Mode</string>
 </resources>

@@ -287,6 +287,14 @@ class ConcentricNativeCanvasRenderer(
                         minuteDialAOD = booleanValue.value
                     )
                 }
+                ACTIVE_AS_AMBIENT_STYLE_SETTING -> {
+                    val booleanValue = options.value as
+                        UserStyleSetting.BooleanUserStyleSetting.BooleanOption
+
+                    newWatchFaceData = newWatchFaceData.copy(
+                        activeAsAmbient = booleanValue.value
+                    )
+                }
                 SHIFT_PIXEL_STYLE_SETTING -> {
                     val doubleValue = options.value as
                         UserStyleSetting.DoubleRangeUserStyleSetting.DoubleRangeOption
@@ -330,12 +338,20 @@ class ConcentricNativeCanvasRenderer(
                     // Set to draw the progress and under circles on the complications or not
                     it.isDrawComplicationCircles = watchFaceData.drawCompCircles
                     it.isStyleIcon = watchFaceData.styleIcon
+                    it.isActiveInAmbient = watchFaceData.activeAsAmbient
 
                     it.activeStyle.iconColor = watchFaceColors.activePrimaryColor
                     it.activeStyle.highlightColor = watchFaceColors.activePrimaryColor
-                    it.activeStyle.textColor = watchFaceColors.activePrimaryColor
+                    it.activeStyle.textColor = watchFaceColors.activePrimaryTextColor
                     it.activeStyle.rangedValuePrimaryColor = watchFaceColors.activeSecondaryColor
 
+                    if ( watchFaceData.activeAsAmbient) {
+                        it.ambientStyle.textColor = watchFaceColors.activePrimaryTextColor
+                        it.ambientStyle.iconColor = watchFaceColors.activePrimaryColor
+                        it.ambientStyle.highlightColor = watchFaceColors.activePrimaryColor
+                        it.ambientStyle.rangedValuePrimaryColor = watchFaceColors.activeSecondaryColor
+                        it.ambientStyle.rangedValueSecondaryColor = it.activeStyle.rangedValueSecondaryColor
+                    }
                     (complication.renderer as CanvasComplicationDrawable).drawable = it
                 }
             }
@@ -380,8 +396,7 @@ class ConcentricNativeCanvasRenderer(
                 watchFaceData.numberRadiusFraction,
                 watchFaceColors.activePrimaryColor,
                 watchFaceColors.activeOuterElementColor,
-                zonedDateTime,
-                isAmbient
+                zonedDateTime
             )
         }
         if (renderParameters.watchFaceLayers.contains(WatchFaceLayer.BASE) && (!isAmbient ||
@@ -426,7 +441,7 @@ class ConcentricNativeCanvasRenderer(
         zonedDateTime: ZonedDateTime,
         sharedAssets: AnalogSharedAssets
     ) {
-        val isAmbient = renderParameters.drawMode == DrawMode.AMBIENT
+        val isAmbient = renderParameters.drawMode == DrawMode.AMBIENT && !watchFaceData.activeAsAmbient
         val scaledImage =
             watchFaceData.layoutStyle.id == LayoutStyleIdAndResourceIds.SCALED_HALFFACE.id
         val isHalfFace = watchFaceData.layoutStyle.id == LayoutStyleIdAndResourceIds.HALFFACE.id ||
@@ -438,9 +453,10 @@ class ConcentricNativeCanvasRenderer(
             watchFaceColors.activeBackgroundColor
         }
 
-        scaleIfNeeded(canvas, bounds, isAmbient)
+        scaleIfNeeded(canvas, bounds, renderParameters.drawMode == DrawMode.AMBIENT)
 
-        if (isAmbient &&
+        // Prevent burnin
+        if (renderParameters.drawMode == DrawMode.AMBIENT &&
             watchFaceData.shiftPixelAmount >= 1.0f
         ) {
             val cx = sin((zonedDateTime.minute % 60f) * 6f) * watchFaceData.shiftPixelAmount
@@ -467,7 +483,7 @@ class ConcentricNativeCanvasRenderer(
 
         canvas.restoreToCount(restoreCount)
 
-        if (!isAmbient) {
+        if (renderParameters.drawMode != DrawMode.AMBIENT) {
             drawDateElement(canvas, bounds, zonedDateTime, isAmbient)
         }
 
@@ -595,7 +611,7 @@ class ConcentricNativeCanvasRenderer(
             else -> darkenColor(watchFaceColors.activePrimaryColor)
         }
 
-        val rightSide: Float = if (drawAmbient || isBatteryLow()) {
+        val rightSide: Float = if (renderParameters.drawMode == DrawMode.AMBIENT || isBatteryLow()) {
             cx + sizeRadius
         } else {
             if (isHalfFace) {
@@ -633,7 +649,7 @@ class ConcentricNativeCanvasRenderer(
             pivotX = bounds.exactCenterX(),
             pivotY = bounds.exactCenterY()
         ) {
-            val drawAmbient = renderParameters.drawMode == DrawMode.AMBIENT
+            val drawAmbient = renderParameters.drawMode == DrawMode.AMBIENT && !watchFaceData.activeAsAmbient
             configColors(drawAmbient)
 
             val textBounds = Rect()
@@ -775,10 +791,9 @@ class ConcentricNativeCanvasRenderer(
         numberRadiusFraction: Float,
         primaryColor: Int,
         outerElementColor: Int,
-        zonedDateTime: ZonedDateTime,
-        isAmbient: Boolean
+        zonedDateTime: ZonedDateTime
     ) {
-        if (isAmbient)
+        if (renderParameters.drawMode == DrawMode.AMBIENT)
             return
         outerElementPaint.color = outerElementColor
         minuteDialTextPaint.color = outerElementColor

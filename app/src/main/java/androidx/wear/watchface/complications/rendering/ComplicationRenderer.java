@@ -149,6 +149,8 @@ class ComplicationRenderer {
 
     private boolean mStyleIcon;
 
+    private boolean mActiveInAmbient;
+
     private boolean mHasNoData;
 
     // Below drawables will be null until they are fully loaded.
@@ -409,6 +411,12 @@ class ComplicationRenderer {
     public void setStyleIcon(boolean styleit) {
         if (mStyleIcon != styleit) {
             mStyleIcon = styleit;
+            calculateBounds();
+        }
+    }
+    public void setActiveOnAmbient(boolean styleit) {
+        if (mActiveInAmbient != styleit) {
+            mActiveInAmbient = styleit;
             calculateBounds();
         }
     }
@@ -680,7 +688,7 @@ class ComplicationRenderer {
     }
 
     private void drawIconOutlindBorder(Canvas canvas, PaintSet paintSet) {
-         if ( paintSet.mIsAmbientStyle || !mDrawProgressCircles) {
+         if ( (paintSet.mIsAmbientStyle && !mActiveInAmbient) || !mDrawProgressCircles) {
             return;
         }
         RectF bounds = mRangedValueBoundsF;
@@ -720,7 +728,7 @@ class ComplicationRenderer {
             if (paintSet.isInBurnInProtectionMode() && mBurnInProtectionIcon != null) {
                 icon = mBurnInProtectionIcon;
             }
-            if ( mStyleIcon || paintSet.mIsAmbientStyle ) {
+            if ( mStyleIcon || (!mActiveInAmbient && paintSet.mIsAmbientStyle) ) {
                 icon.setColorFilter(mIsPlaceholder ? PLACEHOLDER_COLOR_FILTER :
                     paintSet.mIconColorFilter);
             } else {

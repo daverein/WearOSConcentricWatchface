@@ -112,6 +112,7 @@ class WatchFaceConfigActivity : ComponentActivity() {
         binding.compaodEnabledSwitch.isChecked = userStylesAndPreview.compaodEnabled
         binding.drawcompcirclesEnabledSwitch.isChecked = userStylesAndPreview.drawCompCirclesEnabled
         binding.minutedialaodEnabledSwitch.isChecked = userStylesAndPreview.minutedialaodEnabled
+        binding.activeAsAmbientEnabledSwitch.isChecked = userStylesAndPreview.activeAsAmbientEnabled
         binding.shiftPixelAmountSlider.value = userStylesAndPreview.shiftpixelamount
         currentLayoutId = userStylesAndPreview.layoutStyleId
         currentColorId = userStylesAndPreview.colorStyleId
@@ -126,6 +127,7 @@ class WatchFaceConfigActivity : ComponentActivity() {
         binding.drawdateEnabledSwitch.isEnabled = true
         binding.timeaodEnabledSwitch.isEnabled = true
         binding.styleIconEnabledSwitch.isEnabled = true
+        binding.activeAsAmbientEnabledSwitch.isEnabled = true
         binding.drawcompcirclesEnabledSwitch.isEnabled = true
         binding.shiftPixelAmountSlider.isEnabled = true
         binding.compaodEnabledSwitch.isEnabled = true
@@ -197,6 +199,11 @@ class WatchFaceConfigActivity : ComponentActivity() {
     fun onClickStyleIconEnabledSwitch(view: View) {
         Log.d(TAG, "onClickStyleIconEnabledSwitch() $view")
         stateHolder.setStyleIcon(binding.styleIconEnabledSwitch.isChecked)
+    }
+
+    fun onClickActiveAsAmbientEnabledSwitch(view: View) {
+        Log.d(TAG, "onClickActiveAsAmbientEnabledSwitch() $view")
+        stateHolder.setActiveAsAmbient(binding.activeAsAmbientEnabledSwitch.isChecked)
     }
 
     fun onClickLeftComplicationButton(view: View) {

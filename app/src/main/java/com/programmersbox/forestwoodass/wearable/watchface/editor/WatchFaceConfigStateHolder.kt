@@ -76,6 +76,7 @@ class WatchFaceConfigStateHolder(
     private lateinit var drawDateKey: UserStyleSetting.BooleanUserStyleSetting
     private lateinit var compCirclesKey: UserStyleSetting.BooleanUserStyleSetting
     private lateinit var compaodKey: UserStyleSetting.BooleanUserStyleSetting
+    private lateinit var activeAsAmbientKey: UserStyleSetting.BooleanUserStyleSetting
     private lateinit var minutedialaodKey: UserStyleSetting.BooleanUserStyleSetting
     private lateinit var shiftpixelamountKey: UserStyleSetting.DoubleRangeUserStyleSetting
 
@@ -131,6 +132,9 @@ class WatchFaceConfigStateHolder(
                 COMPAOD_STYLE_SETTING -> {
                     compaodKey = setting as UserStyleSetting.BooleanUserStyleSetting
                 }
+                ACTIVE_AS_AMBIENT_STYLE_SETTING -> {
+                    activeAsAmbientKey = setting as UserStyleSetting.BooleanUserStyleSetting
+                }
                 MINUTEDIALAOD_STYLE_SETTING -> {
                     minutedialaodKey = setting as UserStyleSetting.BooleanUserStyleSetting
                 }
@@ -178,6 +182,8 @@ class WatchFaceConfigStateHolder(
             userStyle[compCirclesKey] as UserStyleSetting.BooleanUserStyleSetting.BooleanOption
         val compaodEnabledStyle =
             userStyle[compaodKey] as UserStyleSetting.BooleanUserStyleSetting.BooleanOption
+        val activeAsAmbientEnabledStyle =
+            userStyle[activeAsAmbientKey] as UserStyleSetting.BooleanUserStyleSetting.BooleanOption
         val minuteDialAODEnabledStyle =
             userStyle[minutedialaodKey] as UserStyleSetting.BooleanUserStyleSetting.BooleanOption
         val shiftpixelamountStyle =
@@ -194,6 +200,7 @@ class WatchFaceConfigStateHolder(
             drawDateEnabled = drawDateEnabledStyle.value,
             drawCompCirclesEnabled = drawCompCirclesEnabledStyle.value,
             compaodEnabled = compaodEnabledStyle.value,
+            activeAsAmbientEnabled = activeAsAmbientEnabledStyle.value,
             minutedialaodEnabled = minuteDialAODEnabledStyle.value,
             shiftpixelamount = multiplyByMultipleForSlider(shiftpixelamountStyle.value).toFloat(),
             previewImage = bitmap
@@ -297,6 +304,13 @@ class WatchFaceConfigStateHolder(
         )
     }
 
+    fun setActiveAsAmbient(enabled: Boolean) {
+        setUserStyleOption(
+            activeAsAmbientKey,
+            UserStyleSetting.BooleanUserStyleSetting.BooleanOption.from(enabled)
+        )
+    }
+
     fun setShiftPixelAmount(newShiftPixel: Float) {
         val newShiftPixelRatio = newShiftPixel.toDouble() / MULTIPLE_FOR_SLIDER
 
@@ -333,6 +347,7 @@ class WatchFaceConfigStateHolder(
         val compaodEnabled: Boolean,
         val drawCompCirclesEnabled: Boolean,
         val minutedialaodEnabled: Boolean,
+        val activeAsAmbientEnabled: Boolean,
         val shiftpixelamount: Float,
         val previewImage: Bitmap
     )

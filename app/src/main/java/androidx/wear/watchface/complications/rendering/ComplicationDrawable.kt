@@ -572,6 +572,12 @@ public class ComplicationDrawable : Drawable {
             field = styleIcon
             complicationRenderer?.setStyleIcon(styleIcon)
         }
+
+    public var isActiveInAmbient: Boolean = true
+        set(activeInAmbient) {
+            field = activeInAmbient
+            complicationRenderer?.setActiveOnAmbient(activeInAmbient)
+        }
     /**
      * Sets the complication data to be drawn.
      *
@@ -594,6 +600,7 @@ public class ComplicationDrawable : Drawable {
             nextRenderer.isRangedValueProgressHidden = isRangedValueProgressHidden
             nextRenderer.setDrawComplicationCircles(isDrawComplicationCircles)
             nextRenderer.setStyleIcon(isStyleIcon)
+            nextRenderer.setActiveOnAmbient(isActiveInAmbient)
             nextRenderer.bounds = bounds
             nextRenderer.setOnInvalidateListener {
                 complicationRenderer = nextRenderer
