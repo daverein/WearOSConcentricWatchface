@@ -16,7 +16,6 @@
 package com.programmersbox.forestwoodass.wearable.watchface.data.watchface
 
 import android.content.Context
-import androidx.annotation.DrawableRes
 import androidx.wear.watchface.complications.rendering.ComplicationDrawable
 
 /**
@@ -37,7 +36,6 @@ data class WatchFaceColorPalette(
     val activeSecondaryColor: Int,
     val activeBackgroundColor: Int,
     val activeOuterElementColor: Int,
-    @DrawableRes val complicationStyleDrawableId: Int,
     val ambientPrimaryColor: Int,
     val ambientPrimaryTextColor: Int,
     val ambientSecondaryColor: Int,
@@ -60,8 +58,6 @@ data class WatchFaceColorPalette(
                 activeSecondaryColor = context.getColor(activeColorStyle.secondaryColorId),
                 activeBackgroundColor = context.getColor(activeColorStyle.backgroundColorId),
                 activeOuterElementColor = context.getColor(activeColorStyle.outerElementColorId),
-                // Complication color style
-                complicationStyleDrawableId = activeColorStyle.complicationStyleDrawableId,
                 // Ambient colors
                 ambientPrimaryColor = context.getColor(ambientColorStyle.primaryColorId),
                 ambientPrimaryTextColor = context.getColor(ambientColorStyle.primaryColorTextId),

@@ -325,11 +325,17 @@ class ConcentricNativeCanvasRenderer(
             for ((_, complication) in complicationSlotsManager.complicationSlots) {
                 ComplicationDrawable.getDrawable(
                     context,
-                    watchFaceColors.complicationStyleDrawableId
+                    R.drawable.complication_style
                 )?.let {
                     // Set to draw the progress and under circles on the complications or not
                     it.isDrawComplicationCircles = watchFaceData.drawCompCircles
                     it.isStyleIcon = watchFaceData.styleIcon
+
+                    it.activeStyle.iconColor = watchFaceColors.activePrimaryColor
+                    it.activeStyle.highlightColor = watchFaceColors.activePrimaryColor
+                    it.activeStyle.textColor = watchFaceColors.activePrimaryColor
+                    it.activeStyle.rangedValuePrimaryColor = watchFaceColors.activeSecondaryColor
+
                     (complication.renderer as CanvasComplicationDrawable).drawable = it
                 }
             }

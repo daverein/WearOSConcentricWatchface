@@ -23,7 +23,6 @@ import android.graphics.Rect
 import android.graphics.drawable.Icon
 import android.util.Log
 import androidx.annotation.ColorRes
-import androidx.annotation.DrawableRes
 import androidx.annotation.StringRes
 import androidx.wear.watchface.style.UserStyleSetting
 import androidx.wear.watchface.style.UserStyleSetting.ListUserStyleSetting
@@ -68,7 +67,6 @@ const val BITMAP_SIZE = 128f
 enum class ColorStyleIdAndResourceIds(
     val id: String,
     @StringRes val nameResourceId: Int,
-    @DrawableRes val complicationStyleDrawableId: Int,
     @ColorRes val primaryColorId: Int,
     @ColorRes val primaryColorTextId: Int,
     @ColorRes val secondaryColorId: Int,
@@ -78,7 +76,6 @@ enum class ColorStyleIdAndResourceIds(
     BLUE(
         id = BLUE_COLOR_STYLE_ID,
         nameResourceId = BLUE_COLOR_STYLE_NAME_RESOURCE_ID,
-        complicationStyleDrawableId = R.drawable.complication_blue_style,
         primaryColorId = R.color.blue_primary_color,
         primaryColorTextId = R.color.blue_color_text_primary,
         secondaryColorId = R.color.blue_secondary_color,
@@ -89,7 +86,6 @@ enum class ColorStyleIdAndResourceIds(
     RED(
         id = RED_COLOR_STYLE_ID,
         nameResourceId = RED_COLOR_STYLE_NAME_RESOURCE_ID,
-        complicationStyleDrawableId = R.drawable.complication_red_style,
         primaryColorId = R.color.red_primary_color,
         primaryColorTextId = R.color.red_color_text_primary,
         secondaryColorId = R.color.red_secondary_color,
@@ -100,7 +96,6 @@ enum class ColorStyleIdAndResourceIds(
     GREEN(
         id = GREEN_COLOR_STYLE_ID,
         nameResourceId = GREEN_COLOR_STYLE_NAME_RESOURCE_ID,
-        complicationStyleDrawableId = R.drawable.complication_green_style,
         primaryColorId = R.color.green_primary_color,
         primaryColorTextId = R.color.green_color_text_primary,
         secondaryColorId = R.color.green_secondary_color,
@@ -111,7 +106,6 @@ enum class ColorStyleIdAndResourceIds(
     YELLOW(
         id = YELLOW_COLOR_STYLE_ID,
         nameResourceId = YELLOW_COLOR_STYLE_NAME_RESOURCE_ID,
-        complicationStyleDrawableId = R.drawable.complication_yellow_style,
         primaryColorId = R.color.yellow_primary_color,
         primaryColorTextId = R.color.yellow_color_text_primary,
         secondaryColorId = R.color.yellow_secondary_color,
@@ -122,7 +116,6 @@ enum class ColorStyleIdAndResourceIds(
     PURPLE (
         id = PURPLE_COLOR_STYLE_ID,
         nameResourceId = PURPLE_COLOR_STYLE_NAME_RESOURCE_ID,
-        complicationStyleDrawableId = R.drawable.complication_purple_style,
         primaryColorId = R.color.purple_primary_color,
         primaryColorTextId = R.color.purple_color_text_primary,
         secondaryColorId = R.color.purple_secondary_color,
@@ -133,7 +126,6 @@ enum class ColorStyleIdAndResourceIds(
     WHITE(
         id = WHITE_COLOR_STYLE_ID,
         nameResourceId = WHITE_COLOR_STYLE_NAME_RESOURCE_ID,
-        complicationStyleDrawableId = R.drawable.complication_white_style,
         primaryColorId = R.color.white_primary_color,
         primaryColorTextId = R.color.white_color_text_primary,
         secondaryColorId = R.color.white_secondary_color,
@@ -144,7 +136,6 @@ enum class ColorStyleIdAndResourceIds(
     AMBIENT(
         id = AMBIENT_COLOR_STYLE_ID,
         nameResourceId = AMBIENT_COLOR_STYLE_NAME_RESOURCE_ID,
-        complicationStyleDrawableId = R.drawable.complication_white_style,
         primaryColorId = R.color.ambient_primary_color,
         primaryColorTextId = R.color.ambient_primary_text_color,
         secondaryColorId = R.color.ambient_secondary_color,
