@@ -427,8 +427,10 @@ class ConcentricNativeCanvasRenderer(
         if (isAmbient) {
             if (watchFaceData.layoutStyle.id == LayoutStyleIdAndResourceIds.FULLFACE.id) {
                 canvas.scale(AOD_ZOOM_LEVEL_1, AOD_ZOOM_LEVEL_1, bounds.exactCenterX(), bounds.exactCenterY())
-            } else if (!watchFaceData.compAOD) {
+            } else if ((!watchFaceData.compAOD && !watchFaceData.activeAsAmbient) || (watchFaceData.activeAsAmbient && watchFaceData.layoutStyle.id == LayoutStyleIdAndResourceIds.HALFFACE.id)) {
                 canvas.scale(AOD_ZOOM_LEVEL_2, AOD_ZOOM_LEVEL_2, 0f, bounds.exactCenterY())
+            } else if ((!watchFaceData.compAOD && !watchFaceData.activeAsAmbient)|| (watchFaceData.activeAsAmbient && watchFaceData.layoutStyle.id == LayoutStyleIdAndResourceIds.SCALED_HALFFACE.id)) {
+                canvas.scale(AOD_ZOOM_LEVEL_4, AOD_ZOOM_LEVEL_4, 0f, bounds.exactCenterY()*1.2f)
             } else if ( watchFaceData.shiftPixelAmount >= 1.0f) {
                 canvas.scale(AOD_ZOOM_LEVEL_3, AOD_ZOOM_LEVEL_3, bounds.exactCenterX(), bounds.exactCenterY())
             }
@@ -453,6 +455,7 @@ class ConcentricNativeCanvasRenderer(
             watchFaceColors.activeBackgroundColor
         }
 
+        val scalingRestoreCount = canvas.save()
         scaleIfNeeded(canvas, bounds, renderParameters.drawMode == DrawMode.AMBIENT)
 
         // Prevent burnin
@@ -486,7 +489,9 @@ class ConcentricNativeCanvasRenderer(
         if (renderParameters.drawMode != DrawMode.AMBIENT) {
             drawDateElement(canvas, bounds, zonedDateTime, isAmbient)
         }
-
+        if ( watchFaceData.layoutStyle.id != LayoutStyleIdAndResourceIds.FULLFACE.id ) {
+            canvas.restoreToCount(scalingRestoreCount)
+        }
         // CanvasComplicationDrawable already obeys rendererParameters.
         if ((!isAmbient || (!isBatteryLow() && watchFaceData.compAOD))) {
             drawComplications(canvas, zonedDateTime)
