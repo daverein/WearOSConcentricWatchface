@@ -344,6 +344,7 @@ class ConcentricNativeCanvasRenderer(
                     it.activeStyle.highlightColor = watchFaceColors.activePrimaryColor
                     it.activeStyle.textColor = watchFaceColors.activePrimaryTextColor
                     it.activeStyle.rangedValuePrimaryColor = watchFaceColors.activeSecondaryColor
+                    it.activeStyle.titleColor = watchFaceColors.activePrimaryColor
 
                     if ( watchFaceData.activeAsAmbient) {
                         it.ambientStyle.textColor = watchFaceColors.activePrimaryTextColor
@@ -351,6 +352,7 @@ class ConcentricNativeCanvasRenderer(
                         it.ambientStyle.highlightColor = watchFaceColors.activePrimaryColor
                         it.ambientStyle.rangedValuePrimaryColor = watchFaceColors.activeSecondaryColor
                         it.ambientStyle.rangedValueSecondaryColor = it.activeStyle.rangedValueSecondaryColor
+                        it.ambientStyle.titleColor = watchFaceColors.activePrimaryColor
                     }
                     (complication.renderer as CanvasComplicationDrawable).drawable = it
                 }
@@ -455,9 +457,6 @@ class ConcentricNativeCanvasRenderer(
             watchFaceColors.activeBackgroundColor
         }
 
-        val scalingRestoreCount = canvas.save()
-        scaleIfNeeded(canvas, bounds, renderParameters.drawMode == DrawMode.AMBIENT)
-
         // Prevent burnin
         if (renderParameters.drawMode == DrawMode.AMBIENT &&
             watchFaceData.shiftPixelAmount >= 1.0f
@@ -466,6 +465,11 @@ class ConcentricNativeCanvasRenderer(
             val cy = -cos((zonedDateTime.minute % 60f) * 6f) * watchFaceData.shiftPixelAmount
             canvas.translate(cx, cy)
         }
+
+        val scalingRestoreCount = canvas.save()
+        scaleIfNeeded(canvas, bounds, renderParameters.drawMode == DrawMode.AMBIENT)
+
+
 
         var scaledShiftX = -bounds.width() * LAYOUT_ALT_CLOCK_SHIFT
         var scaledShiftY = 0f
@@ -493,7 +497,7 @@ class ConcentricNativeCanvasRenderer(
             canvas.restoreToCount(scalingRestoreCount)
         }
         // CanvasComplicationDrawable already obeys rendererParameters.
-        if ((!isAmbient || (!isBatteryLow() && watchFaceData.compAOD))) {
+        if ((renderParameters.drawMode != DrawMode.AMBIENT || (!isBatteryLow() && watchFaceData.compAOD))) {
             drawComplications(canvas, zonedDateTime)
         }
     }
@@ -672,7 +676,7 @@ class ConcentricNativeCanvasRenderer(
             val biggestText = "88"
             var hourPaintToUse = hourTextPaint
             var minutePaintToUse = minuteTextPaint
-            if (drawAmbient) {
+            if (renderParameters.drawMode == DrawMode.AMBIENT) {
                 hourPaintToUse = hourTextAmbientPaint
                 minutePaintToUse = minuteTextAmbientPaint
             }
