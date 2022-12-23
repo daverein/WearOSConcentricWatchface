@@ -20,8 +20,7 @@ import android.util.Log
 import android.view.View
 import androidx.activity.ComponentActivity
 import androidx.lifecycle.lifecycleScope
-import com.programmersbox.forestwoodass.wearable.watchface.data.watchface.ColorStyleIdAndResourceIds
-import com.programmersbox.forestwoodass.wearable.watchface.data.watchface.ColorStyleIdAndResourceIds.Companion.getBitmap
+import com.programmersbox.forestwoodass.wearable.watchface.data.watchface.ColorStylesDynamic
 import com.programmersbox.forestwoodass.wearable.watchface.data.watchface.LayoutStyleIdAndResourceIds
 import com.programmersbox.forestwoodass.wearable.watchface.databinding.ActivityWatchFaceConfigBinding
 import com.programmersbox.forestwoodass.wearable.watchface.editor.WatchFaceConfigStateHolder.Companion.SHIFT_PIXEL_AOD_DEFAULT_FOR_SLIDER
@@ -136,14 +135,14 @@ class WatchFaceConfigActivity : ComponentActivity() {
 
     private fun setColorObject(id: String)
     {
-        val colorStyleIdAndResourceIdsList = enumValues<ColorStyleIdAndResourceIds>()
+        val colorStyleIdAndResourceIdsList = ColorStylesDynamic.instance
         for ( i in 0 until colorStyleIdAndResourceIdsList.size) {
             val r = colorStyleIdAndResourceIdsList[i]
             if ( id == r.id ) {
                 binding.currentColorStyleIcon.setImageBitmap(
-                    getBitmap(baseContext, colorStyleIdAndResourceIdsList[(i)%colorStyleIdAndResourceIdsList.size].nameResourceId,
-                        colorStyleIdAndResourceIdsList[(i)%colorStyleIdAndResourceIdsList.size].primaryColorId,
-                        colorStyleIdAndResourceIdsList[(i)%colorStyleIdAndResourceIdsList.size].secondaryColorId)
+                    ColorStylesDynamic.getBitmap(baseContext, colorStyleIdAndResourceIdsList[(i)%colorStyleIdAndResourceIdsList.size].getName(baseContext),
+                        colorStyleIdAndResourceIdsList[(i)%colorStyleIdAndResourceIdsList.size].getPrimaryColor(baseContext),
+                        colorStyleIdAndResourceIdsList[(i)%colorStyleIdAndResourceIdsList.size].getSecondaryColor(baseContext))
                 )
             }
         }
@@ -152,16 +151,16 @@ class WatchFaceConfigActivity : ComponentActivity() {
     fun onClickColorStylePickerButton(view: View) {
         Log.d(TAG, "onClickColorStylePickerButton() $view")
 
-        val colorStyleIdAndResourceIdsList = enumValues<ColorStyleIdAndResourceIds>()
+        val colorStyleIdAndResourceIdsList = ColorStylesDynamic.instance
         var newColorStyle = ""
         for ( i in colorStyleIdAndResourceIdsList.indices) {
             val r = colorStyleIdAndResourceIdsList[i]
             if ( currentColorId == r.id ) {
                 newColorStyle = colorStyleIdAndResourceIdsList[(i+1)%colorStyleIdAndResourceIdsList.size].id
                  binding.currentColorStyleIcon.setImageBitmap(
-                    getBitmap(view.context,colorStyleIdAndResourceIdsList[(i+1)%colorStyleIdAndResourceIdsList.size].nameResourceId,
-                        colorStyleIdAndResourceIdsList[(i+1)%colorStyleIdAndResourceIdsList.size].primaryColorId,
-                        colorStyleIdAndResourceIdsList[(i+1)%colorStyleIdAndResourceIdsList.size].secondaryColorId)
+                     ColorStylesDynamic.getBitmap(view.context,colorStyleIdAndResourceIdsList[(i+1)%colorStyleIdAndResourceIdsList.size].getName(baseContext),
+                        colorStyleIdAndResourceIdsList[(i+1)%colorStyleIdAndResourceIdsList.size].getPrimaryColor(baseContext),
+                        colorStyleIdAndResourceIdsList[(i+1)%colorStyleIdAndResourceIdsList.size].getSecondaryColor(baseContext))
                  )
             }
         }

@@ -224,7 +224,7 @@ class ConcentricNativeCanvasRenderer(
                         UserStyleSetting.ListUserStyleSetting.ListOption
 
                     newWatchFaceData = newWatchFaceData.copy(
-                        activeColorStyle = ColorStyleIdAndResourceIds.getColorStyleConfig(
+                        activeColorStyle = ColorStylesDynamic.getColorStyleConfig(
                             listOption.id.toString()
                         )
                     )
