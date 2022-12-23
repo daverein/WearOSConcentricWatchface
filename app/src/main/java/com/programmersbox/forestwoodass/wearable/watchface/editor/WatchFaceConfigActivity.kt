@@ -18,6 +18,8 @@ package com.programmersbox.forestwoodass.wearable.watchface.editor
 import android.os.Bundle
 import android.util.Log
 import android.view.View
+import android.widget.SeekBar
+import android.widget.SeekBar.OnSeekBarChangeListener
 import androidx.activity.ComponentActivity
 import androidx.lifecycle.lifecycleScope
 import com.programmersbox.forestwoodass.wearable.watchface.data.watchface.ColorStylesDynamic
@@ -69,14 +71,20 @@ class WatchFaceConfigActivity : ComponentActivity() {
         currentColorId = ""
 
         // Set max and min.
-        binding.shiftPixelAmountSlider.valueTo = SHIFT_PIXEL_AOD_MAXIMUM_FOR_SLIDER
-        binding.shiftPixelAmountSlider.valueFrom = SHIFT_PIXEL_AOD_MINIMUM_FOR_SLIDER
-        binding.shiftPixelAmountSlider.value = SHIFT_PIXEL_AOD_DEFAULT_FOR_SLIDER
-
-        binding.shiftPixelAmountSlider.addOnChangeListener { slider, value, fromUser ->
-            Log.d(TAG, "addOnChangeListener(): $slider, $value, $fromUser")
-            stateHolder.setShiftPixelAmount(value)
-        }
+        binding.shiftPixelAmountSlider.max = SHIFT_PIXEL_AOD_MAXIMUM_FOR_SLIDER.toInt()
+        binding.shiftPixelAmountSlider.min = SHIFT_PIXEL_AOD_MINIMUM_FOR_SLIDER.toInt()
+        binding.shiftPixelAmountSlider.progress = SHIFT_PIXEL_AOD_DEFAULT_FOR_SLIDER.toInt()
+        binding.shiftPixelAmountSlider.setOnSeekBarChangeListener(object : OnSeekBarChangeListener {
+            override fun onStopTrackingTouch(seekBar: SeekBar) {
+                stateHolder.setShiftPixelAmount(binding.shiftPixelAmountSlider.progress.toFloat())
+            }
+            override fun onStartTrackingTouch(seekBar: SeekBar) {
+                // Not needed
+            }
+            override fun onProgressChanged(seekBar: SeekBar, progress: Int, fromUser: Boolean) {
+                // Not needed just need the final result
+            }
+        })
 
         lifecycleScope.launch(Dispatchers.Main.immediate) {
             stateHolder.uiState
@@ -112,7 +120,7 @@ class WatchFaceConfigActivity : ComponentActivity() {
         binding.drawcompcirclesEnabledSwitch.isChecked = userStylesAndPreview.drawCompCirclesEnabled
         binding.minutedialaodEnabledSwitch.isChecked = userStylesAndPreview.minutedialaodEnabled
         binding.activeAsAmbientEnabledSwitch.isChecked = userStylesAndPreview.activeAsAmbientEnabled
-        binding.shiftPixelAmountSlider.value = userStylesAndPreview.shiftpixelamount
+        binding.shiftPixelAmountSlider.progress = userStylesAndPreview.shiftpixelamount.toInt()
         currentLayoutId = userStylesAndPreview.layoutStyleId
         currentColorId = userStylesAndPreview.colorStyleId
         binding.preview.watchFaceBackground.setImageBitmap(userStylesAndPreview.previewImage)
