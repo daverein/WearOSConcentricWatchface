@@ -161,7 +161,7 @@ class WatchFaceConfigStateHolder(
                 RenderParameters.HighlightLayer(
                     RenderParameters.HighlightedElement.AllComplicationSlots,
                     Color.CYAN, // Red complication highlight.
-                    Color.argb(128, 0, 0, 0) // Darken everything else.
+                    Color.argb(0, 0, 0, 0) // Darken everything else.
                 )
             ),
             editorSession.previewReferenceInstant,
