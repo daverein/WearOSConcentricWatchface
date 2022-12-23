@@ -178,10 +178,11 @@ class WatchFaceConfigActivity : ComponentActivity() {
     private fun setLayoutObject(id: String)
     {
         val layoutStyleIdAndResourceIdsList = enumValues<LayoutStyleIdAndResourceIds>()
-        for ( i in 0 until layoutStyleIdAndResourceIdsList.size) {
+        for ( i in layoutStyleIdAndResourceIdsList.indices) {
             val r = layoutStyleIdAndResourceIdsList[i]
             if ( id == r.id ) {
                 binding.currentLayoutStyleIcon.setImageResource(layoutStyleIdAndResourceIdsList[(i)%layoutStyleIdAndResourceIdsList.size].iconResourceId)
+                break
             }
         }
     }
@@ -191,11 +192,12 @@ class WatchFaceConfigActivity : ComponentActivity() {
 
         val layoutStyleIdAndResourceIdsList = enumValues<LayoutStyleIdAndResourceIds>()
         var newLayoutStyle = ""
-        for ( i in 0 until layoutStyleIdAndResourceIdsList.size) {
+        for ( i in layoutStyleIdAndResourceIdsList.indices) {
             val r = layoutStyleIdAndResourceIdsList[i]
             if ( currentLayoutId == r.id ) {
                 newLayoutStyle = layoutStyleIdAndResourceIdsList[(i+1)%layoutStyleIdAndResourceIdsList.size].id
                 binding.currentLayoutStyleIcon.setImageResource(layoutStyleIdAndResourceIdsList[(i+1)%layoutStyleIdAndResourceIdsList.size].iconResourceId)
+                break
             }
         }
 

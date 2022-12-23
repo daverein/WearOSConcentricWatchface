@@ -138,7 +138,7 @@
     <string name="activity_config_draw_comp_enabled_label">Draw circles\nunder Complications</string>
     <string name="activity_config_compaod_enabled_label">Complications\non AOD</string>
     <string name="activity_config_secondsaod_enabled_label">Minute Dial\non AOD</string>
-    <string name="activity_config_slider_text_label">Shift Pixel\nAmount</string>
+    <string name="activity_config_slider_text_label">Shift Amount\n(to avoid burn-in)</string>
     <!-- Content Descriptions -->
     <string name="activity_config_preview_of_watch_face_content_description">Preview of Watch Face.</string>
     <string name="activity_config_more_options_icon_content_description">Icon to indicate there are more options if you scroll down.</string>
@@ -150,7 +150,7 @@
     <string name="activity_config_drawdate_enabled_switch_content_description">Display the date on the watchface</string>
     <string name="activity_config_secondsaod_enabled_switch_content_description">Display Minute Dial on AOD</string>
     <string name="activity_config_minute_hand_slider_text_label_content_description">Shift pixels on the AOD to avoid burn in</string>
-    <string name="activity_config_minute_hand_length_slider_content_description">Slider for adjusting pixels to shift (0&#8211;16).</string>
+    <string name="activity_config_minute_hand_length_slider_content_description">Slider for adjusting pixels to shift (0&#8211;10).</string>
     <string name="activity_config_screenshot_content_description">Screenshot of Watch Face</string>
     <string name="activity_config_complication_button_right_content_description">Button to edit the right complication data</string>
     <string name="activity_config_complication_button_left_content_description">Button to edit the left complication data</string>
