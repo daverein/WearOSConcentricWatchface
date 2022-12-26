@@ -47,9 +47,12 @@ const val MINUTE_TEXT_CENTER_OFFSET_SHIFT = 0.55f
 const val MINUTE_HIGHLIGHT_WIDTH_FRACTION = 1.5f
 const val CAL_CIRCLE_RADIUS = 2f
 const val CAL_TEXT_OFFSET = 4.5f
-const val MINUTE_DIAL_START_OFFSET = 0.07f
-const val MINUTE_DIAL_MAJOR_MARK_END_OFFSET = 0.095f
-const val MINUTE_DIAL_MINOR_MARK_END_OFFSET = 0.085f
+const val SECOND_DIAL_TICK_START = 0.98f
+const val SECOND_NUMBER_START = 0.03f
+const val MINUTE_NUMBER_START = 0.76f
+const val MINUTE_DIAL_START_OFFSET = 0.88f
+const val MINUTE_DIAL_MAJOR_MARK_END_OFFSET = 0.85f
+const val MINUTE_DIAL_MINOR_MARK_END_OFFSET = 0.86f
 
 
 const val HOUR_FONT_SIZE = 0.27848f
@@ -58,8 +61,6 @@ const val SECOND_DIAL_FONT_SIZE = 0.06323f
 const val MINUTE_DIAL_FONT_SIZE = 0.06323f
 const val MONTH_FONT_SIZE = 0.04f
 const val DAY_FONT_SIZE = 0.055f
-
-private const val NUMBER_RADIUS_FRACTION = 0.45f
 
 /**
  * Represents all data needed to render an analog watch face.
@@ -75,6 +76,5 @@ data class WatchFaceData(
     val compAOD: Boolean = COMPAOD_DEFAULT,
     val minuteDialAOD: Boolean = MINUTEDIALAOD_DEFAULT,
     val activeAsAmbient: Boolean = AAA_DEFAULT,
-    val shiftPixelAmount: Float = SHIFT_PIXEL_AOD_FRACTION_DEFAULT,
-    val numberRadiusFraction: Float = NUMBER_RADIUS_FRACTION,
+    val shiftPixelAmount: Float = SHIFT_PIXEL_AOD_FRACTION_DEFAULT
 )

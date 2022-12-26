@@ -395,7 +395,6 @@ class ConcentricNativeCanvasRenderer(
             drawSecondsDial(
                 canvas,
                 bounds,
-                watchFaceData.numberRadiusFraction,
                 watchFaceColors.activePrimaryColor,
                 watchFaceColors.activeOuterElementColor,
                 zonedDateTime
@@ -797,7 +796,6 @@ class ConcentricNativeCanvasRenderer(
     private fun drawSecondsDial(
         canvas: Canvas,
         bounds: Rect,
-        numberRadiusFraction: Float,
         primaryColor: Int,
         outerElementColor: Int,
         zonedDateTime: ZonedDateTime
@@ -807,80 +805,44 @@ class ConcentricNativeCanvasRenderer(
         outerElementPaint.color = outerElementColor
         minuteDialTextPaint.color = outerElementColor
         secondDialTextPaint.color = primaryColor
+        textPaint.color = primaryColor
+
         // Draw and move seconds
         val textBounds = Rect()
         val nano = zonedDateTime.toLocalTime().nano.toFloat() / 1000000f
         val sec = zonedDateTime.toLocalTime().second
-        textPaint.color = primaryColor
+        val pos = canvas.save()
+
+        canvas.rotate(sec*6f+(nano/1000f)*6f, bounds.exactCenterX(), bounds.exactCenterY())
         for (i in 0 until 60) {
-            val rotation =
-                ((12.0f / 360.0f) * (i + sec + 15).toFloat() + ((12.0f / 360.0f) * (nano / 1000.0f))) * Math.PI
-            if (i % 5 == 0) {
-                val dx =
-                    sin(rotation).toFloat() * (numberRadiusFraction - 0.01f) * bounds.width()
-                        .toFloat()
-                val dy =
-                    -cos(rotation).toFloat() * (numberRadiusFraction - 0.01f) * bounds.height()
-                        .toFloat()
-                val tx = "%02d".format(((60 - i) % 60))
+            outerElementPaint.strokeWidth = if ( i % 5 == 0 ) {4f}else{2f}
+            canvas.drawLine(
+                bounds.width()*SECOND_DIAL_TICK_START,
+                bounds.exactCenterY(),
+                bounds.width().toFloat(),
+                bounds.exactCenterY(),
+                outerElementPaint
+            )
+            if ( i % 5 == 0 ) {
+                secondDialTextPaint.textSize = bounds.height() * (SECOND_DIAL_FONT_SIZE)
+                val tx = "%02d".format(((i) % 60))
                 secondDialTextPaint.getTextBounds(tx, 0, tx.length, textBounds)
 
-                val stx = sin(rotation).toFloat() * (numberRadiusFraction) * (bounds.width()
-                    .toFloat() + 30f)
-                val sty =
-                    -cos(rotation * 1.0f).toFloat() * (numberRadiusFraction) * (bounds.height()
-                        .toFloat() + 30f)
-
-                val stx1 =
-                    sin(rotation).toFloat() * (numberRadiusFraction + 0.05f) * bounds.width()
-                        .toFloat()
-                val sty1 =
-                    -cos(rotation).toFloat() * (numberRadiusFraction + 0.05f) * bounds.width()
-                        .toFloat()
-                outerElementPaint.strokeWidth = 4f
-                canvas.drawLine(
-                    bounds.exactCenterX() + stx,
-                    bounds.exactCenterY() + sty,
-                    bounds.exactCenterX() + stx1,
-                    bounds.exactCenterY() + sty1,
-                    outerElementPaint
-                )
-
-                secondDialTextPaint.textSize = bounds.height()*(SECOND_DIAL_FONT_SIZE)
+                val secPos = canvas.save()
+                val x = bounds.width() - (textBounds.width() + bounds.width() * SECOND_NUMBER_START)
+                val y = bounds.exactCenterY() + textBounds.height().toFloat() / 2
+                canvas.rotate(-((sec-i)*6f+(nano/1000f)*6f), x+textBounds.width()/2f, y - textBounds.height().toFloat()/2 )
                 canvas.drawText(
                     tx,
-                    bounds.exactCenterX() + dx - textBounds.width() / 2.0f,
-                    bounds.exactCenterY() + dy + textBounds.height() / 2.0f,
+                    x, y,
                     secondDialTextPaint
                 )
-            } else {
-
-                val stx = sin(rotation).toFloat() * (numberRadiusFraction) * (bounds.width()
-                    .toFloat() + 30f)
-                val sty =
-                    -cos(rotation).toFloat() * (numberRadiusFraction) * (bounds.height()
-                        .toFloat() + 30f)
-
-                val stx1 =
-                    sin(rotation).toFloat() * (numberRadiusFraction + 0.05f) * bounds.width()
-                        .toFloat()
-                val sty1 =
-                    -cos(rotation).toFloat() * (numberRadiusFraction + 0.05f) * bounds.width()
-                        .toFloat()
-
-                outerElementPaint.strokeWidth = 2f
-                canvas.drawLine(
-                    bounds.exactCenterX() + stx,
-                    bounds.exactCenterY() + sty,
-                    bounds.exactCenterX() + stx1,
-                    bounds.exactCenterY() + sty1,
-                    outerElementPaint
-                )
-
+                canvas.restoreToCount(secPos)
             }
+            canvas.rotate(-6f, bounds.exactCenterX(), bounds.exactCenterY())
         }
+        canvas.restoreToCount(pos)
     }
-
 
     private fun drawMinutesDial(
         canvas: Canvas,
@@ -896,94 +858,51 @@ class ConcentricNativeCanvasRenderer(
             !isAmbient -> watchFaceColors.activeOuterElementColor
             else -> watchFaceColors.ambientOuterElementColor
         }
-        secondDialTextPaint.color = when {
-            !isAmbient -> watchFaceColors.activePrimaryColor
-            else -> watchFaceColors.ambientPrimaryColor
-        }
 
         // Draw and move seconds
-        val numberRadiusFraction = watchFaceData.numberRadiusFraction
         val textBounds = Rect()
-        val sec = zonedDateTime.toLocalTime().second
-
-
         val minute = zonedDateTime.toLocalTime().minute
-        for (i in 0 until 60) {
-            val rotation =
-                ((12.0f / 360.0f) * (i - minute - 45).toFloat() - ((12.0f / 360.0f) * (sec.toFloat() / 60.0f))) * Math.PI
-            if (i % 5 == 0) {
+        val sec = zonedDateTime.toLocalTime().second
+        val pos = canvas.save()
 
-                val dx =
-                    sin(rotation).toFloat() * (numberRadiusFraction - FULL_WATCHFACE_COMPLICATION_SHADOW_EDGE_OUTTER) * bounds.width()
-                        .toFloat()
-                val dy =
-                    -cos(rotation).toFloat() * (numberRadiusFraction - FULL_WATCHFACE_COMPLICATION_SHADOW_EDGE_OUTTER) * bounds.width()
-                        .toFloat()
-                val tx = "%02d".format(i % 60)
+        //canvas.rotate(180f, bounds.exactCenterX(), bounds.exactCenterY())
+        canvas.rotate(-(minute*6f+(sec/60f)*6f)+180f, bounds.exactCenterX(), bounds.exactCenterY())
+        for (i in 0 until 60) {
+            val startPoint = when {
+                (i%5) == 0 -> MINUTE_DIAL_MAJOR_MARK_END_OFFSET
+                else -> MINUTE_DIAL_MINOR_MARK_END_OFFSET
+            }
+            outerElementPaint.strokeWidth = if ( i % 5 == 0 ) {4f}else{2f}
+            canvas.drawLine(
+                bounds.width()*startPoint,
+                bounds.exactCenterY(),
+                bounds.width().toFloat()*MINUTE_DIAL_START_OFFSET,
+                bounds.exactCenterY(),
+                outerElementPaint
+            )
+            if ( i % 5 == 0 ) {
+                minuteDialTextPaint.textSize = bounds.height() * (MINUTE_DIAL_FONT_SIZE)
+                val tx = "%02d".format(((i) % 60))
                 minuteDialTextPaint.getTextBounds(tx, 0, tx.length, textBounds)
 
-                val stx =
-                    sin(rotation).toFloat() * (numberRadiusFraction - MINUTE_DIAL_MAJOR_MARK_END_OFFSET) * bounds.width()
-                        .toFloat()
-                val sty =
-                    -cos(rotation).toFloat() * (numberRadiusFraction - MINUTE_DIAL_MAJOR_MARK_END_OFFSET) * bounds.width()
-                        .toFloat()
-
-                val stx1 =
-                    sin(rotation).toFloat() * (numberRadiusFraction - MINUTE_DIAL_START_OFFSET) * bounds.width()
-                        .toFloat()
-                val sty1 =
-                    -cos(rotation).toFloat() * (numberRadiusFraction - MINUTE_DIAL_START_OFFSET) * bounds.width()
-                        .toFloat()
-
-                outerElementPaint.strokeWidth = 4f
-
-                canvas.drawLine(
-                    bounds.exactCenterX() + stx,
-                    bounds.exactCenterY() + sty,
-                    bounds.exactCenterX() + stx1,
-                    bounds.exactCenterY() + sty1,
-                    outerElementPaint
-                )
-
-                minuteDialTextPaint.textSize = bounds.height()*(MINUTE_DIAL_FONT_SIZE)
+                val secPos = canvas.save()
+                val x = bounds.width() - (textBounds.width() + bounds.width() * MINUTE_NUMBER_START)
+                val y = bounds.exactCenterY() + textBounds.height().toFloat() / 2
+                canvas.rotate(180f+((minute-i)*6f+(sec/60f)*6f), x+textBounds.width()/2f, y - textBounds.height().toFloat()/2 )
                 canvas.drawText(
                     tx,
-                    bounds.exactCenterX() + dx - textBounds.width() / 2.0f,
-                    bounds.exactCenterY() + dy + textBounds.height() / 2.0f,
+                    x, y,
                     minuteDialTextPaint
                 )
-            } else {
-                val stx =
-                    sin(rotation).toFloat() * (numberRadiusFraction - MINUTE_DIAL_MINOR_MARK_END_OFFSET) * bounds.width()
-                        .toFloat()
-                val sty =
-                    -cos(rotation).toFloat() * (numberRadiusFraction - MINUTE_DIAL_MINOR_MARK_END_OFFSET) * bounds.width()
-                        .toFloat()
-
-                val stx1 =
-                    sin(rotation).toFloat() * (numberRadiusFraction - MINUTE_DIAL_START_OFFSET) * bounds.width()
-                        .toFloat()
-                val sty1 =
-                    -cos(rotation).toFloat() * (numberRadiusFraction - MINUTE_DIAL_START_OFFSET) * bounds.width()
-                        .toFloat()
-
-                outerElementPaint.strokeWidth = 2f
-
-                canvas.drawLine(
-                    bounds.exactCenterX() + stx,
-                    bounds.exactCenterY() + sty,
-                    bounds.exactCenterX() + stx1,
-                    bounds.exactCenterY() + sty1,
-                    outerElementPaint
-                )
+                canvas.restoreToCount(secPos)
             }
+            canvas.rotate(6f, bounds.exactCenterX(), bounds.exactCenterY())
         }
+        canvas.restoreToCount(pos)
     }
 
 
     companion object {
         private const val TAG = "ConcentricNativeCanvasRenderer"
-
     }
 }
