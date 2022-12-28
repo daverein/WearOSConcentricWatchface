@@ -115,7 +115,9 @@ class AnalogNativeCanvasRenderer(
             (renderParameters.drawMode == DrawMode.AMBIENT || isBatteryLow()) && !watchFaceData.activeAsAmbient
         )
 
-        drawClockHands(canvas, bounds, zonedDateTime)
+        if (renderParameters.drawMode != DrawMode.AMBIENT || watchFaceData.timeAOD) {
+            drawClockHands(canvas, bounds, zonedDateTime)
+        }
     }
 
     private fun drawDateElement(
@@ -124,7 +126,7 @@ class AnalogNativeCanvasRenderer(
         zonedDateTime: ZonedDateTime,
         isAmbient: Boolean
     ) {
-        if (!watchFaceData.drawDate)
+        if (!watchFaceData.drawDate || (renderParameters.drawMode == DrawMode.AMBIENT && !watchFaceData.timeAOD))
             return
         if (renderParameters.watchFaceLayers.contains(WatchFaceLayer.BASE)) {
             calendarMonthPaint.textSize = bounds.height() * (DAY_FONT_SIZE)
@@ -386,6 +388,9 @@ class AnalogNativeCanvasRenderer(
         canvas: Canvas,
         bounds: Rect
     ) {
+        if (renderParameters.drawMode == DrawMode.AMBIENT && !watchFaceData.minuteDialAOD)
+            return
+
         secondHighlightPaint.strokeCap = Paint.Cap.ROUND
 
         val pos = canvas.save()
