@@ -31,8 +31,6 @@ import com.programmersbox.forestwoodass.wearable.watchface.data.watchface.*
 import com.programmersbox.forestwoodass.wearable.watchface.utils.*
 import com.programmersbox.forestwoodass.wearable.watchface.utils.ColorUtils.Companion.darkenColor
 import java.time.ZonedDateTime
-import kotlin.math.cos
-import kotlin.math.sin
 import kotlinx.coroutines.*
 
 
@@ -137,31 +135,15 @@ class ConcentricNativeCanvasRenderer(
         zonedDateTime: ZonedDateTime,
         sharedAssets: AnalogSharedAssets
     ) {
+        super.render(canvas, bounds, zonedDateTime, sharedAssets)
         val isAmbient = renderParameters.drawMode == DrawMode.AMBIENT && !watchFaceData.activeAsAmbient
         val scaledImage =
             watchFaceData.layoutStyle.id == LayoutStyleIdAndResourceIds.SCALED_HALFFACE.id
         val isHalfFace = watchFaceData.layoutStyle.id == LayoutStyleIdAndResourceIds.HALFFACE.id ||
             watchFaceData.layoutStyle.id == LayoutStyleIdAndResourceIds.SCALED_HALFFACE.id
 
-        val backgroundColor = if (isAmbient) {
-            watchFaceColors.ambientBackgroundColor
-        } else {
-            watchFaceColors.activeBackgroundColor
-        }
-
-        // Prevent burnin
-        if (renderParameters.drawMode == DrawMode.AMBIENT &&
-            watchFaceData.shiftPixelAmount >= 1.0f
-        ) {
-            val cx = sin((zonedDateTime.minute % 60f) * 6f) * watchFaceData.shiftPixelAmount
-            val cy = -cos((zonedDateTime.minute % 60f) * 6f) * watchFaceData.shiftPixelAmount
-            canvas.translate(cx, cy)
-        }
-
         val scalingRestoreCount = canvas.save()
         scaleIfNeeded(canvas, bounds, renderParameters.drawMode == DrawMode.AMBIENT)
-
-
 
         var scaledShiftX = -bounds.width() * LAYOUT_ALT_CLOCK_SHIFT
         var scaledShiftY = 0f
@@ -172,8 +154,6 @@ class ConcentricNativeCanvasRenderer(
             scaledShiftX *= SCALED_WATCHFACE_SHIFTX
             scaledShiftY = -(bounds.height() * SCALED_WATCHFACE_SHIFTY - bounds.height()) / 2.0f
         }
-
-        canvas.drawColor(backgroundColor)
 
         if (isHalfFace) {
             canvas.translate(scaledShiftX, scaledShiftY)
@@ -272,29 +252,6 @@ class ConcentricNativeCanvasRenderer(
         }
     }
 
-    private fun configColors(drawAmbient: Boolean) {
-        hourTextPaint.color = when {
-            drawAmbient -> watchFaceColors.ambientPrimaryTextColor
-            else -> watchFaceColors.activePrimaryTextColor
-        }
-        hourTextAmbientPaint.color = when {
-            drawAmbient -> watchFaceColors.ambientPrimaryTextColor
-            else -> watchFaceColors.activePrimaryTextColor
-        }
-        minuteTextPaint.color = when {
-            drawAmbient -> watchFaceColors.ambientPrimaryTextColor
-            else -> watchFaceColors.activePrimaryTextColor
-        }
-        minuteTextAmbientPaint.color = when {
-            drawAmbient -> watchFaceColors.ambientPrimaryTextColor
-            else -> watchFaceColors.activePrimaryTextColor
-        }
-        minuteHighlightPaint.color = when {
-            drawAmbient -> watchFaceColors.ambientPrimaryColor
-            else -> watchFaceColors.activePrimaryColor
-        }
-    }
-
     private fun drawMinuteHighlight(
         canvas: Canvas,
         bounds: Rect,
@@ -350,7 +307,6 @@ class ConcentricNativeCanvasRenderer(
             pivotY = bounds.exactCenterY()
         ) {
             val drawAmbient = renderParameters.drawMode == DrawMode.AMBIENT && !watchFaceData.activeAsAmbient
-            configColors(drawAmbient)
 
             val textBounds = Rect()
             val realTextBounds = Rect()
