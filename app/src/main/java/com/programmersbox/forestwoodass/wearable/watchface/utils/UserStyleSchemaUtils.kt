@@ -41,41 +41,40 @@ const val SHIFT_PIXEL_STYLE_SETTING = "shift_pixels_style_setting"
  * edit different parts of the watch face. In the renderer (after something has changed), the
  * watch face listens for a flow from the watch face API data layer and updates the watch face.
  */
-fun createUserStyleSchema(context: Context): UserStyleSchema {
-    // 1. Allows user to change the color styles of the watch face (if any are available).
-    val colorStyleSetting =
-        UserStyleSetting.ListUserStyleSetting(
-            UserStyleSetting.Id(COLOR_STYLE_SETTING),
-            context.resources,
-            R.string.colors_style_setting,
-            R.string.colors_style_setting_description,
-            null,
-            ColorStylesDynamic.toOptionList(context),
-            listOf(
-                WatchFaceLayer.BASE,
-                WatchFaceLayer.COMPLICATIONS,
-                WatchFaceLayer.COMPLICATIONS_OVERLAY
-            )
-        )
+private fun getColorStyleSetting(context: Context): UserStyleSetting.ListUserStyleSetting {
+   return UserStyleSetting.ListUserStyleSetting(
+       UserStyleSetting.Id(COLOR_STYLE_SETTING),
+       context.resources,
+       R.string.colors_style_setting,
+       R.string.colors_style_setting_description,
+       null,
+       ColorStylesDynamic.toOptionList(context),
+       listOf(
+           WatchFaceLayer.BASE,
+           WatchFaceLayer.COMPLICATIONS,
+           WatchFaceLayer.COMPLICATIONS_OVERLAY
+       )
+   )
+}
 
-    val layoutStyleSetting =
-        UserStyleSetting.ListUserStyleSetting(
-            UserStyleSetting.Id(LAYOUT_STYLE_SETTING),
-            context.resources,
-            R.string.layout_style_setting,
-            R.string.layout_style_setting_description,
-            null,
-            LayoutStyleIdAndResourceIds.toOptionList(context),
-            listOf(
-                WatchFaceLayer.BASE,
-                WatchFaceLayer.COMPLICATIONS,
-                WatchFaceLayer.COMPLICATIONS_OVERLAY
-            )
+private fun getLayoutStyleSetting(context: Context): UserStyleSetting.ListUserStyleSetting {
+    return UserStyleSetting.ListUserStyleSetting(
+        UserStyleSetting.Id(LAYOUT_STYLE_SETTING),
+        context.resources,
+        R.string.layout_style_setting,
+        R.string.layout_style_setting_description,
+        null,
+        LayoutStyleIdAndResourceIds.toOptionList(context),
+        listOf(
+            WatchFaceLayer.BASE,
+            WatchFaceLayer.COMPLICATIONS,
+            WatchFaceLayer.COMPLICATIONS_OVERLAY
         )
+    )
+}
 
-    // 2. Allows user to toggle on/off the hour pips (dashes around the outer edge of the watch
-    // face).
-    val drawDateStyleSetting = UserStyleSetting.BooleanUserStyleSetting(
+private fun getDrawDateStyleSetting(context: Context): UserStyleSetting.BooleanUserStyleSetting {
+    return UserStyleSetting.BooleanUserStyleSetting(
         UserStyleSetting.Id(DRAW_DATE_STYLE_SETTING),
         context.resources,
         R.string.watchface_draw_date_setting,
@@ -84,7 +83,10 @@ fun createUserStyleSchema(context: Context): UserStyleSchema {
         listOf(WatchFaceLayer.BASE),
         DRAW_DATE
     )
-    val styleIconStyleSetting = UserStyleSetting.BooleanUserStyleSetting(
+}
+
+private fun getStyleIconSetting(context: Context): UserStyleSetting.BooleanUserStyleSetting {
+    return UserStyleSetting.BooleanUserStyleSetting(
         UserStyleSetting.Id(STYLE_ICON_STYLE_SETTING),
         context.resources,
         R.string.watchface_style_icon_setting,
@@ -93,7 +95,10 @@ fun createUserStyleSchema(context: Context): UserStyleSchema {
         listOf(WatchFaceLayer.BASE),
         STYLE_ICON
     )
-    val drawTimeOnAODStyleSetting = UserStyleSetting.BooleanUserStyleSetting(
+}
+
+private fun getDrawTimeOnAODStyleSetting(context: Context): UserStyleSetting.BooleanUserStyleSetting {
+    return UserStyleSetting.BooleanUserStyleSetting(
         UserStyleSetting.Id(DRAW_TIME_AOD_STYLE_SETTING),
         context.resources,
         R.string.watchface_pips_setting,
@@ -102,7 +107,10 @@ fun createUserStyleSchema(context: Context): UserStyleSchema {
         listOf(WatchFaceLayer.BASE),
         DRAW_TIME_AOD
     )
-    val drawCompCirclesStyleSetting = UserStyleSetting.BooleanUserStyleSetting(
+}
+
+private fun getDrawCompCirclesStyleSetting(context: Context): UserStyleSetting.BooleanUserStyleSetting {
+    return UserStyleSetting.BooleanUserStyleSetting(
         UserStyleSetting.Id(DRAW_COMP_CIRCLES_STYLE_SETTING),
         context.resources,
         R.string.watchface_draw_comp_circles_setting,
@@ -111,7 +119,10 @@ fun createUserStyleSchema(context: Context): UserStyleSchema {
         listOf(WatchFaceLayer.BASE),
         DRAW_COMP_CIRCLES
     )
-    val compaodStyleSetting = UserStyleSetting.BooleanUserStyleSetting(
+}
+
+private fun getCompaodStyleSetting(context: Context): UserStyleSetting.BooleanUserStyleSetting {
+    return UserStyleSetting.BooleanUserStyleSetting(
         UserStyleSetting.Id(COMPAOD_STYLE_SETTING),
         context.resources,
         R.string.watchface_compaod_setting,
@@ -120,7 +131,10 @@ fun createUserStyleSchema(context: Context): UserStyleSchema {
         listOf(WatchFaceLayer.BASE),
         COMPAOD_DEFAULT
     )
-    val minuteaodStyleSetting = UserStyleSetting.BooleanUserStyleSetting(
+}
+
+private fun getMinuteaodStyleSetting(context: Context): UserStyleSetting.BooleanUserStyleSetting {
+    return UserStyleSetting.BooleanUserStyleSetting(
         UserStyleSetting.Id(MINUTEDIALAOD_STYLE_SETTING),
         context.resources,
         R.string.watchface_minutedialaod_setting,
@@ -129,7 +143,10 @@ fun createUserStyleSchema(context: Context): UserStyleSchema {
         listOf(WatchFaceLayer.BASE),
         COMPAOD_DEFAULT
     )
-    val activeAsAmbientStyleSetting = UserStyleSetting.BooleanUserStyleSetting(
+}
+
+private fun getActiveAsAmbientStyleSetting(context: Context): UserStyleSetting.BooleanUserStyleSetting {
+    return UserStyleSetting.BooleanUserStyleSetting(
         UserStyleSetting.Id(ACTIVE_AS_AMBIENT_STYLE_SETTING),
         context.resources,
         R.string.watchface_active_as_ambient_setting,
@@ -138,8 +155,10 @@ fun createUserStyleSchema(context: Context): UserStyleSchema {
         listOf(WatchFaceLayer.BASE),
         AAA_DEFAULT
     )
-    // 3. Allows user to change the length of the minute hand.
-    val watchHandLengthStyleSetting = UserStyleSetting.DoubleRangeUserStyleSetting(
+}
+
+private fun getWatchHandLengthStyleSetting(context: Context): UserStyleSetting.DoubleRangeUserStyleSetting {
+    return UserStyleSetting.DoubleRangeUserStyleSetting(
         UserStyleSetting.Id(SHIFT_PIXEL_STYLE_SETTING),
         context.resources,
         R.string.watchface_hand_length_setting,
@@ -150,20 +169,39 @@ fun createUserStyleSchema(context: Context): UserStyleSchema {
         listOf(WatchFaceLayer.COMPLICATIONS_OVERLAY),
         SHIFT_PIXEL_AOD_FRACTION_DEFAULT.toDouble()
     )
+}
 
+fun createUserStyleSchema(context: Context): UserStyleSchema {
     // 4. Create style settings to hold all options.
     return UserStyleSchema(
         listOf(
-            colorStyleSetting,
-            layoutStyleSetting,
-            drawDateStyleSetting,
-            styleIconStyleSetting,
-            drawCompCirclesStyleSetting,
-            drawTimeOnAODStyleSetting,
-            compaodStyleSetting,
-            minuteaodStyleSetting,
-            activeAsAmbientStyleSetting,
-            watchHandLengthStyleSetting
+            getColorStyleSetting(context),
+            getLayoutStyleSetting(context),
+            getDrawDateStyleSetting(context),
+            getStyleIconSetting(context),
+            getDrawCompCirclesStyleSetting(context),
+            getDrawTimeOnAODStyleSetting(context),
+            getCompaodStyleSetting(context),
+            getMinuteaodStyleSetting(context),
+            getActiveAsAmbientStyleSetting(context),
+            getWatchHandLengthStyleSetting(context)
+        )
+    )
+}
+
+fun createUserStyleSchemaAnalog(context: Context): UserStyleSchema {
+    // 4. Create style settings to hold all options.
+    return UserStyleSchema(
+        listOf(
+            getColorStyleSetting(context),
+            getDrawDateStyleSetting(context),
+            getStyleIconSetting(context),
+            getDrawCompCirclesStyleSetting(context),
+            getDrawTimeOnAODStyleSetting(context),
+            getCompaodStyleSetting(context),
+            getMinuteaodStyleSetting(context),
+            getActiveAsAmbientStyleSetting(context),
+            getWatchHandLengthStyleSetting(context)
         )
     )
 }

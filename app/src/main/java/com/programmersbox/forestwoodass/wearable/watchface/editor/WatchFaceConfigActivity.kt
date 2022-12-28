@@ -18,10 +18,13 @@ package com.programmersbox.forestwoodass.wearable.watchface.editor
 import android.os.Bundle
 import android.util.Log
 import android.view.View
+import android.view.View.GONE
+import android.view.View.INVISIBLE
 import android.widget.SeekBar
 import android.widget.SeekBar.OnSeekBarChangeListener
 import androidx.activity.ComponentActivity
 import androidx.lifecycle.lifecycleScope
+import com.programmersbox.forestwoodass.wearable.watchface.AnalogNativeFaceService
 import com.programmersbox.forestwoodass.wearable.watchface.data.watchface.ColorStylesDynamic
 import com.programmersbox.forestwoodass.wearable.watchface.data.watchface.LayoutStyleIdAndResourceIds
 import com.programmersbox.forestwoodass.wearable.watchface.databinding.ActivityWatchFaceConfigBinding
@@ -124,6 +127,18 @@ class WatchFaceConfigActivity : ComponentActivity() {
         currentLayoutId = userStylesAndPreview.layoutStyleId
         currentColorId = userStylesAndPreview.colorStyleId
         binding.preview.watchFaceBackground.setImageBitmap(userStylesAndPreview.previewImage)
+
+        // Hide the options that dont apply to the analog face
+        // Move the button around to match where they are for the analog face
+        if ( AnalogNativeFaceService::class.java.canonicalName!!.contains(stateHolder.serviceName)) {
+            binding.currentLayoutStyleIcon.visibility = GONE
+            binding.layoutStylePickerButton.visibility = INVISIBLE
+            binding.preview.middleComplication.left = binding.root.width/2
+            binding.preview.rightComplication.right = binding.root.width/2
+            binding.preview.rightComplication.top = binding.preview.middleComplication.top
+            binding.preview.rightComplication.bottom = binding.preview.middleComplication.bottom
+            binding.preview.leftComplication.bottom = binding.preview.middleComplication.top
+        }
         setColorObject(userStylesAndPreview.colorStyleId)
         setLayoutObject(userStylesAndPreview.layoutStyleId)
         enabledWidgets()

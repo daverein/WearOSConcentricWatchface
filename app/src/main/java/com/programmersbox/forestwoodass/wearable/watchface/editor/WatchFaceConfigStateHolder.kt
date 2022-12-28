@@ -79,13 +79,14 @@ class WatchFaceConfigStateHolder(
     private lateinit var activeAsAmbientKey: UserStyleSetting.BooleanUserStyleSetting
     private lateinit var minutedialaodKey: UserStyleSetting.BooleanUserStyleSetting
     private lateinit var shiftpixelamountKey: UserStyleSetting.DoubleRangeUserStyleSetting
+    lateinit var serviceName: String
 
     val uiState: StateFlow<EditWatchFaceUiState> =
         flow<EditWatchFaceUiState> {
             editorSession = EditorSession.createOnWatchEditorSession(
                 activity = activity
             )
-
+            serviceName = editorSession.watchFaceComponentName.className
             extractsUserStyles(editorSession.userStyleSchema)
 
             emitAll(
@@ -170,8 +171,11 @@ class WatchFaceConfigStateHolder(
 
         val colorStyle =
             userStyle[colorStyleKey] as UserStyleSetting.ListUserStyleSetting.ListOption
-        val layoutStyle =
+        val layoutStyle = if (::layoutStyleKey.isInitialized) {
             userStyle[layoutStyleKey] as UserStyleSetting.ListUserStyleSetting.ListOption
+        } else {
+            null
+        }
         val timeaodEnabledStyle =
             userStyle[timeaodKey] as UserStyleSetting.BooleanUserStyleSetting.BooleanOption
         val styleIconEnabledStyle =
@@ -194,7 +198,7 @@ class WatchFaceConfigStateHolder(
 
         return UserStylesAndPreview(
             colorStyleId = colorStyle.id.toString(),
-            layoutStyleId = layoutStyle.id.toString(),
+            layoutStyleId = layoutStyle?.id.toString(),
             timeaodEnabled = timeaodEnabledStyle.value,
             styleIconEnabled = styleIconEnabledStyle.value,
             drawDateEnabled = drawDateEnabledStyle.value,

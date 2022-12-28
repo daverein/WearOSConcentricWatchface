@@ -17,7 +17,8 @@
 <resources>
     <string name="app_name" translatable="false">Concentric Native</string>
 
-    <string name="analog_watch_face_name" translatable="false">Concentric Native</string>
+    <string name="concentric_watch_face_name" translatable="false">Concentric Native</string>
+    <string name="analog_watch_face_name" translatable="false">Analog Native</string>
 
     <!-- Name of watchface style category for selecting the color theme [CHAR LIMIT=20] -->
     <string name="colors_style_setting">Colors</string>

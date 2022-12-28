@@ -25,6 +25,7 @@
     android:paddingTop="@dimen/activity_config_padding"
     android:paddingEnd="@dimen/activity_config_padding"
     android:paddingBottom="@dimen/activity_config_padding"
+    android:id="@+id/scroll"
     tools:context=".editor.WatchFaceConfigActivity"
     tools:deviceIds="wear">
 
