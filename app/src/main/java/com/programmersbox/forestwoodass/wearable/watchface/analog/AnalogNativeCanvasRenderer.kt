@@ -15,9 +15,12 @@ import com.programmersbox.forestwoodass.wearable.watchface.data.watchface.*
 import com.programmersbox.forestwoodass.wearable.watchface.utils.*
 import java.time.ZonedDateTime
 
-private const val DIAL_TICKS_MINOR_STROKE = 4f
+private const val DIAL_TICKS_MAJOR_STROKE = 4f
+private const val DIAL_TICKS_MINOR_STROKE = 2f
+private const val DIAL_TICKS_MAJOR_LENGTH = 0.94f
+private const val DIAL_TICKS_MINOR_LENGTH = 0.98f
 private const val HOUR_HAND_WIDTH = 0.05f
-private const val HOUR_HAND_EXTENT = 0.45f //0.45f
+private const val HOUR_HAND_EXTENT = 0.40f
 private const val MINUTE_HAND_WIDTH = 0.04f
 private const val MINUTE_HAND_EXTENT = 0.10f
 private const val HOUR_MINUTE_HAND_STROKE = 1f
@@ -30,7 +33,7 @@ private const val SECONDS_EDGE_MINOR_PADDING = 0.99f
 private const val SECONDS_EDGE_MAJOR_PADDING = 0.96f
 private const val SECOND_MARK_LENGTH = 0.03f
 private const val HOUR_MINUTE_HANDLE_LENGTH = 0.10f
-private const val SECONDS_CIRCLE_OFFSET = 0.005f
+private const val SECONDS_CIRCLE_OFFSET = 0.004f
 
 class AnalogNativeCanvasRenderer(
     val context: Context,
@@ -48,11 +51,10 @@ class AnalogNativeCanvasRenderer(
     canvasType
 ) {
 
-    private var bitmap: Bitmap? = null
-    private var bitmapMask: Bitmap? = null
-    private var bitmapResult: Bitmap? = null
+    private var hiddenSecondsBitmap: Bitmap? = null
+    private var hiddenSecondsCutoutMaskBitmap: Bitmap? = null
+    private var hiddenSecondsResultBitmap: Bitmap? = null
     private val xferMode = PorterDuffXfermode(PorterDuff.Mode.DST_IN)
-
 
     private val secondPainter = Paint().apply {
         isAntiAlias = true
@@ -61,18 +63,18 @@ class AnalogNativeCanvasRenderer(
     }
 
     override fun onDestroy() {
-        bitmap?.recycle()
-        bitmap = null
-        bitmapMask?.recycle()
-        bitmapMask = null
-        bitmapResult?.recycle()
-        bitmapResult = null
+        hiddenSecondsBitmap?.recycle()
+        hiddenSecondsBitmap = null
+        hiddenSecondsCutoutMaskBitmap?.recycle()
+        hiddenSecondsCutoutMaskBitmap = null
+        hiddenSecondsResultBitmap?.recycle()
+        hiddenSecondsResultBitmap = null
         super.onDestroy()
     }
 
     override fun updateWatchFaceData(userStyle: UserStyle) {
-        bitmap?.recycle()
-        bitmap = null
+        hiddenSecondsBitmap?.recycle()
+        hiddenSecondsBitmap = null
         super.updateWatchFaceData(userStyle)
     }
     override fun render(
@@ -83,14 +85,14 @@ class AnalogNativeCanvasRenderer(
     ) {
         super.render(canvas, bounds, zonedDateTime, sharedAssets)
 
-        if (bitmap == null) {
-            bitmap = createSecondsBitmap(bounds)
+        if (hiddenSecondsBitmap == null) {
+            hiddenSecondsBitmap = createSecondsBitmap(bounds)
         }
-        if (bitmapMask == null) {
-            bitmapMask = createSecondsMaskBitmap(bounds)
+        if (hiddenSecondsCutoutMaskBitmap == null) {
+            hiddenSecondsCutoutMaskBitmap = createSecondsMaskBitmap(bounds)
         }
-        if (bitmapResult == null) {
-            bitmapResult = createSResultsBitmap(bounds)
+        if (hiddenSecondsResultBitmap == null) {
+            hiddenSecondsResultBitmap = createResultsBitmap(bounds)
         }
 
         // Prevent burnin
@@ -153,6 +155,8 @@ class AnalogNativeCanvasRenderer(
         canvas: Canvas,
         zonedDateTime: ZonedDateTime
     ) {
+        // A bit goofy, but readjust the complications from their initial positions to ones thats best
+        // for this watchface
         for ((_, complication) in complicationSlotsManager.complicationSlots) {
             if (complication.enabled) {
                 val offsetLeft = 0.06f
@@ -180,7 +184,6 @@ class AnalogNativeCanvasRenderer(
                             MIDDLE_COMPLICATION_RIGHT_BOUND + 0.15f
                     }
                 }
-
                 complication.render(canvas, zonedDateTime, renderParameters)
             }
         }
@@ -219,7 +222,6 @@ class AnalogNativeCanvasRenderer(
             bounds.exactCenterX(),
             bounds.exactCenterY()
         )
-
         canvas.drawRoundRect(
             bounds.exactCenterX() - (bounds.width() * MINUTE_HAND_WIDTH) / 2f,
             bounds.exactCenterY() - (bounds.height() * HOUR_MINUTE_HANDLE_LENGTH),
@@ -229,7 +231,6 @@ class AnalogNativeCanvasRenderer(
             HOUR_MINUTE_HAND_RADIUS,
             minuteHighlightPaint
         )
-
         if (HOUR_MINUTE_HAND_STROKE != 0f) {
             canvas.drawRoundRect(
                 bounds.exactCenterX() - (bounds.width()* MINUTE_HAND_WIDTH) / 2f,
@@ -248,10 +249,8 @@ class AnalogNativeCanvasRenderer(
             bounds.exactCenterX(), bounds.exactCenterY() - (bounds.height() * HOUR_MINUTE_HANDLE_LENGTH),
             minuteTextPaint
         )
-
         minuteTextPaint.strokeWidth = HOUR_MINUTE_HAND_STROKE * 2f
         minuteTextPaint.strokeCap = Paint.Cap.ROUND
-
         canvas.restore()
 
         // Draw hour hand
@@ -261,8 +260,6 @@ class AnalogNativeCanvasRenderer(
             bounds.exactCenterX(),
             bounds.exactCenterY()
         )
-
-
         canvas.drawRoundRect(
             bounds.exactCenterX() - (bounds.width()* HOUR_HAND_WIDTH) / 2f,
             bounds.exactCenterY() - (bounds.height() * HOUR_MINUTE_HANDLE_LENGTH),
@@ -290,7 +287,6 @@ class AnalogNativeCanvasRenderer(
             bounds.exactCenterX(), bounds.exactCenterY() - (bounds.height() * HOUR_MINUTE_HANDLE_LENGTH),
             minuteTextPaint
         )
-
         canvas.restore()
 
         // Draw the button in the center
@@ -316,11 +312,11 @@ class AnalogNativeCanvasRenderer(
         )
         // Create the second/nano-time specific bitmap
         val maskC = Canvas()
-        bitmapResult!!.eraseColor(Color.TRANSPARENT)
-        maskC.setBitmap(bitmapResult!!)
+        hiddenSecondsResultBitmap!!.eraseColor(Color.TRANSPARENT)
+        maskC.setBitmap(hiddenSecondsResultBitmap!!)
 
         secondPainter.xfermode = null
-        maskC.drawBitmap(bitmap!!, 0f, 0f, secondPainter)
+        maskC.drawBitmap(hiddenSecondsBitmap!!, 0f, 0f, secondPainter)
 
         maskC.rotate(
             90f + sec * 6f + (nano / 1000f) * 6f,
@@ -332,8 +328,8 @@ class AnalogNativeCanvasRenderer(
         secondPainter.style = Paint.Style.FILL
 
         maskC.drawBitmap(
-            bitmapMask!!,
-            bounds.exactCenterX() - bitmapMask!!.width / 2,
+            hiddenSecondsCutoutMaskBitmap!!,
+            bounds.exactCenterX() - hiddenSecondsCutoutMaskBitmap!!.width / 2,
             0f,
             secondPainter
         )
@@ -358,7 +354,7 @@ class AnalogNativeCanvasRenderer(
             createCurrentSecondsMaskCircle(canvas, bounds, zonedDateTime)
 
             // Draw the resulting cut out imaged into the bigger canvas
-            canvas.drawBitmap(bitmapResult!!, 0f, 0f, minuteTextPaint)
+            canvas.drawBitmap(hiddenSecondsResultBitmap!!, 0f, 0f, minuteTextPaint)
 
             // Draw the seconds focus circle and the little tick mark pointer
             canvas.save()
@@ -391,45 +387,52 @@ class AnalogNativeCanvasRenderer(
         if (renderParameters.drawMode == DrawMode.AMBIENT && !watchFaceData.minuteDialAOD)
             return
 
-        secondHighlightPaint.strokeCap = Paint.Cap.ROUND
-
         val pos = canvas.save()
 
         for (i in 0 until 60) {
-            secondHighlightPaint.strokeWidth = DIAL_TICKS_MINOR_STROKE
+            // Change paintToUse to secondHighlightPaint for the highlight colored dial
+            val paintToUse = when {
+                (i % 15) == 0 -> hourTextPaint
+                else -> outerElementPaint
+            }
+            // Change these to be the same, if you want that look
+            paintToUse.strokeWidth = when {
+                (i % 5) == 0 -> DIAL_TICKS_MAJOR_STROKE
+                else -> DIAL_TICKS_MINOR_STROKE
+            }
+            paintToUse.strokeCap = Paint.Cap.ROUND
 
             val startPoint = when {
-                (i % 5) == 0 -> 0.93f
-                else -> 0.98f
+                (i % 5) == 0 -> DIAL_TICKS_MAJOR_LENGTH
+                else -> DIAL_TICKS_MINOR_LENGTH
             }
             canvas.drawLine(
                 bounds.width() * startPoint,
                 bounds.exactCenterY(),
                 bounds.width().toFloat(),
                 bounds.exactCenterY(),
-                secondHighlightPaint
+                paintToUse
             )
-            if (i % 5 == 0) {
-                val textBounds = Rect()
-                val tx = "%d".format(((i) / 5))
-                hourTextPaint.getTextBounds(tx, 0, tx.length, textBounds)
-                val x = bounds.centerX() - (textBounds.width() / 2f)
-                val y = bounds.height() * (1f - startPoint) + textBounds.height() + 6f
-                canvas.save()
-
-                canvas.rotate(
-                    -i * 6f,
-                    x + textBounds.width() / 2f,
-                    y - textBounds.height().toFloat() / 2
-                )
-                hourTextPaint.textSize = bounds.height() * (SECOND_DIAL_FONT_SIZE)
+//            if (i % 5 == 0) {
+//                val textBounds = Rect()
+//                val tx = "%d".format(((i) / 5))
+//                hourTextPaint.getTextBounds(tx, 0, tx.length, textBounds)
+//                val x = bounds.centerX() - (textBounds.width() / 2f)
+//                val y = bounds.height() * (1f - startPoint) + textBounds.height() + 6f
+//                canvas.save()
+//                canvas.rotate(
+//                    -i * 6f,
+//                    x + textBounds.width() / 2f,
+//                    y - textBounds.height().toFloat() / 2
+//                )
+//                hourTextPaint.textSize = bounds.height() * (SECOND_DIAL_FONT_SIZE)
 //                canvas.drawText(
 //                    tx,
 //                    x, y,
 //                    outerElementPaint
 //                )
-                canvas.restore()
-            }
+//                canvas.restore()
+//            }
             canvas.rotate(6f, bounds.exactCenterX(), bounds.exactCenterY())
         }
         canvas.restoreToCount(pos)
@@ -451,7 +454,7 @@ class AnalogNativeCanvasRenderer(
         return result
     }
 
-    private fun createSResultsBitmap(bounds: Rect): Bitmap {
+    private fun createResultsBitmap(bounds: Rect): Bitmap {
         return Bitmap.createBitmap(bounds.width(), bounds.height(), Bitmap.Config.ARGB_8888)
     }
 
