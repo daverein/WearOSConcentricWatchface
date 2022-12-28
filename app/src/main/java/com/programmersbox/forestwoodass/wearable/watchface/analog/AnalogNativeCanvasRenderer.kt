@@ -308,7 +308,7 @@ class AnalogNativeCanvasRenderer(
 
         canvas.save()
         canvas.rotate(
-            sec * 6f + (nano / 1000f) * 6f,
+            90f+ sec * 6f + (nano / 1000f) * 6f,
             bounds.exactCenterX(),
             bounds.exactCenterY()
         )
@@ -321,7 +321,7 @@ class AnalogNativeCanvasRenderer(
         maskC.drawBitmap(bitmap!!, 0f, 0f, secondPainter)
 
         maskC.rotate(
-            sec * 6f + (nano / 1000f) * 6f,
+            90f + sec * 6f + (nano / 1000f) * 6f,
             bounds.exactCenterX(),
             bounds.exactCenterY()
         )
@@ -361,7 +361,7 @@ class AnalogNativeCanvasRenderer(
             // Draw the seconds focus circle and the little tick mark pointer
             canvas.save()
             canvas.rotate(
-                sec * 6f + (nano / 1000f) * 6f,
+                90f + sec * 6f + (nano / 1000f) * 6f,
                 bounds.exactCenterX(),
                 bounds.exactCenterY()
             )
