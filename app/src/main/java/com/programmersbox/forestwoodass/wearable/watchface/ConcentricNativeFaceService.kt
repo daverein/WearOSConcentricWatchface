@@ -25,6 +25,7 @@ import androidx.wear.watchface.WatchFaceType
 import androidx.wear.watchface.WatchState
 import androidx.wear.watchface.style.CurrentUserStyleRepository
 import androidx.wear.watchface.style.UserStyleSchema
+import com.programmersbox.forestwoodass.wearable.watchface.concentric.ConcentricNativeCanvasRenderer
 import com.programmersbox.forestwoodass.wearable.watchface.utils.createComplicationSlotManager
 import com.programmersbox.forestwoodass.wearable.watchface.utils.createUserStyleSchema
 

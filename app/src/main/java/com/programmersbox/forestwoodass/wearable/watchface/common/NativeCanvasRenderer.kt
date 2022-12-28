@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.programmersbox.forestwoodass.wearable.watchface
+package com.programmersbox.forestwoodass.wearable.watchface.common
 
 import android.content.BroadcastReceiver
 import android.content.Context
@@ -32,6 +32,7 @@ import androidx.wear.watchface.complications.rendering.ComplicationDrawable
 import androidx.wear.watchface.style.CurrentUserStyleRepository
 import androidx.wear.watchface.style.UserStyle
 import androidx.wear.watchface.style.UserStyleSetting
+import com.programmersbox.forestwoodass.wearable.watchface.R
 import com.programmersbox.forestwoodass.wearable.watchface.data.watchface.*
 import com.programmersbox.forestwoodass.wearable.watchface.data.watchface.WatchFaceColorPalette.Companion.convertToWatchFaceColorPalette
 import com.programmersbox.forestwoodass.wearable.watchface.utils.*

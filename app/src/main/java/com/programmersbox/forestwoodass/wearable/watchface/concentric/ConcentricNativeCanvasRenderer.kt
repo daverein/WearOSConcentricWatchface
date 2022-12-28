@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.programmersbox.forestwoodass.wearable.watchface
+package com.programmersbox.forestwoodass.wearable.watchface.concentric
 
 import android.content.Context
 import android.graphics.*
@@ -25,6 +25,8 @@ import androidx.wear.watchface.WatchState
 import androidx.wear.watchface.complications.data.ComplicationType
 import androidx.wear.watchface.style.CurrentUserStyleRepository
 import androidx.wear.watchface.style.WatchFaceLayer
+import com.programmersbox.forestwoodass.wearable.watchface.R
+import com.programmersbox.forestwoodass.wearable.watchface.common.NativeCanvasRenderer
 import com.programmersbox.forestwoodass.wearable.watchface.data.watchface.*
 import com.programmersbox.forestwoodass.wearable.watchface.utils.*
 import com.programmersbox.forestwoodass.wearable.watchface.utils.ColorUtils.Companion.darkenColor

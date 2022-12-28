@@ -1,4 +1,4 @@
-package com.programmersbox.forestwoodass.wearable.watchface
+package com.programmersbox.forestwoodass.wearable.watchface.analog
 
 import android.content.Context
 import android.graphics.*
@@ -10,6 +10,7 @@ import androidx.wear.watchface.complications.data.ComplicationType
 import androidx.wear.watchface.style.CurrentUserStyleRepository
 import androidx.wear.watchface.style.UserStyle
 import androidx.wear.watchface.style.WatchFaceLayer
+import com.programmersbox.forestwoodass.wearable.watchface.common.NativeCanvasRenderer
 import com.programmersbox.forestwoodass.wearable.watchface.data.watchface.*
 import com.programmersbox.forestwoodass.wearable.watchface.utils.*
 import java.time.ZonedDateTime
@@ -229,9 +230,9 @@ class AnalogNativeCanvasRenderer(
 
         if (HOUR_MINUTE_HAND_STROKE != 0f) {
             canvas.drawRoundRect(
-                bounds.exactCenterX() - (bounds.width()*MINUTE_HAND_WIDTH) / 2f,
+                bounds.exactCenterX() - (bounds.width()* MINUTE_HAND_WIDTH) / 2f,
                 bounds.exactCenterY() - (bounds.height() * HOUR_MINUTE_HANDLE_LENGTH),
-                bounds.exactCenterX() + (bounds.width()*MINUTE_HAND_WIDTH) / 2f,
+                bounds.exactCenterX() + (bounds.width()* MINUTE_HAND_WIDTH) / 2f,
                 (bounds.height() / 2) * MINUTE_HAND_EXTENT,
                 HOUR_MINUTE_HAND_RADIUS,
                 HOUR_MINUTE_HAND_RADIUS,
@@ -261,9 +262,9 @@ class AnalogNativeCanvasRenderer(
 
 
         canvas.drawRoundRect(
-            bounds.exactCenterX() - (bounds.width()*HOUR_HAND_WIDTH) / 2f,
+            bounds.exactCenterX() - (bounds.width()* HOUR_HAND_WIDTH) / 2f,
             bounds.exactCenterY() - (bounds.height() * HOUR_MINUTE_HANDLE_LENGTH),
-            bounds.exactCenterX() + (bounds.width()*HOUR_HAND_WIDTH) / 2f,
+            bounds.exactCenterX() + (bounds.width()* HOUR_HAND_WIDTH) / 2f,
             (bounds.height() / 2) * HOUR_HAND_EXTENT,
             HOUR_MINUTE_HAND_RADIUS,
             HOUR_MINUTE_HAND_RADIUS,
@@ -271,9 +272,9 @@ class AnalogNativeCanvasRenderer(
         )
         if (HOUR_MINUTE_HAND_STROKE != 0f) {
             canvas.drawRoundRect(
-                bounds.exactCenterX() - (bounds.width()*HOUR_HAND_WIDTH) / 2f,
+                bounds.exactCenterX() - (bounds.width()* HOUR_HAND_WIDTH) / 2f,
                 bounds.exactCenterY() - (bounds.height() * HOUR_MINUTE_HANDLE_LENGTH),
-                bounds.exactCenterX() + (bounds.width()*HOUR_HAND_WIDTH) / 2f,
+                bounds.exactCenterX() + (bounds.width()* HOUR_HAND_WIDTH) / 2f,
                 (bounds.height() / 2) * HOUR_HAND_EXTENT,
                 HOUR_MINUTE_HAND_RADIUS,
                 HOUR_MINUTE_HAND_RADIUS,
