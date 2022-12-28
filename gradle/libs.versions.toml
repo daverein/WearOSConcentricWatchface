@@ -9,7 +9,7 @@ androidx-wear-watchface = "1.1.1"
 androidx-wear-complications-data = "1.1.1"
 compose = "1.2.0"
 ktlint = "0.46.1"
-org-jetbrains-kotlin = "1.7.22"
+org-jetbrains-kotlin = "1.8.0"
 org-jetbrains-kotlinx = "1.6.4"
 
 [libraries]
