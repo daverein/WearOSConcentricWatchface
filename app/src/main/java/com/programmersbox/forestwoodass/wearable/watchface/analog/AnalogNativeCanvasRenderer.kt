@@ -11,6 +11,7 @@ import androidx.wear.watchface.complications.data.ComplicationType
 import androidx.wear.watchface.style.CurrentUserStyleRepository
 import androidx.wear.watchface.style.UserStyle
 import androidx.wear.watchface.style.WatchFaceLayer
+import com.programmersbox.forestwoodass.wearable.watchface.R
 import com.programmersbox.forestwoodass.wearable.watchface.common.NativeCanvasRenderer
 import com.programmersbox.forestwoodass.wearable.watchface.data.watchface.*
 import com.programmersbox.forestwoodass.wearable.watchface.utils.*
@@ -38,9 +39,10 @@ private const val SECONDS_CIRCLE_OFFSET = 0.004f
 
 
 private const val DIGITAL_TIME_POSITION = 0.47f
-private const val DIGITAL_DATE_POSITION = 0.20f
+private const val DIGITAL_DATE_POSITION = 0.22f
 private const val ANALOG_DATE_POSITION = 0.75f
 private const val TIME_FONT_SIZE = 0.27f
+private const val DATE_FONT_SIZE = 0.05f
 
 class AnalogNativeCanvasRenderer(
     val context: Context,
@@ -68,6 +70,10 @@ class AnalogNativeCanvasRenderer(
         isAntiAlias = true
         isFilterBitmap = true
         xfermode = xferMode
+    }
+
+    init {
+        calendarMonthPaint.typeface = context.resources.getFont(R.font.rubik_regular)
     }
 
     override fun onDestroy() {
@@ -216,8 +222,7 @@ class AnalogNativeCanvasRenderer(
         if (!watchFaceData.drawDate || (renderParameters.drawMode == DrawMode.AMBIENT && !watchFaceData.timeAOD))
             return
         if (renderParameters.watchFaceLayers.contains(WatchFaceLayer.BASE)) {
-            calendarMonthPaint.textSize = bounds.height() * (DAY_FONT_SIZE)
-            calendarDayPaint.textSize = bounds.height() * (DAY_FONT_SIZE)
+            calendarMonthPaint.textSize = bounds.height() * (DATE_FONT_SIZE)
             val textBounds = Rect()
             val tx = "${zonedDateTime.toLocalDate().dayOfWeek.toString().substring(0, 3)}, ${
                 zonedDateTime.toLocalDate().month.toString().substring(0, 3)
@@ -242,7 +247,7 @@ class AnalogNativeCanvasRenderer(
     }
 
     private fun adjustComplicationsForAnalog(complication: ComplicationSlot) {
-        val offsetLeft = 0.06f
+        val offsetLeft = 0.01f
         when (complication.id) {
             RIGHT_COMPLICATION_ID -> {
                 complication.complicationSlotBounds.perComplicationTypeBounds[ComplicationType.RANGED_VALUE]?.top =
@@ -270,7 +275,7 @@ class AnalogNativeCanvasRenderer(
     }
 
     private fun adjustComplicationsForDigital(complication: ComplicationSlot) {
-        val offsetLeft = 0.55f
+        val offsetLeft = 0.57f
         when (complication.id) {
             RIGHT_COMPLICATION_ID -> {
                 complication.complicationSlotBounds.perComplicationTypeBounds[ComplicationType.RANGED_VALUE]?.top =
