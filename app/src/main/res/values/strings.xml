@@ -166,4 +166,5 @@
     <string name="activity_config_activeasambient_enabled_switch_content_description">Use the Active colors on the Ambient display</string>
     <string name="watchface_active_as_ambient_setting">Use Active colors in Ambient Mode</string>
     <string name="watchface_active_as_ambient_setting_description">Use Active colors in Ambient Mode</string>
+    <string name="gold_style_name">Gold</string>
 </resources>

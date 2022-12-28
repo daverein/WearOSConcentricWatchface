@@ -35,6 +35,9 @@ private const val PURPLE_COLOR_STYLE_NAME_RESOURCE_ID = R.string.purple_style_na
 const val BLUE_COLOR_STYLEID = "blue_style_id"
 private const val BLUE_COLOR_STYLE_NAME_RESOURCE_ID = R.string.blue_style_name
 
+const val GOLD_COLOR_STYLEID = "gold_style_id"
+private const val GOLD_COLOR_STYLE_NAME_RESOURCE_ID = R.string.gold_style_name
+
 const val WHITE_COLOR_STYLEID = "white_style_id"
 private const val WHITE_COLOR_STYLE_NAME_RESOURCE_ID = R.string.white_style_name
 
@@ -150,6 +153,16 @@ class ColorStylesDynamic(
                 secondaryColorId = R.color.purple_secondary_color,
                 backgroundColorId = R.color.purple_background_color,
                 outerElementColorId = R.color.purple_outer_element_color
+            )
+            )
+            colorList.add(ColorStylesDynamic(
+                id = GOLD_COLOR_STYLEID,
+                nameResourceId = GOLD_COLOR_STYLE_NAME_RESOURCE_ID,
+                primaryColorId = R.color.gold_primary_color,
+                primaryColorTextId = R.color.gold_color_text_primary,
+                secondaryColorId = R.color.gold_secondary_color,
+                backgroundColorId = R.color.gold_background_color,
+                outerElementColorId = R.color.gold_outer_element_color
             )
             )
             colorList.add(ColorStylesDynamic(

@@ -67,6 +67,13 @@
     <color name="purple_background_color">@color/black</color>
     <color name="purple_outer_element_color">@color/white_50</color>
 
+    <!-- Gold Style -->
+    <color name="gold_color_text_primary">#ffE1CD7E</color>
+    <color name="gold_primary_color">#ffb18D4E</color>
+    <color name="gold_secondary_color">#FF715D1E</color>
+    <color name="gold_background_color">@color/black</color>
+    <color name="gold_outer_element_color">#FF715D1E</color>
+
     <!-- White Style -->
     <color name="white_color_text_primary">@color/white</color>
     <color name="white_primary_color">#FFE0E0E0</color>
