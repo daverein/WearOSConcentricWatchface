@@ -171,7 +171,7 @@ private fun getWatchHandLengthStyleSetting(context: Context): UserStyleSetting.D
     )
 }
 
-fun createUserStyleSchema(context: Context): UserStyleSchema {
+fun createUserStyleSchemaConcentric(context: Context): UserStyleSchema {
     // 4. Create style settings to hold all options.
     return UserStyleSchema(
         listOf(
