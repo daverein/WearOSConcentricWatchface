@@ -167,4 +167,5 @@
     <string name="watchface_active_as_ambient_setting">Use Active colors in Ambient Mode</string>
     <string name="watchface_active_as_ambient_setting_description">Use Active colors in Ambient Mode</string>
     <string name="gold_style_name">Gold</string>
+    <string name="digital_watch_face_name">Digital Native</string>
 </resources>

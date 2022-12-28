@@ -3,6 +3,7 @@ package com.programmersbox.forestwoodass.wearable.watchface.analog
 import android.content.Context
 import android.graphics.*
 import android.view.SurfaceHolder
+import androidx.wear.watchface.ComplicationSlot
 import androidx.wear.watchface.ComplicationSlotsManager
 import androidx.wear.watchface.DrawMode
 import androidx.wear.watchface.WatchState
@@ -35,13 +36,20 @@ private const val SECOND_MARK_LENGTH = 0.03f
 private const val HOUR_MINUTE_HANDLE_LENGTH = 0.10f
 private const val SECONDS_CIRCLE_OFFSET = 0.004f
 
+
+private const val DIGITAL_TIME_POSITION = 0.47f
+private const val DIGITAL_DATE_POSITION = 0.20f
+private const val ANALOG_DATE_POSITION = 0.75f
+private const val TIME_FONT_SIZE = 0.27f
+
 class AnalogNativeCanvasRenderer(
     val context: Context,
     surfaceHolder: SurfaceHolder,
     watchState: WatchState,
     val complicationSlotsManager: ComplicationSlotsManager,
     currentUserStyleRepository: CurrentUserStyleRepository,
-    canvasType: Int
+    canvasType: Int,
+    drawDigital: Boolean
 ) : NativeCanvasRenderer(
     context,
     surfaceHolder,
@@ -50,7 +58,7 @@ class AnalogNativeCanvasRenderer(
     currentUserStyleRepository,
     canvasType
 ) {
-
+    private val drawDigitalWatchFace = drawDigital
     private var hiddenSecondsBitmap: Bitmap? = null
     private var hiddenSecondsCutoutMaskBitmap: Bitmap? = null
     private var hiddenSecondsResultBitmap: Bitmap? = null
@@ -77,6 +85,7 @@ class AnalogNativeCanvasRenderer(
         hiddenSecondsBitmap = null
         super.updateWatchFaceData(userStyle)
     }
+
     override fun render(
         canvas: Canvas,
         bounds: Rect,
@@ -84,26 +93,22 @@ class AnalogNativeCanvasRenderer(
         sharedAssets: AnalogSharedAssets
     ) {
         super.render(canvas, bounds, zonedDateTime, sharedAssets)
+        hiddenSecondsBitmap = hiddenSecondsBitmap ?: createSecondsBitmap(bounds)
+        hiddenSecondsCutoutMaskBitmap = hiddenSecondsCutoutMaskBitmap ?: createSecondsMaskBitmap(bounds)
+        hiddenSecondsResultBitmap = hiddenSecondsResultBitmap ?: createResultsBitmap(bounds)
 
-        if (hiddenSecondsBitmap == null) {
-            hiddenSecondsBitmap = createSecondsBitmap(bounds)
-        }
-        if (hiddenSecondsCutoutMaskBitmap == null) {
-            hiddenSecondsCutoutMaskBitmap = createSecondsMaskBitmap(bounds)
-        }
-        if (hiddenSecondsResultBitmap == null) {
-            hiddenSecondsResultBitmap = createResultsBitmap(bounds)
-        }
-
-        // Prevent burnin
+        // Prevent burn-in
         if (renderParameters.drawMode == DrawMode.AMBIENT &&
             watchFaceData.shiftPixelAmount >= 1.0f
         ) {
-            val scaleValue = 0.97f - (0.05f * (watchFaceData.shiftPixelAmount/SHIFT_PIXEL_AOD_FRACTION_MAXIMUM))
+            val scaleValue =
+                0.97f - (0.05f * (watchFaceData.shiftPixelAmount / SHIFT_PIXEL_AOD_FRACTION_MAXIMUM))
             canvas.scale(scaleValue, scaleValue, bounds.exactCenterX(), bounds.exactCenterY())
         }
 
-        drawDial(canvas, bounds)
+        if (!drawDigitalWatchFace) {
+            drawDial(canvas, bounds)
+        }
 
         // CanvasComplicationDrawable already obeys rendererParameters.
         if ((renderParameters.drawMode != DrawMode.AMBIENT || (!isBatteryLow() && watchFaceData.compAOD))) {
@@ -117,8 +122,88 @@ class AnalogNativeCanvasRenderer(
             (renderParameters.drawMode == DrawMode.AMBIENT || isBatteryLow()) && !watchFaceData.activeAsAmbient
         )
 
+        if (!drawDigitalWatchFace) {
+            drawSecondsCircle(canvas, bounds, zonedDateTime)
+        }
+        drawTime(canvas, bounds, zonedDateTime)
+        if (drawDigitalWatchFace) {
+            drawSecondsCircle(canvas, bounds, zonedDateTime)
+        }
+    }
+
+    private fun drawTime(
+        canvas: Canvas,
+        bounds: Rect,
+        zonedDateTime: ZonedDateTime
+    ) {
         if (renderParameters.drawMode != DrawMode.AMBIENT || watchFaceData.timeAOD) {
-            drawClockHands(canvas, bounds, zonedDateTime)
+            if (!drawDigitalWatchFace) {
+                drawClockHands(canvas, bounds, zonedDateTime)
+            } else {
+                drawDigitalTime(canvas, bounds, zonedDateTime)
+            }
+        }
+    }
+    private fun drawDigitalTime(
+        canvas: Canvas,
+        bounds: Rect,
+        zonedDateTime: ZonedDateTime
+    ) {
+        if (renderParameters.watchFaceLayers.contains(WatchFaceLayer.BASE)) {
+            val fontSize = bounds.height() * TIME_FONT_SIZE
+            val textBounds = Rect()
+            val maxTextBounds = Rect()
+
+            minuteHighlightPaint.textSize = fontSize * 0.7f
+            var tx = ":"
+            minuteHighlightPaint.getTextBounds(tx, 0, tx.length, textBounds)
+            canvas.drawText(
+                tx,
+                bounds.exactCenterX() - (textBounds.width().toFloat()),
+                bounds.height() * (DIGITAL_TIME_POSITION - 0.05f),
+                minuteHighlightPaint
+            )
+            val colonWidth = textBounds.width().toFloat()
+            val maxSize = "8"
+            minuteHighlightPaint.textSize = fontSize
+            minuteHighlightPaint.getTextBounds(maxSize, 0, maxSize.length, maxTextBounds)
+
+            val formattedTime = if (is24Format) {
+                zonedDateTime.toLocalTime().hour
+            } else {
+                if (zonedDateTime.toLocalTime().hour % 12 == 0) {
+                    12
+                } else {
+                    zonedDateTime.toLocalTime().hour % 12
+                }
+            }
+
+            tx = String.format("%02d", formattedTime)
+            minuteHighlightPaint.getTextBounds(tx, 0, 1, textBounds)
+            canvas.drawText(
+                tx.subSequence(0, 1).toString(),
+                (bounds.exactCenterX() - ((maxTextBounds.width()
+                    .toFloat() + colonWidth * 1f) * 2 + colonWidth * 1.5f)) + (maxTextBounds.width() - textBounds.width()) / 2,
+                bounds.height() * DIGITAL_TIME_POSITION,
+                minuteHighlightPaint
+            )
+            minuteHighlightPaint.getTextBounds(tx, 1, 2, textBounds)
+            canvas.drawText(
+                tx.subSequence(1, 2).toString(),
+                (bounds.exactCenterX() - ((maxTextBounds.width()
+                    .toFloat() + colonWidth * 1f) + colonWidth * 1f)) + (maxTextBounds.width() - textBounds.width()) / 2,
+                bounds.height() * DIGITAL_TIME_POSITION,
+                minuteHighlightPaint
+            )
+
+            tx = String.format("%02d", zonedDateTime.toLocalTime().minute)
+            minuteHighlightPaint.getTextBounds(tx, 0, tx.length, textBounds)
+            canvas.drawText(
+                tx,
+                bounds.exactCenterX() + colonWidth,
+                bounds.height() * DIGITAL_TIME_POSITION,
+                minuteHighlightPaint
+            )
         }
     }
 
@@ -142,12 +227,77 @@ class AnalogNativeCanvasRenderer(
                 isAmbient -> watchFaceColors.ambientSecondaryColor
                 else -> watchFaceColors.activePrimaryTextColor
             }
+            val positionY = if (drawDigitalWatchFace) {
+                DIGITAL_DATE_POSITION
+            } else {
+                ANALOG_DATE_POSITION
+            }
             canvas.drawText(
                 tx,
                 bounds.exactCenterX() - (textBounds.width().toFloat() / 2.0f),
-                bounds.height() * 0.75f,
+                bounds.height() * positionY,
                 calendarMonthPaint
             )
+        }
+    }
+
+    private fun adjustComplicationsForAnalog(complication: ComplicationSlot) {
+        val offsetLeft = 0.06f
+        when (complication.id) {
+            RIGHT_COMPLICATION_ID -> {
+                complication.complicationSlotBounds.perComplicationTypeBounds[ComplicationType.RANGED_VALUE]?.top =
+                    MIDDLE_COMPLICATIONS_TOP_BOUND
+                complication.complicationSlotBounds.perComplicationTypeBounds[ComplicationType.RANGED_VALUE]?.bottom =
+                    MIDDLE_COMPLICATIONS_BOTTOM_BOUND
+                complication.complicationSlotBounds.perComplicationTypeBounds[ComplicationType.RANGED_VALUE]?.left =
+                    RIGHT_COMPLICATION_LEFT_BOUND - 0.25f
+                complication.complicationSlotBounds.perComplicationTypeBounds[ComplicationType.RANGED_VALUE]?.right =
+                    RIGHT_COMPLICATION_RIGHT_BOUND - 0.25f
+            }
+            LEFT_COMPLICATION_ID -> {
+                complication.complicationSlotBounds.perComplicationTypeBounds[ComplicationType.RANGED_VALUE]?.top =
+                    LEFT_COMPLICATIONS_TOP_BOUND + offsetLeft
+                complication.complicationSlotBounds.perComplicationTypeBounds[ComplicationType.RANGED_VALUE]?.bottom =
+                    LEFT_COMPLICATIONS_BOTTOM_BOUND + offsetLeft
+            }
+            MIDDLE_COMPLICATION_ID -> {
+                complication.complicationSlotBounds.perComplicationTypeBounds[ComplicationType.RANGED_VALUE]?.left =
+                    MIDDLE_COMPLICATION_LEFT_BOUND + 0.15f
+                complication.complicationSlotBounds.perComplicationTypeBounds[ComplicationType.RANGED_VALUE]?.right =
+                    MIDDLE_COMPLICATION_RIGHT_BOUND + 0.15f
+            }
+        }
+    }
+
+    private fun adjustComplicationsForDigital(complication: ComplicationSlot) {
+        val offsetLeft = 0.55f
+        when (complication.id) {
+            RIGHT_COMPLICATION_ID -> {
+                complication.complicationSlotBounds.perComplicationTypeBounds[ComplicationType.RANGED_VALUE]?.top =
+                    MIDDLE_COMPLICATIONS_TOP_BOUND + 0.15f
+                complication.complicationSlotBounds.perComplicationTypeBounds[ComplicationType.RANGED_VALUE]?.bottom =
+                    MIDDLE_COMPLICATIONS_BOTTOM_BOUND + 0.15f
+                complication.complicationSlotBounds.perComplicationTypeBounds[ComplicationType.RANGED_VALUE]?.left =
+                    RIGHT_COMPLICATION_LEFT_BOUND - 0.25f
+                complication.complicationSlotBounds.perComplicationTypeBounds[ComplicationType.RANGED_VALUE]?.right =
+                    RIGHT_COMPLICATION_RIGHT_BOUND - 0.25f
+            }
+            LEFT_COMPLICATION_ID -> {
+                complication.complicationSlotBounds.perComplicationTypeBounds[ComplicationType.RANGED_VALUE]?.top =
+                    LEFT_COMPLICATIONS_TOP_BOUND + offsetLeft
+                complication.complicationSlotBounds.perComplicationTypeBounds[ComplicationType.RANGED_VALUE]?.bottom =
+                    LEFT_COMPLICATIONS_BOTTOM_BOUND + offsetLeft
+            }
+            MIDDLE_COMPLICATION_ID -> {
+                complication.complicationSlotBounds.perComplicationTypeBounds[ComplicationType.RANGED_VALUE]?.left =
+                    MIDDLE_COMPLICATION_LEFT_BOUND + 0.15f
+                complication.complicationSlotBounds.perComplicationTypeBounds[ComplicationType.RANGED_VALUE]?.right =
+                    MIDDLE_COMPLICATION_RIGHT_BOUND + 0.15f
+                complication.complicationSlotBounds.perComplicationTypeBounds[ComplicationType.RANGED_VALUE]?.top =
+                    MIDDLE_COMPLICATIONS_TOP_BOUND + 0.15f
+                complication.complicationSlotBounds.perComplicationTypeBounds[ComplicationType.RANGED_VALUE]?.bottom =
+                    MIDDLE_COMPLICATIONS_BOTTOM_BOUND + 0.15f
+            }
         }
     }
 
@@ -155,35 +305,16 @@ class AnalogNativeCanvasRenderer(
         canvas: Canvas,
         zonedDateTime: ZonedDateTime
     ) {
-        // A bit goofy, but readjust the complications from their initial positions to ones thats best
+        // A bit goofy, but readjust the complications from their initial positions to ones that's best
         // for this watchface
         for ((_, complication) in complicationSlotsManager.complicationSlots) {
             if (complication.enabled) {
-                val offsetLeft = 0.06f
-                when (complication.id) {
-                    RIGHT_COMPLICATION_ID -> {
-                        complication.complicationSlotBounds.perComplicationTypeBounds[ComplicationType.RANGED_VALUE]?.top =
-                            MIDDLE_COMPLICATIONS_TOP_BOUND
-                        complication.complicationSlotBounds.perComplicationTypeBounds[ComplicationType.RANGED_VALUE]?.bottom =
-                            MIDDLE_COMPLICATIONS_BOTTOM_BOUND
-                        complication.complicationSlotBounds.perComplicationTypeBounds[ComplicationType.RANGED_VALUE]?.left =
-                            RIGHT_COMPLICATION_LEFT_BOUND - 0.25f
-                        complication.complicationSlotBounds.perComplicationTypeBounds[ComplicationType.RANGED_VALUE]?.right =
-                            RIGHT_COMPLICATION_RIGHT_BOUND - 0.25f
-                    }
-                    LEFT_COMPLICATION_ID -> {
-                        complication.complicationSlotBounds.perComplicationTypeBounds[ComplicationType.RANGED_VALUE]?.top =
-                            LEFT_COMPLICATIONS_TOP_BOUND + offsetLeft
-                        complication.complicationSlotBounds.perComplicationTypeBounds[ComplicationType.RANGED_VALUE]?.bottom =
-                            LEFT_COMPLICATIONS_BOTTOM_BOUND + offsetLeft
-                    }
-                    MIDDLE_COMPLICATION_ID -> {
-                        complication.complicationSlotBounds.perComplicationTypeBounds[ComplicationType.RANGED_VALUE]?.left =
-                            MIDDLE_COMPLICATION_LEFT_BOUND + 0.15f
-                        complication.complicationSlotBounds.perComplicationTypeBounds[ComplicationType.RANGED_VALUE]?.right =
-                            MIDDLE_COMPLICATION_RIGHT_BOUND + 0.15f
-                    }
+                if (drawDigitalWatchFace) {
+                    adjustComplicationsForDigital(complication)
+                } else {
+                    adjustComplicationsForAnalog(complication)
                 }
+
                 complication.render(canvas, zonedDateTime, renderParameters)
             }
         }
@@ -202,8 +333,6 @@ class AnalogNativeCanvasRenderer(
         minuteHighlightPaint.color =
             (minuteHighlightPaint.color and 0x00ffffff) or 0xe7000000.toInt()
 
-        drawSecondsCircle(canvas, bounds, zonedDateTime)
-
         minuteHighlightPaint.strokeWidth = HOUR_MINUTE_HAND_STROKE * 2f
         minuteHighlightPaint.strokeCap = Paint.Cap.ROUND
         minuteTextPaint.strokeWidth = HOUR_MINUTE_HAND_STROKE * 2f
@@ -218,7 +347,7 @@ class AnalogNativeCanvasRenderer(
         // Draw Minute hand
         canvas.save()
         canvas.rotate(
-            (minute * 6f + (sec / 60f) * 6f + (nano/1000L)*6f),
+            (minute * 6f + (sec / 60f) * 6f + (nano / 1000L) * 6f),
             bounds.exactCenterX(),
             bounds.exactCenterY()
         )
@@ -233,9 +362,9 @@ class AnalogNativeCanvasRenderer(
         )
         if (HOUR_MINUTE_HAND_STROKE != 0f) {
             canvas.drawRoundRect(
-                bounds.exactCenterX() - (bounds.width()* MINUTE_HAND_WIDTH) / 2f,
+                bounds.exactCenterX() - (bounds.width() * MINUTE_HAND_WIDTH) / 2f,
                 bounds.exactCenterY() - (bounds.height() * HOUR_MINUTE_HANDLE_LENGTH),
-                bounds.exactCenterX() + (bounds.width()* MINUTE_HAND_WIDTH) / 2f,
+                bounds.exactCenterX() + (bounds.width() * MINUTE_HAND_WIDTH) / 2f,
                 (bounds.height() / 2) * MINUTE_HAND_EXTENT,
                 HOUR_MINUTE_HAND_RADIUS,
                 HOUR_MINUTE_HAND_RADIUS,
@@ -245,8 +374,10 @@ class AnalogNativeCanvasRenderer(
         minuteTextPaint.strokeWidth = HOUR_MINUTE_HAND_STROKE * 5f
         minuteTextPaint.strokeCap = Paint.Cap.BUTT
         canvas.drawLine(
-            bounds.exactCenterX(), bounds.exactCenterY(),
-            bounds.exactCenterX(), bounds.exactCenterY() - (bounds.height() * HOUR_MINUTE_HANDLE_LENGTH),
+            bounds.exactCenterX(),
+            bounds.exactCenterY(),
+            bounds.exactCenterX(),
+            bounds.exactCenterY() - (bounds.height() * HOUR_MINUTE_HANDLE_LENGTH),
             minuteTextPaint
         )
         minuteTextPaint.strokeWidth = HOUR_MINUTE_HAND_STROKE * 2f
@@ -261,9 +392,9 @@ class AnalogNativeCanvasRenderer(
             bounds.exactCenterY()
         )
         canvas.drawRoundRect(
-            bounds.exactCenterX() - (bounds.width()* HOUR_HAND_WIDTH) / 2f,
+            bounds.exactCenterX() - (bounds.width() * HOUR_HAND_WIDTH) / 2f,
             bounds.exactCenterY() - (bounds.height() * HOUR_MINUTE_HANDLE_LENGTH),
-            bounds.exactCenterX() + (bounds.width()* HOUR_HAND_WIDTH) / 2f,
+            bounds.exactCenterX() + (bounds.width() * HOUR_HAND_WIDTH) / 2f,
             (bounds.height() / 2) * HOUR_HAND_EXTENT,
             HOUR_MINUTE_HAND_RADIUS,
             HOUR_MINUTE_HAND_RADIUS,
@@ -271,9 +402,9 @@ class AnalogNativeCanvasRenderer(
         )
         if (HOUR_MINUTE_HAND_STROKE != 0f) {
             canvas.drawRoundRect(
-                bounds.exactCenterX() - (bounds.width()* HOUR_HAND_WIDTH) / 2f,
+                bounds.exactCenterX() - (bounds.width() * HOUR_HAND_WIDTH) / 2f,
                 bounds.exactCenterY() - (bounds.height() * HOUR_MINUTE_HANDLE_LENGTH),
-                bounds.exactCenterX() + (bounds.width()* HOUR_HAND_WIDTH) / 2f,
+                bounds.exactCenterX() + (bounds.width() * HOUR_HAND_WIDTH) / 2f,
                 (bounds.height() / 2) * HOUR_HAND_EXTENT,
                 HOUR_MINUTE_HAND_RADIUS,
                 HOUR_MINUTE_HAND_RADIUS,
@@ -283,8 +414,10 @@ class AnalogNativeCanvasRenderer(
         minuteTextPaint.strokeWidth = HOUR_MINUTE_HAND_STROKE * 5f
         minuteTextPaint.strokeCap = Paint.Cap.BUTT
         canvas.drawLine(
-            bounds.exactCenterX(), bounds.exactCenterY(),
-            bounds.exactCenterX(), bounds.exactCenterY() - (bounds.height() * HOUR_MINUTE_HANDLE_LENGTH),
+            bounds.exactCenterX(),
+            bounds.exactCenterY(),
+            bounds.exactCenterX(),
+            bounds.exactCenterY() - (bounds.height() * HOUR_MINUTE_HANDLE_LENGTH),
             minuteTextPaint
         )
         canvas.restore()
@@ -292,8 +425,18 @@ class AnalogNativeCanvasRenderer(
         // Draw the button in the center
         minuteTextPaint.strokeWidth = 0f
         minuteTextPaint.style = Paint.Style.FILL
-        canvas.drawCircle(bounds.exactCenterX(), bounds.exactCenterY(), bounds.width()*0.02f, minuteTextPaint)
-        canvas.drawCircle(bounds.exactCenterX(), bounds.exactCenterY(), bounds.width()*0.005f, blackPaint)
+        canvas.drawCircle(
+            bounds.exactCenterX(),
+            bounds.exactCenterY(),
+            bounds.width() * 0.02f,
+            minuteTextPaint
+        )
+        canvas.drawCircle(
+            bounds.exactCenterX(),
+            bounds.exactCenterY(),
+            bounds.width() * 0.005f,
+            blackPaint
+        )
     }
 
     private fun createCurrentSecondsMaskCircle(
@@ -306,7 +449,7 @@ class AnalogNativeCanvasRenderer(
 
         canvas.save()
         canvas.rotate(
-            90f+ sec * 6f + (nano / 1000f) * 6f,
+            90f + sec * 6f + (nano / 1000f) * 6f,
             bounds.exactCenterX(),
             bounds.exactCenterY()
         )
@@ -341,6 +484,7 @@ class AnalogNativeCanvasRenderer(
         secondPainter.xfermode = null
         canvas.restore()
     }
+
     private fun drawSecondsCircle(
         canvas: Canvas,
         bounds: Rect,

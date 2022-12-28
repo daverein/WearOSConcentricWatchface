@@ -31,10 +31,10 @@ import com.programmersbox.forestwoodass.wearable.watchface.utils.createUserStyle
 
 /**
  * Handles much of the boilerplate needed to implement a watch face (minus rendering code; see
- * [AnalogNativeFaceService]) including the complications and settings (styles user can change on
+ * [DigitalNativeFaceService]) including the complications and settings (styles user can change on
  * the watch face).
  */
-class AnalogNativeFaceService : WatchFaceService() {
+class DigitalNativeFaceService : WatchFaceService() {
 
     // Used by Watch Face APIs to construct user setting options and repository.
     override fun createUserStyleSchema(): UserStyleSchema =
@@ -65,7 +65,7 @@ class AnalogNativeFaceService : WatchFaceService() {
             complicationSlotsManager = complicationSlotsManager,
             currentUserStyleRepository = currentUserStyleRepository,
             canvasType = CanvasType.HARDWARE,
-            false
+            true
         )
 
         Log.d(TAG, "recalculateClockHands()")
