@@ -16,6 +16,8 @@ import com.programmersbox.forestwoodass.wearable.watchface.common.NativeCanvasRe
 import com.programmersbox.forestwoodass.wearable.watchface.data.watchface.*
 import com.programmersbox.forestwoodass.wearable.watchface.utils.*
 import java.time.ZonedDateTime
+import kotlin.math.cos
+import kotlin.math.sin
 
 private const val DIAL_TICKS_MAJOR_STROKE = 4f
 private const val DIAL_TICKS_MINOR_STROKE = 2f
@@ -448,26 +450,33 @@ class AnalogNativeCanvasRenderer(
     }
 
     private fun createCurrentSecondsMaskCircle(
-        canvas: Canvas,
         bounds: Rect,
         zonedDateTime: ZonedDateTime
-    ) {
+    ): Bitmap {
         val sec = zonedDateTime.toLocalTime().second
         val nano = zonedDateTime.toLocalTime().nano.toFloat() / 1000000f
 
-        canvas.save()
-        canvas.rotate(
-            90f + sec * 6f + (nano / 1000f) * 6f,
-            bounds.exactCenterX(),
-            bounds.exactCenterY()
-        )
+
         // Create the second/nano-time specific bitmap
         val maskC = Canvas()
         hiddenSecondsResultBitmap!!.eraseColor(Color.TRANSPARENT)
         maskC.setBitmap(hiddenSecondsResultBitmap!!)
 
         secondPainter.xfermode = null
-        maskC.drawBitmap(hiddenSecondsBitmap!!, 0f, 0f, secondPainter)
+
+        // Only copy an area around the target to reduce bitmap draw operations
+        val cx = sin((0f+ (Math.toRadians((nano / 1000f) * 1f+zonedDateTime.second.toDouble()) )*6f )) * bounds.width()/2 + bounds.exactCenterX()
+        val cy = -cos((0f+ (Math.toRadians((nano / 1000f) * 1f+zonedDateTime.second.toDouble()) )*6f )) * bounds.width()/2 + bounds.exactCenterY()
+        maskC.drawBitmap(hiddenSecondsBitmap!!,
+            Rect(cx.toInt()-(bounds.width() * (SECONDS_CIRCLE_RADIUS + SECONDS_CIRCLE_OFFSET)).toInt()*2,
+                cy.toInt()-(bounds.height() * (SECONDS_CIRCLE_RADIUS + SECONDS_CIRCLE_OFFSET)).toInt()*2,
+                cx.toInt()+(bounds.width() * (SECONDS_CIRCLE_RADIUS + SECONDS_CIRCLE_OFFSET)).toInt()*2,
+                cy.toInt()+(bounds.height() * (SECONDS_CIRCLE_RADIUS + SECONDS_CIRCLE_OFFSET)).toInt()*2),
+            Rect(cx.toInt()-(bounds.width() * (SECONDS_CIRCLE_RADIUS + SECONDS_CIRCLE_OFFSET)).toInt()*2,
+                cy.toInt()-(bounds.height() * (SECONDS_CIRCLE_RADIUS + SECONDS_CIRCLE_OFFSET)).toInt()*2,
+                cx.toInt()+(bounds.width() * (SECONDS_CIRCLE_RADIUS + SECONDS_CIRCLE_OFFSET)).toInt()*2,
+                cy.toInt()+(bounds.height() * (SECONDS_CIRCLE_RADIUS + SECONDS_CIRCLE_OFFSET)).toInt()*2),
+            secondPainter)
 
         maskC.rotate(
             90f + sec * 6f + (nano / 1000f) * 6f,
@@ -484,13 +493,9 @@ class AnalogNativeCanvasRenderer(
             0f,
             secondPainter
         )
-        maskC.rotate(
-            -sec * 6f - (nano / 1000f) * 6f,
-            bounds.exactCenterX(),
-            bounds.exactCenterY()
-        )
+
         secondPainter.xfermode = null
-        canvas.restore()
+        return hiddenSecondsResultBitmap!!
     }
 
     private fun drawSecondsCircle(
@@ -503,10 +508,23 @@ class AnalogNativeCanvasRenderer(
 
         // Draw second bullet if NOT in ambient mode
         if (renderParameters.drawMode != DrawMode.AMBIENT) {
-            createCurrentSecondsMaskCircle(canvas, bounds, zonedDateTime)
+            val secondsMaskedCircle = createCurrentSecondsMaskCircle(bounds, zonedDateTime)
+
+            // Only copy an area around the target to reduce bitmap draw operations
+            val cx = sin((0f+ (Math.toRadians((nano / 1000f) * 1f+zonedDateTime.second.toDouble()) )*6f )) * bounds.width()/2 + bounds.exactCenterX()
+            val cy = -cos((0f+ (Math.toRadians((nano / 1000f) * 1f+zonedDateTime.second.toDouble()) )*6f )) * bounds.width()/2 + bounds.exactCenterY()
 
             // Draw the resulting cut out imaged into the bigger canvas
-            canvas.drawBitmap(hiddenSecondsResultBitmap!!, 0f, 0f, minuteTextPaint)
+            canvas.drawBitmap(secondsMaskedCircle,
+                Rect(cx.toInt()-(bounds.height() * (SECONDS_CIRCLE_RADIUS + SECONDS_CIRCLE_OFFSET)).toInt()*2,
+                    cy.toInt()-(bounds.height() * (SECONDS_CIRCLE_RADIUS + SECONDS_CIRCLE_OFFSET)).toInt()*2,
+                    cx.toInt()+(bounds.height() * (SECONDS_CIRCLE_RADIUS + SECONDS_CIRCLE_OFFSET)).toInt()*2,
+                    cy.toInt()+(bounds.height() * (SECONDS_CIRCLE_RADIUS + SECONDS_CIRCLE_OFFSET)).toInt()*2),
+                    Rect(cx.toInt()-(bounds.height() * (SECONDS_CIRCLE_RADIUS + SECONDS_CIRCLE_OFFSET)).toInt()*2,
+                cy.toInt()-(bounds.height() * (SECONDS_CIRCLE_RADIUS + SECONDS_CIRCLE_OFFSET)).toInt()*2,
+                cx.toInt()+(bounds.height() * (SECONDS_CIRCLE_RADIUS + SECONDS_CIRCLE_OFFSET)).toInt()*2,
+                cy.toInt()+(bounds.height() * (SECONDS_CIRCLE_RADIUS + SECONDS_CIRCLE_OFFSET)).toInt()*2),
+                minuteTextPaint)
 
             // Draw the seconds focus circle and the little tick mark pointer
             canvas.save()
@@ -598,7 +616,7 @@ class AnalogNativeCanvasRenderer(
         paint.color = 0xffffffff.toInt()
         paint.style = Paint.Style.FILL
         canvas.drawCircle(
-            bounds.height() * (SECONDS_CIRCLE_RADIUS + SECONDS_CIRCLE_OFFSET),
+            bounds.width() * (SECONDS_CIRCLE_RADIUS + SECONDS_CIRCLE_OFFSET),
             bounds.exactCenterY(),
             bounds.height() * SECONDS_CIRCLE_RADIUS,
             paint
