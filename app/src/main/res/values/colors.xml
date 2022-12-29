@@ -74,6 +74,20 @@
     <color name="gold_background_color">@color/black</color>
     <color name="gold_outer_element_color">#FF715D1E</color>
 
+    <!-- Rose Gold Style -->
+    <color name="rosegold_color_text_primary">#FF9e586d</color>
+    <color name="rosegold_primary_color">#ffc58388</color>
+    <color name="rosegold_secondary_color">#FF5e182d</color>
+    <color name="rosegold_background_color">@color/black</color>
+    <color name="rosegold_outer_element_color">#FF9e586d</color>
+
+    <!-- Silver Style -->
+    <color name="silver_color_text_primary">@color/white</color>
+    <color name="silver_primary_color">#ffa9b0b4</color>
+    <color name="silver_secondary_color">#ff222527</color>
+    <color name="silver_background_color">@color/black</color>
+    <color name="silver_outer_element_color">#ff535b5f</color>
+
     <!-- White Style -->
     <color name="white_color_text_primary">@color/white</color>
     <color name="white_primary_color">#FFE0E0E0</color>

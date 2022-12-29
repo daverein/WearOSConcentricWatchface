@@ -38,6 +38,12 @@ private const val BLUE_COLOR_STYLE_NAME_RESOURCE_ID = R.string.blue_style_name
 const val GOLD_COLOR_STYLEID = "gold_style_id"
 private const val GOLD_COLOR_STYLE_NAME_RESOURCE_ID = R.string.gold_style_name
 
+const val ROSEGOLD_COLOR_STYLEID = "rosegold_style_id"
+private const val ROSEGOLD_COLOR_STYLE_NAME_RESOURCE_ID = R.string.rosegold_style_name
+
+const val SILVER_COLOR_STYLEID = "silver_style_id"
+private const val SILVER_COLOR_STYLE_NAME_RESOURCE_ID = R.string.silver_style_name
+
 const val WHITE_COLOR_STYLEID = "white_style_id"
 private const val WHITE_COLOR_STYLE_NAME_RESOURCE_ID = R.string.white_style_name
 
@@ -163,6 +169,26 @@ class ColorStylesDynamic(
                 secondaryColorId = R.color.gold_secondary_color,
                 backgroundColorId = R.color.gold_background_color,
                 outerElementColorId = R.color.gold_outer_element_color
+            )
+            )
+            colorList.add(ColorStylesDynamic(
+                id = ROSEGOLD_COLOR_STYLEID,
+                nameResourceId = ROSEGOLD_COLOR_STYLE_NAME_RESOURCE_ID,
+                primaryColorId = R.color.rosegold_primary_color,
+                primaryColorTextId = R.color.rosegold_color_text_primary,
+                secondaryColorId = R.color.rosegold_secondary_color,
+                backgroundColorId = R.color.rosegold_background_color,
+                outerElementColorId = R.color.rosegold_outer_element_color
+            )
+            )
+            colorList.add(ColorStylesDynamic(
+                id = SILVER_COLOR_STYLEID,
+                nameResourceId = SILVER_COLOR_STYLE_NAME_RESOURCE_ID,
+                primaryColorId = R.color.silver_primary_color,
+                primaryColorTextId = R.color.silver_color_text_primary,
+                secondaryColorId = R.color.silver_secondary_color,
+                backgroundColorId = R.color.silver_background_color,
+                outerElementColorId = R.color.silver_outer_element_color
             )
             )
             colorList.add(ColorStylesDynamic(
