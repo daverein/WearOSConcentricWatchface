@@ -197,10 +197,12 @@ class ConcentricNativeCanvasRenderer(
         }
     }
 
-    private fun drawComplications(
+    override fun drawComplications(
         canvas: Canvas,
         zonedDateTime: ZonedDateTime
-    ) {
+    ): Boolean {
+        if (!super.drawComplications(canvas, zonedDateTime))
+            return false
         for ((_, complication) in complicationSlotsManager.complicationSlots) {
             if (complication.enabled) {
                 val offset =
@@ -250,6 +252,7 @@ class ConcentricNativeCanvasRenderer(
                 complication.render(canvas, zonedDateTime, renderParameters)
             }
         }
+        return true
     }
 
     private fun drawMinuteHighlight(

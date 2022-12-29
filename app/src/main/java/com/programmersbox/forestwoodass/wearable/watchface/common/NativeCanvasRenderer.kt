@@ -15,6 +15,7 @@
  */
 package com.programmersbox.forestwoodass.wearable.watchface.common
 
+import android.app.KeyguardManager
 import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
@@ -191,6 +192,21 @@ abstract class NativeCanvasRenderer(
         }
     }
 
+    private val keyguardManager =
+        context.getSystemService(Context.KEYGUARD_SERVICE) as KeyguardManager
+    private var lastLockState = false
+    private var lastLockStateInterval: Long = 0
+    private fun isDeviceLocked(): Boolean {
+        // This is goofy, but the keyguard listener for locked device is not until API33
+        // Goofy code expects to be called interactiveDrawModeUpdateDelayMillis times per sec
+        lastLockStateInterval++
+        interactiveDrawModeUpdateDelayMillis
+        if (lastLockStateInterval % (1000L / interactiveDrawModeUpdateDelayMillis) == 0L) {
+            lastLockState = keyguardManager.isDeviceLocked
+        }
+        return lastLockState
+    }
+
     init {
         scope.launch {
             currentUserStyleRepository.userStyle.collect { userStyle ->
@@ -209,6 +225,14 @@ abstract class NativeCanvasRenderer(
 
     override suspend fun createSharedAssets(): AnalogSharedAssets {
         return AnalogSharedAssets()
+    }
+
+
+    open fun drawComplications(
+        canvas: Canvas,
+        zonedDateTime: ZonedDateTime
+    ): Boolean {
+        return !isDeviceLocked()
     }
 
     /*
@@ -351,12 +375,14 @@ abstract class NativeCanvasRenderer(
                     it.activeStyle.rangedValuePrimaryColor = watchFaceColors.activeSecondaryColor
                     it.activeStyle.titleColor = watchFaceColors.activePrimaryColor
 
-                    if ( watchFaceData.activeAsAmbient) {
+                    if (watchFaceData.activeAsAmbient) {
                         it.ambientStyle.textColor = watchFaceColors.activePrimaryTextColor
                         it.ambientStyle.iconColor = watchFaceColors.activePrimaryColor
                         it.ambientStyle.highlightColor = watchFaceColors.activePrimaryColor
-                        it.ambientStyle.rangedValuePrimaryColor = watchFaceColors.activeSecondaryColor
-                        it.ambientStyle.rangedValueSecondaryColor = it.activeStyle.rangedValueSecondaryColor
+                        it.ambientStyle.rangedValuePrimaryColor =
+                            watchFaceColors.activeSecondaryColor
+                        it.ambientStyle.rangedValueSecondaryColor =
+                            it.activeStyle.rangedValueSecondaryColor
                         it.ambientStyle.titleColor = watchFaceColors.activePrimaryColor
                     }
                     (complication.renderer as CanvasComplicationDrawable).drawable = it
@@ -394,7 +420,8 @@ abstract class NativeCanvasRenderer(
         zonedDateTime: ZonedDateTime,
         sharedAssets: AnalogSharedAssets
     ) {
-        val isAmbient = renderParameters.drawMode == DrawMode.AMBIENT && !watchFaceData.activeAsAmbient
+        val isAmbient =
+            renderParameters.drawMode == DrawMode.AMBIENT && !watchFaceData.activeAsAmbient
 
         val backgroundColor = if (isAmbient) {
             watchFaceColors.ambientBackgroundColor

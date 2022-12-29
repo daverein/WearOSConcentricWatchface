@@ -306,10 +306,12 @@ class AnalogNativeCanvasRenderer(
         }
     }
 
-    private fun drawComplications(
+    override fun drawComplications(
         canvas: Canvas,
         zonedDateTime: ZonedDateTime
-    ) {
+    ): Boolean {
+        if ( !super.drawComplications(canvas, zonedDateTime))
+            return false
         // A bit goofy, but readjust the complications from their initial positions to ones that's best
         // for this watchface
         for ((_, complication) in complicationSlotsManager.complicationSlots) {
@@ -323,6 +325,7 @@ class AnalogNativeCanvasRenderer(
                 complication.render(canvas, zonedDateTime, renderParameters)
             }
         }
+        return true
     }
 
     private fun drawClockHands(
