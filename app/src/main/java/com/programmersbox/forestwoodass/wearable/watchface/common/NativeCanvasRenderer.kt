@@ -444,6 +444,10 @@ abstract class NativeCanvasRenderer(
             drawAmbient -> watchFaceColors.ambientPrimaryColor
             else -> watchFaceColors.activePrimaryColor
         }
+        outerElementPaint.color = when {
+            drawAmbient -> watchFaceColors.ambientOuterElementColor
+            else -> watchFaceColors.activeOuterElementColor
+        }
     }
 
     companion object {

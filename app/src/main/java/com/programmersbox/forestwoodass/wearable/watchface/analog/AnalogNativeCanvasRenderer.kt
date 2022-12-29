@@ -533,7 +533,7 @@ class AnalogNativeCanvasRenderer(
         canvas: Canvas,
         bounds: Rect
     ) {
-        if (renderParameters.drawMode == DrawMode.AMBIENT && !watchFaceData.minuteDialAOD)
+        if (renderParameters.drawMode == DrawMode.AMBIENT && (!watchFaceData.minuteDialAOD || isBatteryLow()))
             return
 
         val pos = canvas.save()
