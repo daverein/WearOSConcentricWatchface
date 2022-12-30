@@ -465,17 +465,17 @@ class AnalogNativeCanvasRenderer(
         secondPainter.xfermode = null
 
         // Only copy an area around the target to reduce bitmap draw operations
-        val cx = sin((0f+ (Math.toRadians((nano / 1000f) * 1f+zonedDateTime.second.toDouble()) )*6f )) * bounds.width()/2 + bounds.exactCenterX()
-        val cy = -cos((0f+ (Math.toRadians((nano / 1000f) * 1f+zonedDateTime.second.toDouble()) )*6f )) * bounds.width()/2 + bounds.exactCenterY()
+        val cx = sin((0f+ (Math.toRadians((nano / 1000f) * 1f+zonedDateTime.second.toDouble()) )*6f )) * (bounds.width()/2 - (bounds.width() * (SECONDS_CIRCLE_RADIUS + SECONDS_CIRCLE_OFFSET)).toInt()) + bounds.exactCenterX()
+        val cy = -cos((0f+ (Math.toRadians((nano / 1000f) * 1f+zonedDateTime.second.toDouble()) )*6f )) * (bounds.width()/2 - (bounds.width() * (SECONDS_CIRCLE_RADIUS + SECONDS_CIRCLE_OFFSET)).toInt()) + bounds.exactCenterY()
         maskC.drawBitmap(hiddenSecondsBitmap!!,
-            Rect(cx.toInt()-(bounds.width() * (SECONDS_CIRCLE_RADIUS + SECONDS_CIRCLE_OFFSET)).toInt()*2,
-                cy.toInt()-(bounds.height() * (SECONDS_CIRCLE_RADIUS + SECONDS_CIRCLE_OFFSET)).toInt()*2,
-                cx.toInt()+(bounds.width() * (SECONDS_CIRCLE_RADIUS + SECONDS_CIRCLE_OFFSET)).toInt()*2,
-                cy.toInt()+(bounds.height() * (SECONDS_CIRCLE_RADIUS + SECONDS_CIRCLE_OFFSET)).toInt()*2),
-            Rect(cx.toInt()-(bounds.width() * (SECONDS_CIRCLE_RADIUS + SECONDS_CIRCLE_OFFSET)).toInt()*2,
-                cy.toInt()-(bounds.height() * (SECONDS_CIRCLE_RADIUS + SECONDS_CIRCLE_OFFSET)).toInt()*2,
-                cx.toInt()+(bounds.width() * (SECONDS_CIRCLE_RADIUS + SECONDS_CIRCLE_OFFSET)).toInt()*2,
-                cy.toInt()+(bounds.height() * (SECONDS_CIRCLE_RADIUS + SECONDS_CIRCLE_OFFSET)).toInt()*2),
+            Rect(cx.toInt()-(bounds.width() * (SECONDS_CIRCLE_RADIUS + SECONDS_CIRCLE_OFFSET)).toInt(),
+                cy.toInt()-(bounds.height() * (SECONDS_CIRCLE_RADIUS + SECONDS_CIRCLE_OFFSET)).toInt(),
+                cx.toInt()+(bounds.width() * (SECONDS_CIRCLE_RADIUS + SECONDS_CIRCLE_OFFSET)).toInt(),
+                cy.toInt()+(bounds.height() * (SECONDS_CIRCLE_RADIUS + SECONDS_CIRCLE_OFFSET)).toInt()),
+            Rect(cx.toInt()-(bounds.width() * (SECONDS_CIRCLE_RADIUS + SECONDS_CIRCLE_OFFSET)).toInt(),
+                cy.toInt()-(bounds.height() * (SECONDS_CIRCLE_RADIUS + SECONDS_CIRCLE_OFFSET)).toInt(),
+                cx.toInt()+(bounds.width() * (SECONDS_CIRCLE_RADIUS + SECONDS_CIRCLE_OFFSET)).toInt(),
+                cy.toInt()+(bounds.height() * (SECONDS_CIRCLE_RADIUS + SECONDS_CIRCLE_OFFSET)).toInt()),
             secondPainter)
 
         maskC.rotate(
@@ -511,19 +511,19 @@ class AnalogNativeCanvasRenderer(
             val secondsMaskedCircle = createCurrentSecondsMaskCircle(bounds, zonedDateTime)
 
             // Only copy an area around the target to reduce bitmap draw operations
-            val cx = sin((0f+ (Math.toRadians((nano / 1000f) * 1f+zonedDateTime.second.toDouble()) )*6f )) * bounds.width()/2 + bounds.exactCenterX()
-            val cy = -cos((0f+ (Math.toRadians((nano / 1000f) * 1f+zonedDateTime.second.toDouble()) )*6f )) * bounds.width()/2 + bounds.exactCenterY()
+            val cx = sin((0f+ (Math.toRadians((nano / 1000f) * 1f+zonedDateTime.second.toDouble()) )*6f )) * (bounds.width()/2 - (bounds.width() * (SECONDS_CIRCLE_RADIUS + SECONDS_CIRCLE_OFFSET)).toInt()) + bounds.exactCenterX()
+            val cy = -cos((0f+ (Math.toRadians((nano / 1000f) * 1f+zonedDateTime.second.toDouble()) )*6f )) * (bounds.width()/2 - (bounds.width() * (SECONDS_CIRCLE_RADIUS + SECONDS_CIRCLE_OFFSET)).toInt()) + bounds.exactCenterY()
 
             // Draw the resulting cut out imaged into the bigger canvas
             canvas.drawBitmap(secondsMaskedCircle,
-                Rect(cx.toInt()-(bounds.height() * (SECONDS_CIRCLE_RADIUS + SECONDS_CIRCLE_OFFSET)).toInt()*2,
-                    cy.toInt()-(bounds.height() * (SECONDS_CIRCLE_RADIUS + SECONDS_CIRCLE_OFFSET)).toInt()*2,
-                    cx.toInt()+(bounds.height() * (SECONDS_CIRCLE_RADIUS + SECONDS_CIRCLE_OFFSET)).toInt()*2,
-                    cy.toInt()+(bounds.height() * (SECONDS_CIRCLE_RADIUS + SECONDS_CIRCLE_OFFSET)).toInt()*2),
-                    Rect(cx.toInt()-(bounds.height() * (SECONDS_CIRCLE_RADIUS + SECONDS_CIRCLE_OFFSET)).toInt()*2,
-                cy.toInt()-(bounds.height() * (SECONDS_CIRCLE_RADIUS + SECONDS_CIRCLE_OFFSET)).toInt()*2,
-                cx.toInt()+(bounds.height() * (SECONDS_CIRCLE_RADIUS + SECONDS_CIRCLE_OFFSET)).toInt()*2,
-                cy.toInt()+(bounds.height() * (SECONDS_CIRCLE_RADIUS + SECONDS_CIRCLE_OFFSET)).toInt()*2),
+                Rect(cx.toInt()-(bounds.height() * (SECONDS_CIRCLE_RADIUS + SECONDS_CIRCLE_OFFSET)).toInt(),
+                    cy.toInt()-(bounds.height() * (SECONDS_CIRCLE_RADIUS + SECONDS_CIRCLE_OFFSET)).toInt(),
+                    cx.toInt()+(bounds.height() * (SECONDS_CIRCLE_RADIUS + SECONDS_CIRCLE_OFFSET)).toInt(),
+                    cy.toInt()+(bounds.height() * (SECONDS_CIRCLE_RADIUS + SECONDS_CIRCLE_OFFSET)).toInt()),
+                    Rect(cx.toInt()-(bounds.height() * (SECONDS_CIRCLE_RADIUS + SECONDS_CIRCLE_OFFSET)).toInt(),
+                cy.toInt()-(bounds.height() * (SECONDS_CIRCLE_RADIUS + SECONDS_CIRCLE_OFFSET)).toInt(),
+                cx.toInt()+(bounds.height() * (SECONDS_CIRCLE_RADIUS + SECONDS_CIRCLE_OFFSET)).toInt(),
+                cy.toInt()+(bounds.height() * (SECONDS_CIRCLE_RADIUS + SECONDS_CIRCLE_OFFSET)).toInt()),
                 minuteTextPaint)
 
             // Draw the seconds focus circle and the little tick mark pointer
