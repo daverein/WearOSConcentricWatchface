@@ -489,8 +489,18 @@ class AnalogNativeCanvasRenderer(
 
         maskC.drawBitmap(
             hiddenSecondsCutoutMaskBitmap!!,
-            bounds.exactCenterX() - hiddenSecondsCutoutMaskBitmap!!.width / 2,
-            0f,
+            Rect(
+                (bounds.width() * (SECONDS_CIRCLE_RADIUS + SECONDS_CIRCLE_OFFSET) - bounds.height() * SECONDS_CIRCLE_RADIUS * 2).toInt(),
+                (bounds.exactCenterY() - bounds.height() * SECONDS_CIRCLE_RADIUS * 2).toInt(),
+                (bounds.width() * (SECONDS_CIRCLE_RADIUS + SECONDS_CIRCLE_OFFSET) + bounds.height() * SECONDS_CIRCLE_RADIUS * 2).toInt(),
+                (bounds.exactCenterY() + bounds.height() * SECONDS_CIRCLE_RADIUS * 2).toInt()
+            ),
+            Rect(
+                (bounds.width() * (SECONDS_CIRCLE_RADIUS + SECONDS_CIRCLE_OFFSET) - bounds.height() * SECONDS_CIRCLE_RADIUS * 2).toInt(),
+                (bounds.exactCenterY() - bounds.height() * SECONDS_CIRCLE_RADIUS * 2).toInt(),
+                (bounds.width() * (SECONDS_CIRCLE_RADIUS + SECONDS_CIRCLE_OFFSET) + bounds.height() * SECONDS_CIRCLE_RADIUS * 2).toInt(),
+                (bounds.exactCenterY() + bounds.height() * SECONDS_CIRCLE_RADIUS * 2).toInt()
+            ),
             secondPainter
         )
 
