@@ -31,6 +31,7 @@ private const val HOUR_MINUTE_HAND_STROKE = 1f
 private const val HOUR_MINUTE_HAND_RADIUS = 10f
 private const val SECONDS_CIRCLE_RADIUS = 0.08f
 private const val SECONDS_CIRCLE_STROKE = 3f
+private const val SECONDS_HAND_STROKE = 2f
 private const val SECONDS_MAJOR_FONT_SIZE = (SECOND_DIAL_FONT_SIZE * 1.6f)
 private const val SECONDS_MINOR_FONT_SIZE = (SECOND_DIAL_FONT_SIZE * 0.62f)
 private const val SECONDS_EDGE_MINOR_PADDING = 0.99f
@@ -370,17 +371,16 @@ class AnalogNativeCanvasRenderer(
             HOUR_MINUTE_HAND_RADIUS,
             minuteHighlightPaint
         )
-        if (HOUR_MINUTE_HAND_STROKE != 0f) {
-            canvas.drawRoundRect(
-                bounds.exactCenterX() - (bounds.width() * MINUTE_HAND_WIDTH) / 2f,
-                bounds.exactCenterY() - (bounds.height() * HOUR_MINUTE_HANDLE_LENGTH),
-                bounds.exactCenterX() + (bounds.width() * MINUTE_HAND_WIDTH) / 2f,
-                (bounds.height() / 2) * MINUTE_HAND_EXTENT,
-                HOUR_MINUTE_HAND_RADIUS,
-                HOUR_MINUTE_HAND_RADIUS,
-                minuteTextPaint
-            )
-        }
+        canvas.drawRoundRect(
+            bounds.exactCenterX() - (bounds.width() * MINUTE_HAND_WIDTH) / 2f,
+            bounds.exactCenterY() - (bounds.height() * HOUR_MINUTE_HANDLE_LENGTH),
+            bounds.exactCenterX() + (bounds.width() * MINUTE_HAND_WIDTH) / 2f,
+            (bounds.height() / 2) * MINUTE_HAND_EXTENT,
+            HOUR_MINUTE_HAND_RADIUS,
+            HOUR_MINUTE_HAND_RADIUS,
+            minuteTextPaint
+        )
+
         minuteTextPaint.strokeWidth = HOUR_MINUTE_HAND_STROKE * 5f
         minuteTextPaint.strokeCap = Paint.Cap.BUTT
         canvas.drawLine(
@@ -410,17 +410,15 @@ class AnalogNativeCanvasRenderer(
             HOUR_MINUTE_HAND_RADIUS,
             minuteHighlightPaint
         )
-        if (HOUR_MINUTE_HAND_STROKE != 0f) {
-            canvas.drawRoundRect(
-                bounds.exactCenterX() - (bounds.width() * HOUR_HAND_WIDTH) / 2f,
-                bounds.exactCenterY() - (bounds.height() * HOUR_MINUTE_HANDLE_LENGTH),
-                bounds.exactCenterX() + (bounds.width() * HOUR_HAND_WIDTH) / 2f,
-                (bounds.height() / 2) * HOUR_HAND_EXTENT,
-                HOUR_MINUTE_HAND_RADIUS,
-                HOUR_MINUTE_HAND_RADIUS,
-                minuteTextPaint
-            )
-        }
+        canvas.drawRoundRect(
+            bounds.exactCenterX() - (bounds.width() * HOUR_HAND_WIDTH) / 2f,
+            bounds.exactCenterY() - (bounds.height() * HOUR_MINUTE_HANDLE_LENGTH),
+            bounds.exactCenterX() + (bounds.width() * HOUR_HAND_WIDTH) / 2f,
+            (bounds.height() / 2) * HOUR_HAND_EXTENT,
+            HOUR_MINUTE_HAND_RADIUS,
+            HOUR_MINUTE_HAND_RADIUS,
+            minuteTextPaint
+        )
         minuteTextPaint.strokeWidth = HOUR_MINUTE_HAND_STROKE * 5f
         minuteTextPaint.strokeCap = Paint.Cap.BUTT
         canvas.drawLine(
@@ -520,6 +518,21 @@ class AnalogNativeCanvasRenderer(
         if (renderParameters.drawMode != DrawMode.AMBIENT) {
             val secondsMaskedCircle = createCurrentSecondsMaskCircle(bounds, zonedDateTime)
 
+            if ( !drawDigitalWatchFace ) {
+                // Draw the second hand
+                canvas.save()
+                canvas.rotate(
+                    90f + sec * 6f + (nano / 1000f) * 6f,
+                    bounds.exactCenterX(),
+                    bounds.exactCenterY()
+                )
+                minuteTextPaint.strokeWidth = SECONDS_HAND_STROKE
+                canvas.drawLine(
+                    bounds.width() * SECONDS_CIRCLE_RADIUS, bounds.exactCenterY(),
+                    bounds.exactCenterX(), bounds.exactCenterY(), minuteTextPaint
+                )
+                canvas.restore()
+            }
             // Only copy an area around the target to reduce bitmap draw operations
             val cx = sin((0f+ (Math.toRadians((nano / 1000f) * 1f+zonedDateTime.second.toDouble()) )*6f )) * (bounds.width()/2 - (bounds.width() * (SECONDS_CIRCLE_RADIUS + SECONDS_CIRCLE_OFFSET)).toInt()) + bounds.exactCenterX()
             val cy = -cos((0f+ (Math.toRadians((nano / 1000f) * 1f+zonedDateTime.second.toDouble()) )*6f )) * (bounds.width()/2 - (bounds.width() * (SECONDS_CIRCLE_RADIUS + SECONDS_CIRCLE_OFFSET)).toInt()) + bounds.exactCenterY()
