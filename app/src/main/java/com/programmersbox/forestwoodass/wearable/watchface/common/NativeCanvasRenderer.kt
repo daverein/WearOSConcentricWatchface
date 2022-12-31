@@ -179,7 +179,7 @@ abstract class NativeCanvasRenderer(
     }
 
     override fun onBatteryLevelChanged(oldValue: Boolean, newValue: Boolean) {
-        interactiveDrawModeUpdateDelayMillis = if (isBatteryLow()) {
+        interactiveDrawModeUpdateDelayMillis = if (isBatteryLow() || watchFaceData.lowPower) {
             FRAME_PERIOD_MS_LOW_BATTERY
         } else {
             FRAME_PERIOD_MS_DEFAULT
@@ -200,7 +200,6 @@ abstract class NativeCanvasRenderer(
         // This is goofy, but the keyguard listener for locked device is not until API33
         // Goofy code expects to be called interactiveDrawModeUpdateDelayMillis times per sec
         lastLockStateInterval++
-        interactiveDrawModeUpdateDelayMillis
         if (lastLockStateInterval % (1000L / interactiveDrawModeUpdateDelayMillis) == 0L) {
             lastLockState = keyguardManager.isDeviceLocked
         }
@@ -291,6 +290,14 @@ abstract class NativeCanvasRenderer(
                         drawDate = booleanValue.value
                     )
                 }
+                LOW_POWER_STYLE_SETTING -> {
+                    val booleanValue = options.value as
+                        UserStyleSetting.BooleanUserStyleSetting.BooleanOption
+
+                    newWatchFaceData = newWatchFaceData.copy(
+                        lowPower = booleanValue.value
+                    )
+                }
                 DRAW_COMP_CIRCLES_STYLE_SETTING -> {
                     val booleanValue = options.value as
                         UserStyleSetting.BooleanUserStyleSetting.BooleanOption
@@ -350,7 +357,7 @@ abstract class NativeCanvasRenderer(
                 watchFaceData.ambientColorStyle
             )
 
-            interactiveDrawModeUpdateDelayMillis = if (isBatteryLow()) {
+            interactiveDrawModeUpdateDelayMillis = if (isBatteryLow() || watchFaceData.lowPower) {
                 FRAME_PERIOD_MS_LOW_BATTERY
             } else {
                 FRAME_PERIOD_MS_DEFAULT

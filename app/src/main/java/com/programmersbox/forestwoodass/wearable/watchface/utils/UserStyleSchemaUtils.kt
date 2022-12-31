@@ -35,7 +35,7 @@ const val COMPAOD_STYLE_SETTING = "compaod_style_setting"
 const val ACTIVE_AS_AMBIENT_STYLE_SETTING = "active_as_ambient_style_setting"
 const val MINUTEDIALAOD_STYLE_SETTING = "minutedialaod_style_setting"
 const val SHIFT_PIXEL_STYLE_SETTING = "shift_pixels_style_setting"
-
+const val LOW_POWER_STYLE_SETTING = "low_power_style_setting"
 /*
  * Creates user styles in the settings activity associated with the watch face, so users can
  * edit different parts of the watch face. In the renderer (after something has changed), the
@@ -82,6 +82,18 @@ private fun getDrawDateStyleSetting(context: Context): UserStyleSetting.BooleanU
         null,
         listOf(WatchFaceLayer.BASE),
         DRAW_DATE
+    )
+}
+
+private fun getLowPowerStyleSetting(context: Context): UserStyleSetting.BooleanUserStyleSetting {
+    return UserStyleSetting.BooleanUserStyleSetting(
+        UserStyleSetting.Id(LOW_POWER_STYLE_SETTING),
+        context.resources,
+        R.string.watchface_low_power_setting,
+        R.string.watchface_low_power_setting_description,
+        null,
+        listOf(WatchFaceLayer.BASE),
+        LOW_POWER
     )
 }
 
@@ -157,7 +169,7 @@ private fun getActiveAsAmbientStyleSetting(context: Context): UserStyleSetting.B
     )
 }
 
-private fun getWatchHandLengthStyleSetting(context: Context): UserStyleSetting.DoubleRangeUserStyleSetting {
+private fun getShiftPixelStyleSetting(context: Context): UserStyleSetting.DoubleRangeUserStyleSetting {
     return UserStyleSetting.DoubleRangeUserStyleSetting(
         UserStyleSetting.Id(SHIFT_PIXEL_STYLE_SETTING),
         context.resources,
@@ -184,7 +196,7 @@ fun createUserStyleSchemaConcentric(context: Context): UserStyleSchema {
             getCompaodStyleSetting(context),
             getMinuteaodStyleSetting(context),
             getActiveAsAmbientStyleSetting(context),
-            getWatchHandLengthStyleSetting(context)
+            getShiftPixelStyleSetting(context)
         )
     )
 }
@@ -197,11 +209,11 @@ fun createUserStyleSchemaAnalog(context: Context): UserStyleSchema {
             getDrawDateStyleSetting(context),
             getStyleIconSetting(context),
             getDrawCompCirclesStyleSetting(context),
+            getLowPowerStyleSetting(context),
             getDrawTimeOnAODStyleSetting(context),
             getCompaodStyleSetting(context),
-            getMinuteaodStyleSetting(context),
             getActiveAsAmbientStyleSetting(context),
-            getWatchHandLengthStyleSetting(context)
+            getShiftPixelStyleSetting(context)
         )
     )
 }

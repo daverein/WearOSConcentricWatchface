@@ -74,6 +74,7 @@ class WatchFaceConfigStateHolder(
     private lateinit var styleIconKey: UserStyleSetting.BooleanUserStyleSetting
     private lateinit var timeaodKey: UserStyleSetting.BooleanUserStyleSetting
     private lateinit var drawDateKey: UserStyleSetting.BooleanUserStyleSetting
+    private lateinit var lowPowerKey: UserStyleSetting.BooleanUserStyleSetting
     private lateinit var compCirclesKey: UserStyleSetting.BooleanUserStyleSetting
     private lateinit var compaodKey: UserStyleSetting.BooleanUserStyleSetting
     private lateinit var activeAsAmbientKey: UserStyleSetting.BooleanUserStyleSetting
@@ -120,6 +121,9 @@ class WatchFaceConfigStateHolder(
                 }
                 DRAW_DATE_STYLE_SETTING -> {
                     drawDateKey = setting as UserStyleSetting.BooleanUserStyleSetting
+                }
+                LOW_POWER_STYLE_SETTING -> {
+                    lowPowerKey = setting as UserStyleSetting.BooleanUserStyleSetting
                 }
                 DRAW_TIME_AOD_STYLE_SETTING -> {
                     timeaodKey = setting as UserStyleSetting.BooleanUserStyleSetting
@@ -182,14 +186,19 @@ class WatchFaceConfigStateHolder(
             userStyle[styleIconKey] as UserStyleSetting.BooleanUserStyleSetting.BooleanOption
         val drawDateEnabledStyle =
             userStyle[drawDateKey] as UserStyleSetting.BooleanUserStyleSetting.BooleanOption
+        val lowPowerEnabledStyle =
+            userStyle[lowPowerKey] as UserStyleSetting.BooleanUserStyleSetting.BooleanOption
         val drawCompCirclesEnabledStyle =
             userStyle[compCirclesKey] as UserStyleSetting.BooleanUserStyleSetting.BooleanOption
         val compaodEnabledStyle =
             userStyle[compaodKey] as UserStyleSetting.BooleanUserStyleSetting.BooleanOption
         val activeAsAmbientEnabledStyle =
             userStyle[activeAsAmbientKey] as UserStyleSetting.BooleanUserStyleSetting.BooleanOption
-        val minuteDialAODEnabledStyle =
+        val minuteDialAODEnabledStyle = if (::layoutStyleKey.isInitialized) {
             userStyle[minutedialaodKey] as UserStyleSetting.BooleanUserStyleSetting.BooleanOption
+        } else {
+            UserStyleSetting.BooleanUserStyleSetting.BooleanOption.TRUE
+        }
         val shiftpixelamountStyle =
             userStyle[shiftpixelamountKey]
                 as UserStyleSetting.DoubleRangeUserStyleSetting.DoubleRangeOption
@@ -202,6 +211,7 @@ class WatchFaceConfigStateHolder(
             timeaodEnabled = timeaodEnabledStyle.value,
             styleIconEnabled = styleIconEnabledStyle.value,
             drawDateEnabled = drawDateEnabledStyle.value,
+            lowPowerEnabled = lowPowerEnabledStyle.value,
             drawCompCirclesEnabled = drawCompCirclesEnabledStyle.value,
             compaodEnabled = compaodEnabledStyle.value,
             activeAsAmbientEnabled = activeAsAmbientEnabledStyle.value,
@@ -287,6 +297,13 @@ class WatchFaceConfigStateHolder(
         )
     }
 
+    fun setLowPower(enabled: Boolean) {
+        setUserStyleOption(
+            lowPowerKey,
+            UserStyleSetting.BooleanUserStyleSetting.BooleanOption.from(enabled)
+        )
+    }
+
     fun setDrawCompCircles(enabled: Boolean) {
         setUserStyleOption(
             compCirclesKey,
@@ -346,6 +363,7 @@ class WatchFaceConfigStateHolder(
         val colorStyleId: String,
         val layoutStyleId: String,
         val drawDateEnabled: Boolean,
+        val lowPowerEnabled: Boolean,
         val styleIconEnabled: Boolean,
         val timeaodEnabled: Boolean,
         val compaodEnabled: Boolean,

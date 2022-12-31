@@ -171,6 +171,22 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/style_icon_enabled_switch" />
 
+        <com.google.android.material.switchmaterial.SwitchMaterial
+            android:id="@+id/low_power_enabled_switch"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:drawablePadding="@dimen/activity_config_ticks_enabled_switch_icon_padding"
+            android:gravity="start|center_vertical"
+            android:onClick="onClickLowPowerEnabledSwitch"
+            android:text="@string/activity_config_low_power_enabled_label"
+            android:textColor="@color/white"
+            android:textSize="@dimen/settings_default_text_size"
+            android:textAppearance="?attr/textAppearanceButton"
+            android:contentDescription="@string/activity_config_low_power_enabled_switch_content_description"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/drawdate_enabled_switch" />
+
         <com.google.android.material.divider.MaterialDivider
             android:id="@+id/divider1"
             android:layout_width="0dp"
@@ -181,7 +197,7 @@
             android:gravity="start|center_vertical"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/drawdate_enabled_switch" />
+            app:layout_constraintTop_toBottomOf="@+id/low_power_enabled_switch" />
 
 
         <TextView

@@ -65,6 +65,7 @@ class WatchFaceConfigActivity : ComponentActivity() {
         // Disable widgets until data loads and values are set.
         binding.colorStylePickerButton.isEnabled = false
         binding.drawdateEnabledSwitch.isEnabled = false
+        binding.lowPowerEnabledSwitch.isEnabled = false
         binding.timeaodEnabledSwitch.isEnabled = false
         binding.styleIconEnabledSwitch.isEnabled = false
         binding.shiftPixelAmountSlider.isEnabled = false
@@ -118,6 +119,7 @@ class WatchFaceConfigActivity : ComponentActivity() {
         Log.d(TAG, "\tselected color style: $colorStyleId")
 
         binding.drawdateEnabledSwitch.isChecked = userStylesAndPreview.drawDateEnabled
+        binding.lowPowerEnabledSwitch.isChecked = userStylesAndPreview.lowPowerEnabled
         binding.timeaodEnabledSwitch.isChecked = userStylesAndPreview.timeaodEnabled
         binding.styleIconEnabledSwitch.isChecked = userStylesAndPreview.styleIconEnabled
         binding.compaodEnabledSwitch.isChecked = userStylesAndPreview.compaodEnabled
@@ -159,6 +161,7 @@ class WatchFaceConfigActivity : ComponentActivity() {
     private fun enabledWidgets() {
         binding.colorStylePickerButton.isEnabled = true
         binding.drawdateEnabledSwitch.isEnabled = true
+        binding.lowPowerEnabledSwitch.isEnabled = true
         binding.timeaodEnabledSwitch.isEnabled = true
         binding.styleIconEnabledSwitch.isEnabled = true
         binding.activeAsAmbientEnabledSwitch.isEnabled = true
@@ -260,6 +263,11 @@ class WatchFaceConfigActivity : ComponentActivity() {
     fun onClickDrawDateEnabledSwitch(view: View) {
         Log.d(TAG, "onClickDrawDateEnabledSwitch() $view")
         stateHolder.setDrawDate(binding.drawdateEnabledSwitch.isChecked)
+    }
+
+    fun onClickLowPowerEnabledSwitch(view: View) {
+        Log.d(TAG, "onClickLowPowerEnabledSwitch() $view")
+        stateHolder.setLowPower(binding.lowPowerEnabledSwitch.isChecked)
     }
 
     fun onClickTimeAODEnabledSwitch(view: View) {

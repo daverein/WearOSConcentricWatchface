@@ -6,7 +6,6 @@ import android.graphics.Canvas
 import android.graphics.Paint
 import android.graphics.Rect
 import android.graphics.drawable.Icon
-import android.util.Log
 import androidx.annotation.ColorRes
 import androidx.annotation.StringRes
 import androidx.wear.watchface.style.UserStyleSetting
@@ -105,6 +104,7 @@ class ColorStylesDynamic(
             context.getColor(outerElementColorId)
     }
     companion object {
+        @Suppress("unused")
         private const val TAG = "ColorStylesDynamic"
 
         var instance = initArray()
@@ -257,7 +257,6 @@ class ColorStylesDynamic(
 
         fun getBitmap(context: Context, name: String, color1: Int, color2: Int): Bitmap
         {
-            Log.d(TAG, "getBitmap colors 1: ${Integer.toHexString(color1)} and color 2: ${Integer.toHexString(color2)}")
             val bitmap: Bitmap = Bitmap.createBitmap(BITMAP_SIZE.toInt(), BITMAP_SIZE.toInt(), Bitmap.Config.ARGB_8888)
 
             val canvas = Canvas(bitmap)
