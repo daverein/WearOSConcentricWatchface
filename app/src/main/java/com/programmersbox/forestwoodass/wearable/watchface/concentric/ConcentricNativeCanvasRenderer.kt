@@ -151,7 +151,7 @@ class ConcentricNativeCanvasRenderer(
         val restoreCount = canvas.save()
         if (scaledImage) {
             canvas.scale(SCALED_CLOCKFACE_AMOUNT, SCALED_CLOCKFACE_AMOUNT)
-            scaledShiftX *= SCALED_WATCHFACE_SHIFTX
+            scaledShiftX *= SCALED_WATCHFACE_SHIFT_X
             scaledShiftY = -(bounds.height() * SCALED_WATCHFACE_SHIFTY - bounds.height()) / 2.0f
         }
 
@@ -356,7 +356,7 @@ class ConcentricNativeCanvasRenderer(
             // Draw the underside of the highlight
             if (!drawAmbient) {
                 canvas.drawArc(
-                    bounds.width().toFloat() * FULL_WATCHFACE_COMPLICATION_SHADOW_EDGE_OUTTER, bounds.height().toFloat() * FULL_WATCHFACE_COMPLICATION_SHADOW_EDGE_OUTTER,
+                    bounds.width().toFloat() * FULL_WATCHFACE_COMPLICATION_SHADOW_EDGE_OUTER, bounds.height().toFloat() * FULL_WATCHFACE_COMPLICATION_SHADOW_EDGE_OUTER,
                     bounds.width().toFloat() * FULL_WATCHFACE_COMPLICATION_SHADOW_EDGE_INNER, bounds.height().toFloat() * FULL_WATCHFACE_COMPLICATION_SHADOW_EDGE_INNER,
                     -21f, 42f, true, translucentPaint
                 )
@@ -367,7 +367,7 @@ class ConcentricNativeCanvasRenderer(
                 )
             } else {
                 canvas.drawArc(
-                    bounds.width().toFloat() * FULL_WATCHFACE_COMPLICATION_SHADOW_EDGE_OUTTER, bounds.height().toFloat() * FULL_WATCHFACE_COMPLICATION_SHADOW_EDGE_OUTTER,
+                    bounds.width().toFloat() * FULL_WATCHFACE_COMPLICATION_SHADOW_EDGE_OUTER, bounds.height().toFloat() * FULL_WATCHFACE_COMPLICATION_SHADOW_EDGE_OUTER,
                     bounds.width().toFloat() * FULL_WATCHFACE_COMPLICATION_SHADOW_EDGE_INNER, bounds.height().toFloat() * FULL_WATCHFACE_COMPLICATION_SHADOW_EDGE_INNER,
                     -18f, 36f, true, translucentPaint
                 )

@@ -45,6 +45,7 @@ private const val ANALOG_DATE_POSITION = 0.75f
 private const val TIME_FONT_SIZE = 0.27f
 private const val DATE_FONT_SIZE = 0.05f
 
+@Suppress("SpellCheckingInspection")
 class SecondsRevealNativeCanvasRenderer(
     val context: Context,
     surfaceHolder: SurfaceHolder,

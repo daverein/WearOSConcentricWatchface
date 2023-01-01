@@ -20,7 +20,9 @@ package com.programmersbox.forestwoodass.wearable.watchface.data.watchface
 const val DRAW_COMP_CIRCLES = true
 const val DRAW_TIME_AOD = true
 const val DRAW_DATE = true
+@Suppress("SpellCheckingInspection")
 const val COMPAOD_DEFAULT = true
+@Suppress("SpellCheckingInspection")
 const val MINUTEDIALAOD_DEFAULT = true
 const val AAA_DEFAULT = false
 const val STYLE_ICON = true
@@ -38,10 +40,11 @@ const val AOD_ZOOM_LEVEL_1 = 1.15f
 const val AOD_ZOOM_LEVEL_2 = 1.20f
 const val AOD_ZOOM_LEVEL_3 = 0.95f
 const val AOD_ZOOM_LEVEL_4 = 1.12f
+@Suppress("SpellCheckingInspection")
 const val SCALED_CLOCKFACE_AMOUNT = 1.35f
-const val SCALED_WATCHFACE_SHIFTX = 1.00f
+const val SCALED_WATCHFACE_SHIFT_X = 1.00f
 const val SCALED_WATCHFACE_SHIFTY = 1.26f
-const val FULL_WATCHFACE_COMPLICATION_SHADOW_EDGE_OUTTER = 0.15f
+const val FULL_WATCHFACE_COMPLICATION_SHADOW_EDGE_OUTER = 0.15f
 const val FULL_WATCHFACE_COMPLICATION_SHADOW_EDGE_INNER = 0.85f
 const val HOUR_TEXT_CENTER_OFFSET_SHIFT = 0.45f
 const val MINUTE_TEXT_CENTER_OFFSET_SHIFT = 0.55f

@@ -27,14 +27,17 @@ import com.programmersbox.forestwoodass.wearable.watchface.R
 // X_COLOR_STYLE_ID - id in watch face database for each style id.
 // X_COLOR_STYLE_NAME_RESOURCE_ID - String name to display in the user settings UI for the style.
 // X_COLOR_STYLE_ICON_ID - Icon to display in the user settings UI for the style.
+@Suppress("SpellCheckingInspection")
 const val FULL_FACE_STYLE_ID = "fullface_style_id"
 private const val FULL_FACE_STYLE_NAME_RESOURCE_ID = R.string.fullface_style_name
 private const val FULL_FACE_STYLE_ICON_ID = R.drawable.fullface
 
+@Suppress("SpellCheckingInspection")
 const val HALF_FACE_STYLE_ID = "halfface_style_id"
 private const val HALF_FACE_STYLE_NAME_RESOURCE_ID = R.string.halfface_style_name
 private const val HALF_FACE_STYLE_ICON_ID = R.drawable.halfface
 
+@Suppress("SpellCheckingInspection")
 const val SCALED_HALF_FACE_STYLE_ID = "scaled_halfface_style_id"
 private const val SCALED_HALF_FACE_STYLE_NAME_RESOURCE_ID = R.string.scaled_halfface_style_name
 private const val SCALED_HALF_FACE_STYLE_ICON_ID = R.drawable.scaled_halfface
@@ -48,6 +51,7 @@ private const val SCALED_HALF_FACE_STYLE_ICON_ID = R.drawable.scaled_halfface
  * renderer will use these resources to render the actual colors and ComplicationDrawables of the
  * watch face.
  */
+@Suppress("SpellCheckingInspection")
 enum class LayoutStyleIdAndResourceIds(
     val id: String,
     @StringRes val nameResourceId: Int,

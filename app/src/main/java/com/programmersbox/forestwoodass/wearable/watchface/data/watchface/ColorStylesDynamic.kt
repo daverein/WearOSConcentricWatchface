@@ -16,33 +16,45 @@ import com.programmersbox.forestwoodass.wearable.watchface.utils.ColorUtils.Comp
 // X_COLOR_STYLE_ID - id in watch face database for each style id.
 // X_COLOR_STYLE_NAME_RESOURCE_ID - String name to display in the user settings UI for the style.
 // X_COLOR_STYLE_ICON_ID - Icon to display in the user settings UI for the style.
+
+@Suppress("SpellCheckingInspection")
 const val AMBIENT_COLOR_STYLEID = "ambient_style_id"
 private const val AMBIENT_COLOR_STYLE_NAME_RESOURCE_ID = R.string.ambient_style_name
 
+@Suppress("SpellCheckingInspection")
 const val RED_COLOR_STYLEID = "red_style_id"
 private const val RED_COLOR_STYLE_NAME_RESOURCE_ID = R.string.red_style_name
 
+@Suppress("SpellCheckingInspection")
 const val GREEN_COLOR_STYLEID = "green_style_id"
 private const val GREEN_COLOR_STYLE_NAME_RESOURCE_ID = R.string.green_style_name
 
+@Suppress("SpellCheckingInspection")
 const val YELLOW_COLOR_STYLEID = "yellow_style_id"
 private const val YELLOW_COLOR_STYLE_NAME_RESOURCE_ID = R.string.yellow_style_name
 
+@Suppress("SpellCheckingInspection")
 const val PURPLE_COLOR_STYLEID = "purple_style_id"
 private const val PURPLE_COLOR_STYLE_NAME_RESOURCE_ID = R.string.purple_style_name
 
+@Suppress("SpellCheckingInspection")
 const val BLUE_COLOR_STYLEID = "blue_style_id"
 private const val BLUE_COLOR_STYLE_NAME_RESOURCE_ID = R.string.blue_style_name
 
+@Suppress("SpellCheckingInspection")
 const val GOLD_COLOR_STYLEID = "gold_style_id"
 private const val GOLD_COLOR_STYLE_NAME_RESOURCE_ID = R.string.gold_style_name
 
+@Suppress("SpellCheckingInspection")
 const val ROSEGOLD_COLOR_STYLEID = "rosegold_style_id"
+@Suppress("SpellCheckingInspection")
 private const val ROSEGOLD_COLOR_STYLE_NAME_RESOURCE_ID = R.string.rosegold_style_name
 
+@Suppress("SpellCheckingInspection")
 const val SILVER_COLOR_STYLEID = "silver_style_id"
 private const val SILVER_COLOR_STYLE_NAME_RESOURCE_ID = R.string.silver_style_name
 
+@Suppress("SpellCheckingInspection")
 const val WHITE_COLOR_STYLEID = "white_style_id"
 private const val WHITE_COLOR_STYLE_NAME_RESOURCE_ID = R.string.white_style_name
 
@@ -97,7 +109,7 @@ class ColorStylesDynamic(
         else
             context.getColor(backgroundColorId)
     }
-    fun getOutterElementColor(context: Context): Int {
+    fun getOuterElementColor(context: Context): Int {
         return if ( outerElementColorId == 0 )
             outerElementColor
         else
@@ -201,7 +213,7 @@ class ColorStylesDynamic(
                 outerElementColorId = R.color.white_outer_element_color
             )
             )
-            var entries : ArrayList<Int> = ArrayList<Int>()
+            var entries : ArrayList<Int> = ArrayList()
             for(r in 1..3) {
                 for (g in 1..3) {
                     for (b in 1..3) {

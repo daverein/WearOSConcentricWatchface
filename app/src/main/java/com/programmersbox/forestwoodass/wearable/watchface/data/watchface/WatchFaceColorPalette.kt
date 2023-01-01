@@ -57,13 +57,13 @@ data class WatchFaceColorPalette(
                 activePrimaryTextColor = activeColorStyle.getPrimaryColorText(context),
                 activeSecondaryColor = activeColorStyle.getSecondaryColor(context),
                 activeBackgroundColor = activeColorStyle.getBackgroundColor(context),
-                activeOuterElementColor = activeColorStyle.getOutterElementColor(context),
+                activeOuterElementColor = activeColorStyle.getOuterElementColor(context),
                 // Ambient colors
                 ambientPrimaryColor = ambientColorStyle.getPrimaryColor(context),
                 ambientPrimaryTextColor = ambientColorStyle.getPrimaryColorText(context),
                 ambientSecondaryColor = ambientColorStyle.getSecondaryColor(context),
                 ambientBackgroundColor = ambientColorStyle.getBackgroundColor(context),
-                ambientOuterElementColor = ambientColorStyle.getOutterElementColor(context)
+                ambientOuterElementColor = ambientColorStyle.getOuterElementColor(context)
             )
         }
     }

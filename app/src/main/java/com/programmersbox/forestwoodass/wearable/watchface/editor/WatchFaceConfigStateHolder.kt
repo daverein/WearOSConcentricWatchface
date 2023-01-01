@@ -62,6 +62,7 @@ import kotlinx.coroutines.yield
  * new image preview via screenshot class and triggers a listener (which creates new data for the
  * [StateFlow] that feeds back to the Activity).
  */
+@Suppress("SpellCheckingInspection")
 class WatchFaceConfigStateHolder(
     private val scope: CoroutineScope,
     private val activity: ComponentActivity

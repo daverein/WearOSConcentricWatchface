@@ -31,8 +31,10 @@ const val STYLE_ICON_STYLE_SETTING = "style_icon_style_setting"
 const val DRAW_TIME_AOD_STYLE_SETTING = "draw_time_aod_style_setting"
 const val DRAW_DATE_STYLE_SETTING = "draw_date_style_setting"
 const val DRAW_COMP_CIRCLES_STYLE_SETTING = "draw_comp_circles_style_setting"
+@Suppress("SpellCheckingInspection")
 const val COMPAOD_STYLE_SETTING = "compaod_style_setting"
 const val ACTIVE_AS_AMBIENT_STYLE_SETTING = "active_as_ambient_style_setting"
+@Suppress("SpellCheckingInspection")
 const val MINUTEDIALAOD_STYLE_SETTING = "minutedialaod_style_setting"
 const val SHIFT_PIXEL_STYLE_SETTING = "shift_pixels_style_setting"
 const val LOW_POWER_STYLE_SETTING = "low_power_style_setting"
@@ -133,6 +135,7 @@ private fun getDrawCompCirclesStyleSetting(context: Context): UserStyleSetting.B
     )
 }
 
+@Suppress("SpellCheckingInspection")
 private fun getCompaodStyleSetting(context: Context): UserStyleSetting.BooleanUserStyleSetting {
     return UserStyleSetting.BooleanUserStyleSetting(
         UserStyleSetting.Id(COMPAOD_STYLE_SETTING),
@@ -145,6 +148,7 @@ private fun getCompaodStyleSetting(context: Context): UserStyleSetting.BooleanUs
     )
 }
 
+@Suppress("SpellCheckingInspection")
 private fun getMinuteaodStyleSetting(context: Context): UserStyleSetting.BooleanUserStyleSetting {
     return UserStyleSetting.BooleanUserStyleSetting(
         UserStyleSetting.Id(MINUTEDIALAOD_STYLE_SETTING),
