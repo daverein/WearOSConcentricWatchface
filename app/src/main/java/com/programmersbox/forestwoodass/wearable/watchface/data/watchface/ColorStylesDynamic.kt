@@ -46,6 +46,10 @@ const val GOLD_COLOR_STYLEID = "gold_style_id"
 private const val GOLD_COLOR_STYLE_NAME_RESOURCE_ID = R.string.gold_style_name
 
 @Suppress("SpellCheckingInspection")
+const val BLACK_GOLD_COLOR_STYLEID = "black_gold_style_id"
+private const val BLACK_GOLD_COLOR_STYLE_NAME_RESOURCE_ID = R.string.black_gold_style_name
+
+@Suppress("SpellCheckingInspection")
 const val ROSEGOLD_COLOR_STYLEID = "rosegold_style_id"
 @Suppress("SpellCheckingInspection")
 private const val ROSEGOLD_COLOR_STYLE_NAME_RESOURCE_ID = R.string.rosegold_style_name
@@ -181,6 +185,16 @@ class ColorStylesDynamic(
                 secondaryColorId = R.color.gold_secondary_color,
                 backgroundColorId = R.color.gold_background_color,
                 outerElementColorId = R.color.gold_outer_element_color
+            )
+            )
+            colorList.add(ColorStylesDynamic(
+                id = BLACK_GOLD_COLOR_STYLEID,
+                nameResourceId = BLACK_GOLD_COLOR_STYLE_NAME_RESOURCE_ID,
+                primaryColorId = R.color.black_gold_primary_color,
+                primaryColorTextId = R.color.black_gold_color_text_primary,
+                secondaryColorId = R.color.black_gold_secondary_color,
+                backgroundColorId = R.color.black_gold_background_color,
+                outerElementColorId = R.color.black_gold_outer_element_color
             )
             )
             colorList.add(ColorStylesDynamic(

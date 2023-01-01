@@ -74,6 +74,13 @@
     <color name="gold_background_color">@color/black</color>
     <color name="gold_outer_element_color">#FF715D1E</color>
 
+    <!-- Black Gold Style -->
+    <color name="black_gold_color_text_primary">#ffb18D4E</color>
+    <color name="black_gold_primary_color">#ff281c02</color>
+    <color name="black_gold_secondary_color">#FF715D1E</color>
+    <color name="black_gold_background_color">@color/black</color>
+    <color name="black_gold_outer_element_color">#FF715D1E</color>
+
     <!-- Rose Gold Style -->
     <color name="rosegold_color_text_primary">#FF9e586d</color>
     <color name="rosegold_primary_color">#ffc58388</color>

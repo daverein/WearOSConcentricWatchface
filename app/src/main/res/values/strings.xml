@@ -174,4 +174,5 @@
     <string name="watchface_low_power_setting_description">Update less to save power</string>
     <string name="activity_config_low_power_enabled_switch_content_description">Low Power Mode</string>
     <string name="activity_config_low_power_enabled_label">Low Power Mode</string>
+    <string name="black_gold_style_name">Black Gold</string>
 </resources>
