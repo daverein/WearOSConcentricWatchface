@@ -1,4 +1,19 @@
-package com.programmersbox.forestwoodass.wearable.watchface.utils
+/*
+ * Copyright 2020 The Android Open Source Project
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     https://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+package com.programmersbox.forestwoodass.wearable.watchface.concentric
 
 import android.content.Context
 import android.graphics.RectF
@@ -13,24 +28,30 @@ import androidx.wear.watchface.complications.rendering.CanvasComplicationDrawabl
 import androidx.wear.watchface.complications.rendering.ComplicationDrawable
 import androidx.wear.watchface.style.CurrentUserStyleRepository
 import com.programmersbox.forestwoodass.wearable.watchface.R
+import com.programmersbox.forestwoodass.wearable.watchface.utils.ComplicationConfig
 
-private const val LEFT_COMPLICATIONS_TOP_BOUND = 0.13f
-private const val LEFT_COMPLICATIONS_BOTTOM_BOUND = 0.37f
-private const val LEFT_COMPLICATION_LEFT_BOUND = 0.38f
-private const val LEFT_COMPLICATION_RIGHT_BOUND = 0.62f
+// Information needed for complications.
+// Creates bounds for the locations of both right and left complications. (This is the
+// location from 0.0 - 1.0.)
+// Both left and right complications use the same top and bottom bounds.
+const val CONCENTRIC_LEFT_COMPLICATIONS_TOP_BOUND = 0.12f
+const val CONCENTRIC_LEFT_COMPLICATIONS_BOTTOM_BOUND = 0.36f
+const val CONCENTRIC_LEFT_COMPLICATION_LEFT_BOUND = 0.38f
+const val CONCENTRIC_LEFT_COMPLICATION_RIGHT_BOUND = 0.62f
 
-private const val RIGHT_COMPLICATIONS_TOP_BOUND = 0.38f
-private const val RIGHT_COMPLICATIONS_BOTTOM_BOUND = 0.62f
-private const val RIGHT_COMPLICATION_LEFT_BOUND = 0.13f
-private const val RIGHT_COMPLICATION_RIGHT_BOUND = 0.37f
+const val CONCENTRIC_RIGHT_COMPLICATIONS_TOP_BOUND = 0.65f
+const val CONCENTRIC_RIGHT_COMPLICATIONS_BOTTOM_BOUND = 0.89f
+const val CONCENTRIC_RIGHT_COMPLICATION_LEFT_BOUND = 0.38f
+const val CONCENTRIC_RIGHT_COMPLICATION_RIGHT_BOUND = 0.62f
 
-private const val MIDDLE_COMPLICATIONS_TOP_BOUND = 0.38f
-private const val MIDDLE_COMPLICATIONS_BOTTOM_BOUND = 0.62f
-private const val MIDDLE_COMPLICATION_LEFT_BOUND = 0.63f
-private const val MIDDLE_COMPLICATION_RIGHT_BOUND = 0.87f
+const val CONCENTRIC_MIDDLE_COMPLICATIONS_TOP_BOUND = 0.38f
+const val CONCENTRIC_MIDDLE_COMPLICATIONS_BOTTOM_BOUND = 0.62f
+const val CONCENTRIC_MIDDLE_COMPLICATION_LEFT_BOUND = 0.48f
+const val CONCENTRIC_MIDDLE_COMPLICATION_RIGHT_BOUND = 0.72f
+
 
 // Utility function that initializes default complication slots (left and right).
-fun createAnalogComplicationSlotManager(
+fun createConcentricComplicationSlotManager(
     context: Context,
     currentUserStyleRepository: CurrentUserStyleRepository
 ): ComplicationSlotsManager {
@@ -53,14 +74,15 @@ fun createAnalogComplicationSlotManager(
         ),
         bounds = ComplicationSlotBounds(
             RectF(
-                LEFT_COMPLICATION_LEFT_BOUND,
-                LEFT_COMPLICATIONS_TOP_BOUND,
-                LEFT_COMPLICATION_RIGHT_BOUND,
-                LEFT_COMPLICATIONS_BOTTOM_BOUND
+                CONCENTRIC_LEFT_COMPLICATION_LEFT_BOUND,
+                CONCENTRIC_LEFT_COMPLICATIONS_TOP_BOUND,
+                CONCENTRIC_LEFT_COMPLICATION_RIGHT_BOUND,
+                CONCENTRIC_LEFT_COMPLICATIONS_BOTTOM_BOUND
             )
         )
     )
         .build()
+
 
     val middleComplication = ComplicationSlot.createRoundRectComplicationSlotBuilder(
         id = ComplicationConfig.Middle.id,
@@ -72,14 +94,15 @@ fun createAnalogComplicationSlotManager(
         ),
         bounds = ComplicationSlotBounds(
             RectF(
-                MIDDLE_COMPLICATION_LEFT_BOUND,
-                MIDDLE_COMPLICATIONS_TOP_BOUND,
-                MIDDLE_COMPLICATION_RIGHT_BOUND,
-                MIDDLE_COMPLICATIONS_BOTTOM_BOUND
+                CONCENTRIC_MIDDLE_COMPLICATION_LEFT_BOUND,
+                CONCENTRIC_MIDDLE_COMPLICATIONS_TOP_BOUND,
+                CONCENTRIC_MIDDLE_COMPLICATION_RIGHT_BOUND,
+                CONCENTRIC_MIDDLE_COMPLICATIONS_BOTTOM_BOUND
             )
         )
     )
         .build()
+
 
     val rightComplication = ComplicationSlot.createRoundRectComplicationSlotBuilder(
         id = ComplicationConfig.Right.id,
@@ -91,10 +114,10 @@ fun createAnalogComplicationSlotManager(
         ),
         bounds = ComplicationSlotBounds(
             RectF(
-                RIGHT_COMPLICATION_LEFT_BOUND,
-                RIGHT_COMPLICATIONS_TOP_BOUND,
-                RIGHT_COMPLICATION_RIGHT_BOUND,
-                RIGHT_COMPLICATIONS_BOTTOM_BOUND
+                CONCENTRIC_RIGHT_COMPLICATION_LEFT_BOUND,
+                CONCENTRIC_RIGHT_COMPLICATIONS_TOP_BOUND,
+                CONCENTRIC_RIGHT_COMPLICATION_RIGHT_BOUND,
+                CONCENTRIC_RIGHT_COMPLICATIONS_BOTTOM_BOUND
             )
         )
     ).build()
@@ -103,4 +126,5 @@ fun createAnalogComplicationSlotManager(
         listOf(leftComplication, rightComplication, middleComplication),
         currentUserStyleRepository
     )
+
 }

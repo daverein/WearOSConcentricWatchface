@@ -25,8 +25,8 @@ import androidx.wear.watchface.WatchFaceType
 import androidx.wear.watchface.WatchState
 import androidx.wear.watchface.style.CurrentUserStyleRepository
 import androidx.wear.watchface.style.UserStyleSchema
-import com.programmersbox.forestwoodass.wearable.watchface.analog.AnalogNativeCanvasRenderer
-import com.programmersbox.forestwoodass.wearable.watchface.utils.createDigitalComplicationSlotManager
+import com.programmersbox.forestwoodass.wearable.watchface.reveal.SecondsRevealNativeCanvasRenderer
+import com.programmersbox.forestwoodass.wearable.watchface.reveal.createDigitalComplicationSlotManager
 import com.programmersbox.forestwoodass.wearable.watchface.utils.createUserStyleSchemaAnalog
 
 /**
@@ -58,7 +58,7 @@ class DigitalNativeFaceService : WatchFaceService() {
         Log.d(TAG, "createWatchFace()")
 
         // Creates class that renders the watch face.
-        val renderer = AnalogNativeCanvasRenderer(
+        val renderer = SecondsRevealNativeCanvasRenderer(
             context = applicationContext,
             surfaceHolder = surfaceHolder,
             watchState = watchState,

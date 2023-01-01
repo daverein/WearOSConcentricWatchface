@@ -1,4 +1,4 @@
-package com.programmersbox.forestwoodass.wearable.watchface.utils
+package com.programmersbox.forestwoodass.wearable.watchface.reveal
 
 import android.content.Context
 import android.graphics.RectF
@@ -13,24 +13,25 @@ import androidx.wear.watchface.complications.rendering.CanvasComplicationDrawabl
 import androidx.wear.watchface.complications.rendering.ComplicationDrawable
 import androidx.wear.watchface.style.CurrentUserStyleRepository
 import com.programmersbox.forestwoodass.wearable.watchface.R
+import com.programmersbox.forestwoodass.wearable.watchface.utils.ComplicationConfig
 
-private const val LEFT_COMPLICATIONS_TOP_BOUND = 0.69f
-private const val LEFT_COMPLICATIONS_BOTTOM_BOUND = 0.93f
+private const val LEFT_COMPLICATIONS_TOP_BOUND = 0.13f
+private const val LEFT_COMPLICATIONS_BOTTOM_BOUND = 0.37f
 private const val LEFT_COMPLICATION_LEFT_BOUND = 0.38f
 private const val LEFT_COMPLICATION_RIGHT_BOUND = 0.62f
 
-private const val RIGHT_COMPLICATIONS_TOP_BOUND = 0.53f
-private const val RIGHT_COMPLICATIONS_BOTTOM_BOUND = 0.77f
+private const val RIGHT_COMPLICATIONS_TOP_BOUND = 0.38f
+private const val RIGHT_COMPLICATIONS_BOTTOM_BOUND = 0.62f
 private const val RIGHT_COMPLICATION_LEFT_BOUND = 0.13f
 private const val RIGHT_COMPLICATION_RIGHT_BOUND = 0.37f
 
-private const val MIDDLE_COMPLICATIONS_TOP_BOUND = 0.53f
-private const val MIDDLE_COMPLICATIONS_BOTTOM_BOUND = 0.77f
+private const val MIDDLE_COMPLICATIONS_TOP_BOUND = 0.38f
+private const val MIDDLE_COMPLICATIONS_BOTTOM_BOUND = 0.62f
 private const val MIDDLE_COMPLICATION_LEFT_BOUND = 0.63f
 private const val MIDDLE_COMPLICATION_RIGHT_BOUND = 0.87f
 
 // Utility function that initializes default complication slots (left and right).
-fun createDigitalComplicationSlotManager(
+fun createAnalogComplicationSlotManager(
     context: Context,
     currentUserStyleRepository: CurrentUserStyleRepository
 ): ComplicationSlotsManager {

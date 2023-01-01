@@ -1,4 +1,4 @@
-package com.programmersbox.forestwoodass.wearable.watchface.analog
+package com.programmersbox.forestwoodass.wearable.watchface.reveal
 
 import android.content.Context
 import android.graphics.*
@@ -45,7 +45,7 @@ private const val ANALOG_DATE_POSITION = 0.75f
 private const val TIME_FONT_SIZE = 0.27f
 private const val DATE_FONT_SIZE = 0.05f
 
-class AnalogNativeCanvasRenderer(
+class SecondsRevealNativeCanvasRenderer(
     val context: Context,
     surfaceHolder: SurfaceHolder,
     watchState: WatchState,
