@@ -172,8 +172,8 @@ abstract class NativeCanvasRenderer(
     var currentWatchFaceSize = Rect(0, 0, 0, 0)
 
     // Is this expensive?
-    private val batteryLevelChanged: BatteryLevelChangeReceiver
-        get() = BatteryLevelChangeReceiver(this)
+    private val batteryLevelChanged = BatteryLevelChangeReceiver(this)
+
 
     fun isBatteryLow(): Boolean {
         return batteryLevelChanged.batteryLow
