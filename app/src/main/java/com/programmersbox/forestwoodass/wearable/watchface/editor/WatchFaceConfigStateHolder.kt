@@ -186,8 +186,11 @@ class WatchFaceConfigStateHolder(
             userStyle[styleIconKey] as UserStyleSetting.BooleanUserStyleSetting.BooleanOption
         val drawDateEnabledStyle =
             userStyle[drawDateKey] as UserStyleSetting.BooleanUserStyleSetting.BooleanOption
-        val lowPowerEnabledStyle =
+        val lowPowerEnabledStyle = if (::lowPowerKey.isInitialized) {
             userStyle[lowPowerKey] as UserStyleSetting.BooleanUserStyleSetting.BooleanOption
+        } else {
+            UserStyleSetting.BooleanUserStyleSetting.BooleanOption.FALSE
+        }
         val drawCompCirclesEnabledStyle =
             userStyle[compCirclesKey] as UserStyleSetting.BooleanUserStyleSetting.BooleanOption
         val compaodEnabledStyle =

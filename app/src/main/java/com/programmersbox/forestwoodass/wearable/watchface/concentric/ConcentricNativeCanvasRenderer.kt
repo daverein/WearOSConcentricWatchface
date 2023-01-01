@@ -221,21 +221,21 @@ class ConcentricNativeCanvasRenderer(
                 when (complication.id) {
                     RIGHT_COMPLICATION_ID -> {
                         complication.complicationSlotBounds.perComplicationTypeBounds[ComplicationType.RANGED_VALUE]?.left =
-                            RIGHT_COMPLICATION_LEFT_BOUND + offset
+                            CONCENTRIC_RIGHT_COMPLICATION_LEFT_BOUND + offset
                         complication.complicationSlotBounds.perComplicationTypeBounds[ComplicationType.RANGED_VALUE]?.right =
-                            RIGHT_COMPLICATION_RIGHT_BOUND + offset
+                            CONCENTRIC_RIGHT_COMPLICATION_RIGHT_BOUND + offset
                     }
                     LEFT_COMPLICATION_ID -> {
                         complication.complicationSlotBounds.perComplicationTypeBounds[ComplicationType.RANGED_VALUE]?.left =
-                            LEFT_COMPLICATION_LEFT_BOUND + offset
+                            CONCENTRIC_LEFT_COMPLICATION_LEFT_BOUND + offset
                         complication.complicationSlotBounds.perComplicationTypeBounds[ComplicationType.RANGED_VALUE]?.right =
-                            LEFT_COMPLICATION_RIGHT_BOUND + offset
+                            CONCENTRIC_LEFT_COMPLICATION_RIGHT_BOUND + offset
                     }
                     MIDDLE_COMPLICATION_ID -> {
                         complication.complicationSlotBounds.perComplicationTypeBounds[ComplicationType.RANGED_VALUE]?.left =
-                            MIDDLE_COMPLICATION_LEFT_BOUND + offset
+                            CONCENTRIC_MIDDLE_COMPLICATION_LEFT_BOUND + offset
                         complication.complicationSlotBounds.perComplicationTypeBounds[ComplicationType.RANGED_VALUE]?.right =
-                            MIDDLE_COMPLICATION_RIGHT_BOUND + offset
+                            CONCENTRIC_MIDDLE_COMPLICATION_RIGHT_BOUND + offset
                     }
                 }
 
@@ -243,9 +243,9 @@ class ConcentricNativeCanvasRenderer(
                     watchFaceData.layoutStyle.id != LayoutStyleIdAndResourceIds.HALFFACE.id
                 ) {
                     complication.complicationSlotBounds.perComplicationTypeBounds[ComplicationType.RANGED_VALUE]?.left =
-                        MIDDLE_COMPLICATION_LEFT_BOUND + offset + MINUTE_HIGHLIGHT_WIDTH_FRACTION
+                        CONCENTRIC_MIDDLE_COMPLICATION_LEFT_BOUND + offset + MINUTE_HIGHLIGHT_WIDTH_FRACTION
                     complication.complicationSlotBounds.perComplicationTypeBounds[ComplicationType.RANGED_VALUE]?.right =
-                        MIDDLE_COMPLICATION_RIGHT_BOUND + offset + MINUTE_HIGHLIGHT_WIDTH_FRACTION
+                        CONCENTRIC_MIDDLE_COMPLICATION_RIGHT_BOUND + offset + MINUTE_HIGHLIGHT_WIDTH_FRACTION
                     continue
                 }
 

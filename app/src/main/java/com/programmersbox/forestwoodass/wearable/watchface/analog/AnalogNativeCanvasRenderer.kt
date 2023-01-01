@@ -3,11 +3,9 @@ package com.programmersbox.forestwoodass.wearable.watchface.analog
 import android.content.Context
 import android.graphics.*
 import android.view.SurfaceHolder
-import androidx.wear.watchface.ComplicationSlot
 import androidx.wear.watchface.ComplicationSlotsManager
 import androidx.wear.watchface.DrawMode
 import androidx.wear.watchface.WatchState
-import androidx.wear.watchface.complications.data.ComplicationType
 import androidx.wear.watchface.style.CurrentUserStyleRepository
 import androidx.wear.watchface.style.UserStyle
 import androidx.wear.watchface.style.WatchFaceLayer
@@ -249,65 +247,9 @@ class AnalogNativeCanvasRenderer(
         }
     }
 
-    private fun adjustComplicationsForAnalog(complication: ComplicationSlot) {
-        val offsetLeft = 0.01f
-        when (complication.id) {
-            RIGHT_COMPLICATION_ID -> {
-                complication.complicationSlotBounds.perComplicationTypeBounds[ComplicationType.RANGED_VALUE]?.top =
-                    MIDDLE_COMPLICATIONS_TOP_BOUND
-                complication.complicationSlotBounds.perComplicationTypeBounds[ComplicationType.RANGED_VALUE]?.bottom =
-                    MIDDLE_COMPLICATIONS_BOTTOM_BOUND
-                complication.complicationSlotBounds.perComplicationTypeBounds[ComplicationType.RANGED_VALUE]?.left =
-                    RIGHT_COMPLICATION_LEFT_BOUND - 0.25f
-                complication.complicationSlotBounds.perComplicationTypeBounds[ComplicationType.RANGED_VALUE]?.right =
-                    RIGHT_COMPLICATION_RIGHT_BOUND - 0.25f
-            }
-            LEFT_COMPLICATION_ID -> {
-                complication.complicationSlotBounds.perComplicationTypeBounds[ComplicationType.RANGED_VALUE]?.top =
-                    LEFT_COMPLICATIONS_TOP_BOUND + offsetLeft
-                complication.complicationSlotBounds.perComplicationTypeBounds[ComplicationType.RANGED_VALUE]?.bottom =
-                    LEFT_COMPLICATIONS_BOTTOM_BOUND + offsetLeft
-            }
-            MIDDLE_COMPLICATION_ID -> {
-                complication.complicationSlotBounds.perComplicationTypeBounds[ComplicationType.RANGED_VALUE]?.left =
-                    MIDDLE_COMPLICATION_LEFT_BOUND + 0.15f
-                complication.complicationSlotBounds.perComplicationTypeBounds[ComplicationType.RANGED_VALUE]?.right =
-                    MIDDLE_COMPLICATION_RIGHT_BOUND + 0.15f
-            }
-        }
-    }
 
-    private fun adjustComplicationsForDigital(complication: ComplicationSlot) {
-        val offsetLeft = 0.57f
-        when (complication.id) {
-            RIGHT_COMPLICATION_ID -> {
-                complication.complicationSlotBounds.perComplicationTypeBounds[ComplicationType.RANGED_VALUE]?.top =
-                    MIDDLE_COMPLICATIONS_TOP_BOUND + 0.15f
-                complication.complicationSlotBounds.perComplicationTypeBounds[ComplicationType.RANGED_VALUE]?.bottom =
-                    MIDDLE_COMPLICATIONS_BOTTOM_BOUND + 0.15f
-                complication.complicationSlotBounds.perComplicationTypeBounds[ComplicationType.RANGED_VALUE]?.left =
-                    RIGHT_COMPLICATION_LEFT_BOUND - 0.25f
-                complication.complicationSlotBounds.perComplicationTypeBounds[ComplicationType.RANGED_VALUE]?.right =
-                    RIGHT_COMPLICATION_RIGHT_BOUND - 0.25f
-            }
-            LEFT_COMPLICATION_ID -> {
-                complication.complicationSlotBounds.perComplicationTypeBounds[ComplicationType.RANGED_VALUE]?.top =
-                    LEFT_COMPLICATIONS_TOP_BOUND + offsetLeft
-                complication.complicationSlotBounds.perComplicationTypeBounds[ComplicationType.RANGED_VALUE]?.bottom =
-                    LEFT_COMPLICATIONS_BOTTOM_BOUND + offsetLeft
-            }
-            MIDDLE_COMPLICATION_ID -> {
-                complication.complicationSlotBounds.perComplicationTypeBounds[ComplicationType.RANGED_VALUE]?.left =
-                    MIDDLE_COMPLICATION_LEFT_BOUND + 0.15f
-                complication.complicationSlotBounds.perComplicationTypeBounds[ComplicationType.RANGED_VALUE]?.right =
-                    MIDDLE_COMPLICATION_RIGHT_BOUND + 0.15f
-                complication.complicationSlotBounds.perComplicationTypeBounds[ComplicationType.RANGED_VALUE]?.top =
-                    MIDDLE_COMPLICATIONS_TOP_BOUND + 0.15f
-                complication.complicationSlotBounds.perComplicationTypeBounds[ComplicationType.RANGED_VALUE]?.bottom =
-                    MIDDLE_COMPLICATIONS_BOTTOM_BOUND + 0.15f
-            }
-        }
-    }
+
+
 
     override fun drawComplications(
         canvas: Canvas,
@@ -319,12 +261,6 @@ class AnalogNativeCanvasRenderer(
         // for this watchface
         for ((_, complication) in complicationSlotsManager.complicationSlots) {
             if (complication.enabled) {
-                if (drawDigitalWatchFace) {
-                    adjustComplicationsForDigital(complication)
-                } else {
-                    adjustComplicationsForAnalog(complication)
-                }
-
                 complication.render(canvas, zonedDateTime, renderParameters)
             }
         }

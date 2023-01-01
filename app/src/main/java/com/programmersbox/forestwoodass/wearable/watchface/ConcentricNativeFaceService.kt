@@ -26,7 +26,7 @@ import androidx.wear.watchface.WatchState
 import androidx.wear.watchface.style.CurrentUserStyleRepository
 import androidx.wear.watchface.style.UserStyleSchema
 import com.programmersbox.forestwoodass.wearable.watchface.concentric.ConcentricNativeCanvasRenderer
-import com.programmersbox.forestwoodass.wearable.watchface.utils.createComplicationSlotManager
+import com.programmersbox.forestwoodass.wearable.watchface.utils.createConcentricComplicationSlotManager
 import com.programmersbox.forestwoodass.wearable.watchface.utils.createUserStyleSchemaConcentric
 
 /**
@@ -44,7 +44,7 @@ class ConcentricNativeFaceService : WatchFaceService() {
     // repository.
     override fun createComplicationSlotsManager(
         currentUserStyleRepository: CurrentUserStyleRepository
-    ): ComplicationSlotsManager = createComplicationSlotManager(
+    ): ComplicationSlotsManager = createConcentricComplicationSlotManager(
         context = applicationContext,
         currentUserStyleRepository = currentUserStyleRepository
     )

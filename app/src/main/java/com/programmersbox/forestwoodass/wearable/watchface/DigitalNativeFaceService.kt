@@ -26,7 +26,7 @@ import androidx.wear.watchface.WatchState
 import androidx.wear.watchface.style.CurrentUserStyleRepository
 import androidx.wear.watchface.style.UserStyleSchema
 import com.programmersbox.forestwoodass.wearable.watchface.analog.AnalogNativeCanvasRenderer
-import com.programmersbox.forestwoodass.wearable.watchface.utils.createComplicationSlotManager
+import com.programmersbox.forestwoodass.wearable.watchface.utils.createDigitalComplicationSlotManager
 import com.programmersbox.forestwoodass.wearable.watchface.utils.createUserStyleSchemaAnalog
 
 /**
@@ -44,7 +44,7 @@ class DigitalNativeFaceService : WatchFaceService() {
     // repository.
     override fun createComplicationSlotsManager(
         currentUserStyleRepository: CurrentUserStyleRepository
-    ): ComplicationSlotsManager = createComplicationSlotManager(
+    ): ComplicationSlotsManager = createDigitalComplicationSlotManager(
         context = applicationContext,
         currentUserStyleRepository = currentUserStyleRepository
     )

@@ -15,41 +15,13 @@
  */
 package com.programmersbox.forestwoodass.wearable.watchface.utils
 
-import android.content.Context
-import android.graphics.RectF
-import androidx.wear.watchface.CanvasComplicationFactory
-import androidx.wear.watchface.ComplicationSlot
-import androidx.wear.watchface.ComplicationSlotsManager
-import androidx.wear.watchface.complications.ComplicationSlotBounds
-import androidx.wear.watchface.complications.DefaultComplicationDataSourcePolicy
-import androidx.wear.watchface.complications.SystemDataSources
 import androidx.wear.watchface.complications.data.ComplicationType
-import androidx.wear.watchface.complications.rendering.CanvasComplicationDrawable
-import androidx.wear.watchface.complications.rendering.ComplicationDrawable
-import androidx.wear.watchface.style.CurrentUserStyleRepository
-import com.programmersbox.forestwoodass.wearable.watchface.R
 
 // Information needed for complications.
 // Creates bounds for the locations of both right and left complications. (This is the
 // location from 0.0 - 1.0.)
 // Both left and right complications use the same top and bottom bounds.
-const val LEFT_COMPLICATIONS_TOP_BOUND = 0.12f
-const val LEFT_COMPLICATIONS_BOTTOM_BOUND = 0.36f
-const val LEFT_COMPLICATION_LEFT_BOUND = 0.38f
-const val LEFT_COMPLICATION_RIGHT_BOUND = 0.62f
 
-const val RIGHT_COMPLICATIONS_TOP_BOUND = 0.65f
-const val RIGHT_COMPLICATIONS_BOTTOM_BOUND = 0.89f
-const val RIGHT_COMPLICATION_LEFT_BOUND = 0.38f
-const val RIGHT_COMPLICATION_RIGHT_BOUND = 0.62f
-
-const val MIDDLE_COMPLICATIONS_TOP_BOUND = 0.38f
-const val MIDDLE_COMPLICATIONS_BOTTOM_BOUND = 0.62f
-const val MIDDLE_COMPLICATION_LEFT_BOUND = 0.48f
-const val MIDDLE_COMPLICATION_RIGHT_BOUND = 0.72f
-
-
-private const val DEFAULT_COMPLICATION_STYLE_DRAWABLE_ID = R.drawable.complication_style
 
 // Unique IDs for each complication. The settings activity that supports allowing users
 // to select their complication data provider requires numbers to be >= 0.
@@ -93,84 +65,4 @@ sealed class ComplicationConfig(val id: Int, val supportedTypes: List<Complicati
             ComplicationType.PHOTO_IMAGE
         )
     )
-}
-
-// Utility function that initializes default complication slots (left and right).
-fun createComplicationSlotManager(
-    context: Context,
-    currentUserStyleRepository: CurrentUserStyleRepository,
-    drawableId: Int = DEFAULT_COMPLICATION_STYLE_DRAWABLE_ID
-): ComplicationSlotsManager {
-    val defaultCanvasComplicationFactory =
-        CanvasComplicationFactory { watchState, listener ->
-            CanvasComplicationDrawable(
-                ComplicationDrawable.getDrawable(context, drawableId)!!,
-                watchState,
-                listener
-            )
-        }
-
-    val leftComplication = ComplicationSlot.createRoundRectComplicationSlotBuilder(
-        id = ComplicationConfig.Left.id,
-        canvasComplicationFactory = defaultCanvasComplicationFactory,
-        supportedTypes = ComplicationConfig.Left.supportedTypes,
-        defaultDataSourcePolicy = DefaultComplicationDataSourcePolicy(
-            SystemDataSources.NO_DATA_SOURCE,
-            ComplicationType.SHORT_TEXT
-        ),
-        bounds = ComplicationSlotBounds(
-            RectF(
-                LEFT_COMPLICATION_LEFT_BOUND,
-                LEFT_COMPLICATIONS_TOP_BOUND,
-                LEFT_COMPLICATION_RIGHT_BOUND,
-                LEFT_COMPLICATIONS_BOTTOM_BOUND
-            )
-        )
-    )
-        .build()
-
-
-    val middleComplication = ComplicationSlot.createRoundRectComplicationSlotBuilder(
-        id = ComplicationConfig.Middle.id,
-        canvasComplicationFactory = defaultCanvasComplicationFactory,
-        supportedTypes = ComplicationConfig.Middle.supportedTypes,
-        defaultDataSourcePolicy = DefaultComplicationDataSourcePolicy(
-            SystemDataSources.NO_DATA_SOURCE,
-            ComplicationType.SHORT_TEXT
-        ),
-        bounds = ComplicationSlotBounds(
-            RectF(
-                MIDDLE_COMPLICATION_LEFT_BOUND,
-                MIDDLE_COMPLICATIONS_TOP_BOUND,
-                MIDDLE_COMPLICATION_RIGHT_BOUND,
-                MIDDLE_COMPLICATIONS_BOTTOM_BOUND
-            )
-        )
-    )
-        .build()
-
-
-    val rightComplication = ComplicationSlot.createRoundRectComplicationSlotBuilder(
-        id = ComplicationConfig.Right.id,
-        canvasComplicationFactory = defaultCanvasComplicationFactory,
-        supportedTypes = ComplicationConfig.Right.supportedTypes,
-        defaultDataSourcePolicy = DefaultComplicationDataSourcePolicy(
-            SystemDataSources.NO_DATA_SOURCE,
-            ComplicationType.RANGED_VALUE
-        ),
-        bounds = ComplicationSlotBounds(
-            RectF(
-                RIGHT_COMPLICATION_LEFT_BOUND,
-                RIGHT_COMPLICATIONS_TOP_BOUND,
-                RIGHT_COMPLICATION_RIGHT_BOUND,
-                RIGHT_COMPLICATIONS_BOTTOM_BOUND
-            )
-        )
-    ).build()
-
-    return ComplicationSlotsManager(
-        listOf(leftComplication, rightComplication, middleComplication),
-        currentUserStyleRepository
-    )
-
 }
