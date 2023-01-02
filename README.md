@@ -1,21 +1,25 @@
 Concentric Native (WearOS Watchface)
 ===============================
-My version of the Pixel Concentric watchface.
+My version of the Pixel Concentric and Digital watchfaces, plus an Analog-style one.
 
 Features
 --------
-* 3 faces
+* 3 watchfaces in one app, with one having 3 styles
 * Large(r) fonts
 * 2-3 Complications on the watchfaces
 * Always On Display friendly, and can adjust watchface, complications, and even the time
 * Full-on AOD for when you want it to show nicely (but probably uses more power)
-* Multiple highlight colors
+* Multiple colors palettes
 * Pixel-shifting to avoid burn-in during AOD
 * Control over colors and complication elements
+* Ability to show AOD in full colors
+* Only 15fps for a good battery experience, with a 1fps Low Power mode
 
 Introduction
 ------------
 This is my version of the Google Pixel Concentric Watchface.  It started off being as closely mirroring it as possible, but then I realized I was too old to see the time with those font sizes... and lack of complications for several of the different faces it provided.  So I made the fonts bigger and added complications.  And made the fonts even bigger when in Always on Display (ambient) mode.
+
+Then I added an Analog watchface (for those classy nights out), and a Digital version (for my son).
 
 Always On Display
 -----------------
@@ -29,17 +33,26 @@ https://github.com/android/wear-os-samples/tree/main/WatchFaceKotlin
 Screenshots
 -------------
 
-Face 1:
+Concentric Face 1:
 
 <img src="screenshots/screenshot_full.png" width="400" alt="Concentric Native Watchface"/>
 
-Face 2:
+Concentric Face 2:
 
 <img src="screenshots/screenshot_half.png" width="400" alt="Concentric Native Config"/>
 
-Face 3:
+Concentric Face 3:
 
 <img src="screenshots/screenshot_halfzoom.png" width="400" alt="Concentric Native Config"/>
+
+Digital Face:
+
+<img src="screenshots/screenshot_digital.png" width="400" alt="Digital Native Config"/>
+
+Analog Face:
+
+<img src="screenshots/screenshot_analog.png" width="400" alt="Analog Native Config"/>
+
 
 Battery-Friendly Always On Display screens (with options to show or hide complications):
 
@@ -48,7 +61,7 @@ Battery-Friendly Always On Display screens (with options to show or hide complic
 <img src="screenshots/aod3.png" width="400" alt="Concentric Native Config"/>
 <img src="screenshots/aod4.png" width="400" alt="Concentric Native Config"/>
 
-Full-on Always On Display screens:
+Full-on Always On Display screens with Ambient As Active options:
 
 <img src="screenshots/aod5.png" width="400" alt="Concentric Native Config"/>
 <img src="screenshots/aod6.png" width="400" alt="Concentric Native Config"/>
@@ -62,15 +75,14 @@ Configuration screen:
 Getting Started to build
 ---------------
 
-This sample uses the Gradle build system. To build this project, use the "gradlew build" command or
-use "Import Project" in Android Studio.
+This application uses the Gradle build system. To build this project, use the "gradlew build" command or use "Import Project" in Android Studio.
 
 Support
 -------
 
 - Stack Overflow: http://stackoverflow.com/questions/tagged/android
 
-If you've found an error in this sample, please file an issue:
+If you've found an error in this application, please file an issue:
 https://github.com/daverein/WearOSConcentricWatchface/issues
 
 Patches are encouraged, and may be submitted by forking this project and
