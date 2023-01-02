@@ -205,7 +205,7 @@ fun createUserStyleSchemaConcentric(context: Context): UserStyleSchema {
     )
 }
 
-fun createUserStyleSchemaAnalog(context: Context): UserStyleSchema {
+fun createUserStyleSchemaSecondsReveal(context: Context): UserStyleSchema {
     // 4. Create style settings to hold all options.
     return UserStyleSchema(
         listOf(

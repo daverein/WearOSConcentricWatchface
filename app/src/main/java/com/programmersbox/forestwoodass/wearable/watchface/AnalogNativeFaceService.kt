@@ -27,7 +27,7 @@ import androidx.wear.watchface.style.CurrentUserStyleRepository
 import androidx.wear.watchface.style.UserStyleSchema
 import com.programmersbox.forestwoodass.wearable.watchface.reveal.SecondsRevealNativeCanvasRenderer
 import com.programmersbox.forestwoodass.wearable.watchface.reveal.createAnalogComplicationSlotManager
-import com.programmersbox.forestwoodass.wearable.watchface.utils.createUserStyleSchemaAnalog
+import com.programmersbox.forestwoodass.wearable.watchface.utils.createUserStyleSchemaSecondsReveal
 
 /**
  * Handles much of the boilerplate needed to implement a watch face (minus rendering code; see
@@ -38,7 +38,7 @@ class AnalogNativeFaceService : WatchFaceService() {
 
     // Used by Watch Face APIs to construct user setting options and repository.
     override fun createUserStyleSchema(): UserStyleSchema =
-        createUserStyleSchemaAnalog(context = applicationContext)
+        createUserStyleSchemaSecondsReveal(context = applicationContext)
 
     // Creates all complication user settings and adds them to the existing user settings
     // repository.
