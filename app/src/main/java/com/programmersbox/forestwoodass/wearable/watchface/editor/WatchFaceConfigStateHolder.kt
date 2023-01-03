@@ -232,7 +232,14 @@ class WatchFaceConfigStateHolder(
             MIDDLE_COMPLICATION_ID -> MIDDLE_COMPLICATION_ID
             else -> return
         }
-        scope.launch { editorSession.openComplicationDataSourceChooser(complicationSlotId) }
+        try {
+            scope.launch { editorSession.openComplicationDataSourceChooser(complicationSlotId) }
+        }
+        catch ( ex: java.lang.IllegalStateException)
+        {
+            // Not sure why this is, but let's catch it and hope its just a transient issue?
+            Log.e(TAG, "Error in launching complication data source chooser")
+        }
     }
 
     fun setColorStyle(newColorStyleId: String) {
