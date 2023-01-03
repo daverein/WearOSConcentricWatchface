@@ -48,10 +48,12 @@ Concentric Face 3:
 Digital Face:
 
 <img src="screenshots/screenshot_digital.png" width="400" alt="Digital Native Config"/>
+<img src="screenshots/digital_animate.png" width="400" alt="Digital Native Config"/>
 
 Analog Face:
 
 <img src="screenshots/screenshot_analog.png" width="400" alt="Analog Native Config"/>
+<img src="screenshots/analog_animate.png" width="400" alt="Digital Native Config"/>
 
 
 Battery-Friendly Always On Display screens (with options to show or hide complications):
