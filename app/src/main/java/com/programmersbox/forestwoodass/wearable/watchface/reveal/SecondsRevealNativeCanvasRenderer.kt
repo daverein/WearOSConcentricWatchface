@@ -279,7 +279,7 @@ class SecondsRevealNativeCanvasRenderer(
         val nano = zonedDateTime.toLocalTime().nano / 1000000L
 
         minuteHighlightPaint.color =
-            (minuteHighlightPaint.color and 0x00ffffff) or 0xe7000000.toInt()
+            (minuteHighlightPaint.color and 0x00ffffff) or 0x77000000
 
         minuteHighlightPaint.strokeWidth = HOUR_MINUTE_HAND_STROKE * 2f
         minuteHighlightPaint.strokeCap = Paint.Cap.ROUND
