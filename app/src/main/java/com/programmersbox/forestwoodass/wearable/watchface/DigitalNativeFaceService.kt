@@ -17,15 +17,10 @@ package com.programmersbox.forestwoodass.wearable.watchface
 
 import android.util.Log
 import android.view.SurfaceHolder
-import androidx.wear.watchface.CanvasType
-import androidx.wear.watchface.ComplicationSlotsManager
-import androidx.wear.watchface.WatchFace
-import androidx.wear.watchface.WatchFaceService
-import androidx.wear.watchface.WatchFaceType
-import androidx.wear.watchface.WatchState
+import androidx.wear.watchface.*
 import androidx.wear.watchface.style.CurrentUserStyleRepository
 import androidx.wear.watchface.style.UserStyleSchema
-import com.programmersbox.forestwoodass.wearable.watchface.reveal.SecondsRevealNativeCanvasRenderer
+import com.programmersbox.forestwoodass.wearable.watchface.reveal.DigitalNativeCanvasRenderer
 import com.programmersbox.forestwoodass.wearable.watchface.reveal.createDigitalComplicationSlotManager
 import com.programmersbox.forestwoodass.wearable.watchface.utils.createUserStyleSchemaSecondsReveal
 
@@ -58,14 +53,13 @@ class DigitalNativeFaceService : WatchFaceService() {
         Log.d(TAG, "createWatchFace()")
 
         // Creates class that renders the watch face.
-        val renderer = SecondsRevealNativeCanvasRenderer(
+        val renderer = DigitalNativeCanvasRenderer(
             context = applicationContext,
             surfaceHolder = surfaceHolder,
             watchState = watchState,
             complicationSlotsManager = complicationSlotsManager,
             currentUserStyleRepository = currentUserStyleRepository,
-            canvasType = CanvasType.HARDWARE,
-            true
+            canvasType = CanvasType.HARDWARE
         )
 
         Log.d(TAG, "recalculateClockHands()")

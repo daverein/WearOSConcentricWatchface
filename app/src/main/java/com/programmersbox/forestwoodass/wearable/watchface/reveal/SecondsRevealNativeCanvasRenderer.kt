@@ -21,12 +21,6 @@ private const val DIAL_TICKS_MAJOR_STROKE = 4f
 private const val DIAL_TICKS_MINOR_STROKE = 2f
 private const val DIAL_TICKS_MAJOR_LENGTH = 0.94f
 private const val DIAL_TICKS_MINOR_LENGTH = 0.98f
-private const val HOUR_HAND_WIDTH = 0.05f
-private const val HOUR_HAND_EXTENT = 0.40f
-private const val MINUTE_HAND_WIDTH = 0.04f
-private const val MINUTE_HAND_EXTENT = 0.10f
-private const val HOUR_MINUTE_HAND_STROKE = 1f
-private const val HOUR_MINUTE_HAND_RADIUS = 10f
 private const val SECONDS_CIRCLE_RADIUS = 0.08f
 private const val SECONDS_CIRCLE_STROKE = 3f
 private const val SECONDS_HAND_STROKE = 2f
@@ -35,25 +29,18 @@ private const val SECONDS_MINOR_FONT_SIZE = (SECOND_DIAL_FONT_SIZE * 0.62f)
 private const val SECONDS_EDGE_MINOR_PADDING = 0.99f
 private const val SECONDS_EDGE_MAJOR_PADDING = 0.96f
 private const val SECOND_MARK_LENGTH = 0.03f
-private const val HOUR_MINUTE_HANDLE_LENGTH = 0.10f
-private const val SECONDS_CIRCLE_OFFSET = 0.004f
+private const val SECONDS_CIRCLE_OFFSET = 0.0025f
 
-
-private const val DIGITAL_TIME_POSITION = 0.47f
-private const val DIGITAL_DATE_POSITION = 0.22f
-private const val ANALOG_DATE_POSITION = 0.75f
-private const val TIME_FONT_SIZE = 0.27f
 private const val DATE_FONT_SIZE = 0.05f
 
 @Suppress("SpellCheckingInspection")
-class SecondsRevealNativeCanvasRenderer(
+abstract class SecondsRevealNativeCanvasRenderer(
     val context: Context,
     surfaceHolder: SurfaceHolder,
     watchState: WatchState,
     val complicationSlotsManager: ComplicationSlotsManager,
     currentUserStyleRepository: CurrentUserStyleRepository,
-    canvasType: Int,
-    drawDigital: Boolean
+    canvasType: Int
 ) : NativeCanvasRenderer(
     context,
     surfaceHolder,
@@ -62,7 +49,6 @@ class SecondsRevealNativeCanvasRenderer(
     currentUserStyleRepository,
     canvasType
 ) {
-    private val drawDigitalWatchFace = drawDigital
     private var hiddenSecondsBitmap: Bitmap? = null
     private var hiddenSecondsCutoutMaskBitmap: Bitmap? = null
     private var hiddenSecondsResultBitmap: Bitmap? = null
@@ -114,112 +100,17 @@ class SecondsRevealNativeCanvasRenderer(
             canvas.scale(scaleValue, scaleValue, bounds.exactCenterX(), bounds.exactCenterY())
         }
 
-        if (!drawDigitalWatchFace) {
-            drawDial(canvas, bounds)
-        }
-
-        // CanvasComplicationDrawable already obeys rendererParameters.
-        if ((renderParameters.drawMode != DrawMode.AMBIENT || (!isBatteryLow() && watchFaceData.compAOD))) {
-            drawComplications(canvas, zonedDateTime)
-        }
-
-        drawDateElement(
-            canvas,
-            bounds,
-            zonedDateTime,
-            (renderParameters.drawMode == DrawMode.AMBIENT || isBatteryLow()) && !watchFaceData.activeAsAmbient
-        )
-
-        if (!drawDigitalWatchFace) {
-            drawSecondsCircle(canvas, bounds, zonedDateTime)
-        }
-        drawTime(canvas, bounds, zonedDateTime)
-        if (drawDigitalWatchFace) {
-            drawSecondsCircle(canvas, bounds, zonedDateTime)
-        }
     }
 
-    private fun drawTime(
-        canvas: Canvas,
-        bounds: Rect,
-        zonedDateTime: ZonedDateTime
-    ) {
-        if (renderParameters.drawMode != DrawMode.AMBIENT || watchFaceData.timeAOD) {
-            if (!drawDigitalWatchFace) {
-                drawClockHands(canvas, bounds, zonedDateTime)
-            } else {
-                drawDigitalTime(canvas, bounds, zonedDateTime)
-            }
-        }
-    }
-    private fun drawDigitalTime(
-        canvas: Canvas,
-        bounds: Rect,
-        zonedDateTime: ZonedDateTime
-    ) {
-        if (renderParameters.watchFaceLayers.contains(WatchFaceLayer.BASE)) {
-            val fontSize = bounds.height() * TIME_FONT_SIZE
-            val textBounds = Rect()
-            val maxTextBounds = Rect()
 
-            minuteHighlightPaint.textSize = fontSize * 0.7f
-            var tx = ":"
-            minuteHighlightPaint.getTextBounds(tx, 0, tx.length, textBounds)
-            canvas.drawText(
-                tx,
-                bounds.exactCenterX() - (textBounds.width().toFloat()),
-                bounds.height() * (DIGITAL_TIME_POSITION - 0.05f),
-                minuteHighlightPaint
-            )
-            val colonWidth = textBounds.width().toFloat()
-            val maxSize = "8"
-            minuteHighlightPaint.textSize = fontSize
-            minuteHighlightPaint.getTextBounds(maxSize, 0, maxSize.length, maxTextBounds)
 
-            val formattedTime = if (is24Format) {
-                zonedDateTime.toLocalTime().hour
-            } else {
-                if (zonedDateTime.toLocalTime().hour % 12 == 0) {
-                    12
-                } else {
-                    zonedDateTime.toLocalTime().hour % 12
-                }
-            }
 
-            tx = String.format("%02d", formattedTime)
-            minuteHighlightPaint.getTextBounds(tx, 0, 1, textBounds)
-            canvas.drawText(
-                tx.subSequence(0, 1).toString(),
-                (bounds.exactCenterX() - ((maxTextBounds.width()
-                    .toFloat() + colonWidth * 1f) * 2 + colonWidth * 1.5f)) + (maxTextBounds.width() - textBounds.width()) / 2,
-                bounds.height() * DIGITAL_TIME_POSITION,
-                minuteHighlightPaint
-            )
-            minuteHighlightPaint.getTextBounds(tx, 1, 2, textBounds)
-            canvas.drawText(
-                tx.subSequence(1, 2).toString(),
-                (bounds.exactCenterX() - ((maxTextBounds.width()
-                    .toFloat() + colonWidth * 1f) + colonWidth * 1f)) + (maxTextBounds.width() - textBounds.width()) / 2,
-                bounds.height() * DIGITAL_TIME_POSITION,
-                minuteHighlightPaint
-            )
-
-            tx = String.format("%02d", zonedDateTime.toLocalTime().minute)
-            minuteHighlightPaint.getTextBounds(tx, 0, tx.length, textBounds)
-            canvas.drawText(
-                tx,
-                bounds.exactCenterX() + colonWidth,
-                bounds.height() * DIGITAL_TIME_POSITION,
-                minuteHighlightPaint
-            )
-        }
-    }
-
-    private fun drawDateElement(
+    fun drawDateElement(
         canvas: Canvas,
         bounds: Rect,
         zonedDateTime: ZonedDateTime,
-        isAmbient: Boolean
+        isAmbient: Boolean,
+        positionY: Float
     ) {
         if (!watchFaceData.drawDate || (renderParameters.drawMode == DrawMode.AMBIENT && !watchFaceData.timeAOD))
             return
@@ -234,11 +125,7 @@ class SecondsRevealNativeCanvasRenderer(
                 isAmbient -> watchFaceColors.ambientSecondaryColor
                 else -> watchFaceColors.activePrimaryTextColor
             }
-            val positionY = if (drawDigitalWatchFace) {
-                DIGITAL_DATE_POSITION
-            } else {
-                ANALOG_DATE_POSITION
-            }
+
             canvas.drawText(
                 tx,
                 bounds.exactCenterX() - (textBounds.width().toFloat() / 2.0f),
@@ -266,122 +153,6 @@ class SecondsRevealNativeCanvasRenderer(
             }
         }
         return true
-    }
-
-    private fun drawClockHands(
-        canvas: Canvas,
-        bounds: Rect,
-        zonedDateTime: ZonedDateTime
-    ) {
-        val hour = zonedDateTime.toLocalTime().hour
-        val minute = zonedDateTime.toLocalTime().minute
-        val sec = zonedDateTime.toLocalTime().second
-        val nano = zonedDateTime.toLocalTime().nano / 1000000L
-
-        minuteHighlightPaint.color =
-            (minuteHighlightPaint.color and 0x00ffffff) or 0x77000000
-
-        minuteHighlightPaint.strokeWidth = HOUR_MINUTE_HAND_STROKE * 2f
-        minuteHighlightPaint.strokeCap = Paint.Cap.ROUND
-        minuteTextPaint.strokeWidth = HOUR_MINUTE_HAND_STROKE * 2f
-        minuteTextPaint.strokeCap = Paint.Cap.ROUND
-        minuteTextPaint.style = Paint.Style.STROKE
-        translucentPaint.strokeWidth = HOUR_MINUTE_HAND_STROKE
-        translucentPaint.style = Paint.Style.STROKE
-        translucentPaint.strokeCap = Paint.Cap.ROUND
-        hourTextPaint.style = Paint.Style.STROKE
-        hourTextPaint.strokeWidth = HOUR_MINUTE_HAND_STROKE
-
-        // Draw Minute hand
-        canvas.save()
-        canvas.rotate(
-            (minute * 6f + (sec / 60f) * 6f + (nano / 1000L) * 6f),
-            bounds.exactCenterX(),
-            bounds.exactCenterY()
-        )
-        canvas.drawRoundRect(
-            bounds.exactCenterX() - (bounds.width() * MINUTE_HAND_WIDTH) / 2f,
-            bounds.exactCenterY() - (bounds.height() * HOUR_MINUTE_HANDLE_LENGTH),
-            bounds.exactCenterX() + (bounds.width() * MINUTE_HAND_WIDTH) / 2f,
-            (bounds.height() / 2) * MINUTE_HAND_EXTENT,
-            HOUR_MINUTE_HAND_RADIUS,
-            HOUR_MINUTE_HAND_RADIUS,
-            minuteHighlightPaint
-        )
-        canvas.drawRoundRect(
-            bounds.exactCenterX() - (bounds.width() * MINUTE_HAND_WIDTH) / 2f,
-            bounds.exactCenterY() - (bounds.height() * HOUR_MINUTE_HANDLE_LENGTH),
-            bounds.exactCenterX() + (bounds.width() * MINUTE_HAND_WIDTH) / 2f,
-            (bounds.height() / 2) * MINUTE_HAND_EXTENT,
-            HOUR_MINUTE_HAND_RADIUS,
-            HOUR_MINUTE_HAND_RADIUS,
-            minuteTextPaint
-        )
-
-        minuteTextPaint.strokeWidth = HOUR_MINUTE_HAND_STROKE * 5f
-        minuteTextPaint.strokeCap = Paint.Cap.BUTT
-        canvas.drawLine(
-            bounds.exactCenterX(),
-            bounds.exactCenterY(),
-            bounds.exactCenterX(),
-            bounds.exactCenterY() - (bounds.height() * HOUR_MINUTE_HANDLE_LENGTH),
-            minuteTextPaint
-        )
-        minuteTextPaint.strokeWidth = HOUR_MINUTE_HAND_STROKE * 2f
-        minuteTextPaint.strokeCap = Paint.Cap.ROUND
-        canvas.restore()
-
-        // Draw hour hand
-        canvas.save()
-        canvas.rotate(
-            (hour * 30f + (minute / 60f) * 30f),
-            bounds.exactCenterX(),
-            bounds.exactCenterY()
-        )
-        canvas.drawRoundRect(
-            bounds.exactCenterX() - (bounds.width() * HOUR_HAND_WIDTH) / 2f,
-            bounds.exactCenterY() - (bounds.height() * HOUR_MINUTE_HANDLE_LENGTH),
-            bounds.exactCenterX() + (bounds.width() * HOUR_HAND_WIDTH) / 2f,
-            (bounds.height() / 2) * HOUR_HAND_EXTENT,
-            HOUR_MINUTE_HAND_RADIUS,
-            HOUR_MINUTE_HAND_RADIUS,
-            minuteHighlightPaint
-        )
-        canvas.drawRoundRect(
-            bounds.exactCenterX() - (bounds.width() * HOUR_HAND_WIDTH) / 2f,
-            bounds.exactCenterY() - (bounds.height() * HOUR_MINUTE_HANDLE_LENGTH),
-            bounds.exactCenterX() + (bounds.width() * HOUR_HAND_WIDTH) / 2f,
-            (bounds.height() / 2) * HOUR_HAND_EXTENT,
-            HOUR_MINUTE_HAND_RADIUS,
-            HOUR_MINUTE_HAND_RADIUS,
-            minuteTextPaint
-        )
-        minuteTextPaint.strokeWidth = HOUR_MINUTE_HAND_STROKE * 5f
-        minuteTextPaint.strokeCap = Paint.Cap.BUTT
-        canvas.drawLine(
-            bounds.exactCenterX(),
-            bounds.exactCenterY(),
-            bounds.exactCenterX(),
-            bounds.exactCenterY() - (bounds.height() * HOUR_MINUTE_HANDLE_LENGTH),
-            minuteTextPaint
-        )
-        canvas.restore()
-
-        // Draw the button in the center
-        minuteTextPaint.strokeWidth = 0f
-        minuteTextPaint.style = Paint.Style.FILL
-        canvas.drawCircle(
-            bounds.exactCenterX(),
-            bounds.exactCenterY(),
-            bounds.width() * 0.02f,
-            minuteTextPaint
-        )
-        canvas.drawCircle(
-            bounds.exactCenterX(),
-            bounds.exactCenterY(),
-            bounds.width() * 0.005f,
-            blackPaint
-        )
     }
 
     private fun createCurrentSecondsMaskCircle(
@@ -443,10 +214,11 @@ class SecondsRevealNativeCanvasRenderer(
         return hiddenSecondsResultBitmap!!
     }
 
-    private fun drawSecondsCircle(
+    fun drawSecondsCircle(
         canvas: Canvas,
         bounds: Rect,
-        zonedDateTime: ZonedDateTime
+        zonedDateTime: ZonedDateTime,
+        drawSecondHand: Boolean
     ) {
         val sec = zonedDateTime.toLocalTime().second
         val nano = zonedDateTime.toLocalTime().nano.toFloat() / 1000000f
@@ -455,7 +227,7 @@ class SecondsRevealNativeCanvasRenderer(
         if (renderParameters.drawMode != DrawMode.AMBIENT) {
             val secondsMaskedCircle = createCurrentSecondsMaskCircle(bounds, zonedDateTime)
 
-            if ( !drawDigitalWatchFace ) {
+            if ( drawSecondHand ) {
                 // Draw the second hand
                 canvas.save()
                 canvas.rotate(
@@ -510,7 +282,7 @@ class SecondsRevealNativeCanvasRenderer(
         }
     }
 
-    private fun drawDial(
+    fun drawDial(
         canvas: Canvas,
         bounds: Rect
     ) {
