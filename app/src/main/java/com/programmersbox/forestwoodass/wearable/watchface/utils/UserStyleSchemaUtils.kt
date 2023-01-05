@@ -196,6 +196,7 @@ fun createUserStyleSchemaConcentric(context: Context): UserStyleSchema {
             getDrawDateStyleSetting(context),
             getStyleIconSetting(context),
             getDrawCompCirclesStyleSetting(context),
+            getLowPowerStyleSetting(context),
             getDrawTimeOnAODStyleSetting(context),
             getCompaodStyleSetting(context),
             getMinuteaodStyleSetting(context),
