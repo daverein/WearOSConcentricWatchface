@@ -135,6 +135,7 @@ class WatchFaceConfigActivity : ComponentActivity() {
         // Move the button around to match where they are for the analog face
         if ( AnalogNativeFaceService::class.java.canonicalName!!.contains(stateHolder.serviceName)) {
             binding.currentLayoutStyleIcon.visibility = GONE
+            binding.minutedialaodEnabledSwitch.visibility = GONE
             binding.layoutStylePickerButton.visibility = INVISIBLE
             binding.preview.middleComplication.left = binding.root.width/2
             binding.preview.rightComplication.right = binding.root.width/2
@@ -144,6 +145,7 @@ class WatchFaceConfigActivity : ComponentActivity() {
         }
         if ( DigitalNativeFaceService::class.java.canonicalName!!.contains(stateHolder.serviceName)) {
             binding.currentLayoutStyleIcon.visibility = GONE
+            binding.minutedialaodEnabledSwitch.visibility = GONE
             binding.layoutStylePickerButton.visibility = INVISIBLE
             binding.preview.middleComplication.left = binding.root.width/2
             binding.preview.rightComplication.left = 0
