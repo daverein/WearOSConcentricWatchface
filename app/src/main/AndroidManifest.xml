@@ -23,8 +23,14 @@
     <uses-permission android:name="android.permission.WAKE_LOCK" />
     <uses-permission android:name="com.google.android.wearable.permission.RECEIVE_COMPLICATION_DATA" />
     <uses-permission android:name="com.google.android.wearable.permission.RECEIVE_COMPLICATION_DATA_PRIVILEGED" />
+    <uses-permission android:name="android.permission.BODY_SENSORS" />
+    <uses-permission android:name="android.permission.BODY_SENSORS_BACKGROUND" />
     <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
+    <uses-permission android:name="com.google.android.wearable.healthservices.permission.PASSIVE_DATA_BINDING" />
 
+    <queries>
+        <package android:name="com.google.android.wearable.healthservices" />
+    </queries>
     <application
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
@@ -39,6 +45,10 @@
         <meta-data
             android:name="com.google.android.wearable.standalone"
             android:value="true" />
+
+        <uses-library
+            android:name="com.google.android.wearable"
+            android:required="true" />
 
         <service
             android:name=".ConcentricNativeFaceService"
@@ -124,6 +134,30 @@
                 android:name="com.google.android.wearable.watchface.companionBuiltinConfigurationEnabled"
                 android:value="true" />
         </service>
+        <service
+            android:name=".complication.HeartRateComplicationProviderService"
+            android:icon="@drawable/heart_96"
+            android:label="@string/hr_complication_provider"
+            android:permission="com.google.android.wearable.permission.BIND_COMPLICATION_PROVIDER"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="android.support.wearable.complications.ACTION_COMPLICATION_UPDATE_REQUEST" />
+            </intent-filter>
+
+            <meta-data
+                android:name="android.support.wearable.complications.SUPPORTED_TYPES"
+                android:value="SHORT_TEXT" />
+            <meta-data
+                android:name="android.support.wearable.complications.UPDATE_PERIOD_SECONDS"
+                android:value="100" />
+        </service>
+
+        <service android:name=".complication.HeartRateService"
+            android:permission="com.google.android.wearable.healthservices.permission.PASSIVE_DATA_BINDING"
+            android:exported="true" />
+        <service android:name=".complication.PassiveDataService"
+            android:permission="com.google.android.wearable.healthservices.permission.PASSIVE_DATA_BINDING"
+            android:exported="true" />
         <activity
             android:name=".editor.WatchFaceConfigActivity"
             android:exported="true"
@@ -135,6 +169,13 @@
                 <category android:name="com.google.android.wearable.watchface.category.WEARABLE_CONFIGURATION" />
                 <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
+        </activity>
+        <activity
+            android:name=".complication.PermissionActivity"
+            android:exported="true"
+            android:label="@string/title_activity_watch_face_config">
+
+
         </activity>
     </application>
 </manifest>
