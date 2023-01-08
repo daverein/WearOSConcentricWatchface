@@ -34,6 +34,10 @@ class HeartRateService : Service() {
 
     override fun onCreate() {
         super.onCreate()
+        if (android.os.Build.VERSION.SDK_INT  < android.os.Build.VERSION_CODES.R) {
+            stopSelf()
+            return
+        }
         dataRepo = PassiveDataRepository(this)
         when (PackageManager.PERMISSION_GRANTED) {
             ContextCompat.checkSelfPermission(
@@ -110,7 +114,10 @@ class HeartRateService : Service() {
     private fun startHealthListener(context: Context) {
         if ( listenerStarted || !hasPermissions)
             return
-
+        // This really should be unnecessary, but I'm OCD
+        if (android.os.Build.VERSION.SDK_INT  < android.os.Build.VERSION_CODES.R) {
+            return
+        }
         dataRepo.putPermissionDeclined(false)
         healthClient = healthClient ?: getClient(context /*context*/)
         passiveMonitoringClient = healthClient?.passiveMonitoringClient

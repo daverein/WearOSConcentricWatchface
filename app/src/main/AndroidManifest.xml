@@ -14,7 +14,9 @@
   See the License for the specific language governing permissions and
   limitations under the License.
   -->
-<manifest xmlns:android="http://schemas.android.com/apk/res/android">
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:overrideLibrary="androidx.health.services.client" >
 
     <!-- Required for complications to receive complication data and open the provider chooser. -->
     <uses-feature android:name="android.hardware.type.watch" />
@@ -27,6 +29,8 @@
     <uses-permission android:name="android.permission.BODY_SENSORS_BACKGROUND" />
     <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
     <uses-permission android:name="com.google.android.wearable.healthservices.permission.PASSIVE_DATA_BINDING" />
+
+    <uses-sdk tools:overrideLibrary="androidx.health.services.client" />
 
     <queries>
         <package android:name="com.google.android.wearable.healthservices" />
