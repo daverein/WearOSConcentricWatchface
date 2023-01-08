@@ -10,8 +10,13 @@ import android.os.IBinder
 import android.util.Log
 import androidx.core.content.ContextCompat
 import androidx.health.services.client.HealthServices.getClient
+import androidx.health.services.client.HealthServicesClient
+import androidx.health.services.client.PassiveMonitoringClient
 import androidx.health.services.client.data.DataType.Companion.HEART_RATE_BPM
 import androidx.health.services.client.data.PassiveListenerConfig
+import com.google.common.util.concurrent.FutureCallback
+import com.google.common.util.concurrent.Futures
+import com.programmersbox.forestwoodass.wearable.watchface.complication.PassiveDataRepository.Companion.NOT_HEART_RATE_CAPABLE
 
 class HeartRateService : Service() {
     inner class LocalBinder : Binder() {
@@ -22,6 +27,9 @@ class HeartRateService : Service() {
     private var connectionCount = 0
     private var hasPermissions: Boolean = false
     private var listenerStarted: Boolean = false
+    private var notCapable: Boolean = false
+    private  var healthClient: HealthServicesClient? = null
+    private var passiveMonitoringClient: PassiveMonitoringClient? = null
     private lateinit var dataRepo: PassiveDataRepository
 
     override fun onCreate() {
@@ -39,16 +47,20 @@ class HeartRateService : Service() {
             else -> {
                 hasPermissions = false
                 Log.d(TAG, "We do NOT have body_sensor permissions")
-                val dialogIntent = Intent(this, PermissionActivity::class.java)
-                dialogIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
-                startActivity(dialogIntent)
+                if (!dataRepo.getPermissionDeclined()) {
+                    Log.d(TAG, "Starting permissions dialog activity")
+                    val dialogIntent = Intent(this, PermissionActivity::class.java)
+                    dialogIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+                    startActivity(dialogIntent)
+                } else {
+                    Log.d(TAG, "User declined permissions")
+                }
             }
         }
     }
 
     private fun havePermission(): Boolean
     {
-        Log.d(TAG, "havePermission: $hasPermissions")
         if ( hasPermissions )
             return true
         when (PackageManager.PERMISSION_GRANTED) {
@@ -60,12 +72,12 @@ class HeartRateService : Service() {
             }
             else -> {
                 hasPermissions = false
-                Log.d(TAG, "We do NOT have body_sensor permissions")
+                Log.d(TAG, "havePermission: We do NOT have body_sensor permissions")
             }
         }
         return hasPermissions
     }
-    override fun onStartCommand(intent: Intent, flags: Int, startId: Int): Int {
+    override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
         return if (hasPermissions) {
             START_STICKY
         } else {
@@ -75,6 +87,9 @@ class HeartRateService : Service() {
 
     override fun onDestroy() {
         Log.d(TAG, "onDestroy")
+        if ( passiveMonitoringClient != null ) {
+            passiveMonitoringClient?.clearPassiveListenerServiceAsync()
+        }
         super.onDestroy()
     }
     override fun onBind(intent: Intent): IBinder? {
@@ -95,8 +110,10 @@ class HeartRateService : Service() {
     private fun startHealthListener(context: Context) {
         if ( listenerStarted || !hasPermissions)
             return
-        val healthClient = getClient(context /*context*/)
-        val passiveMonitoringClient = healthClient.passiveMonitoringClient
+
+        dataRepo.putPermissionDeclined(false)
+        healthClient = healthClient ?: getClient(context /*context*/)
+        passiveMonitoringClient = healthClient?.passiveMonitoringClient
 
         val passiveListenerConfig: PassiveListenerConfig = PassiveListenerConfig.builder()
             .setDataTypes(
@@ -105,15 +122,29 @@ class HeartRateService : Service() {
                 )
             )
             .build()
-        val rc = passiveMonitoringClient.setPassiveListenerServiceAsync(
+        val rc = passiveMonitoringClient?.setPassiveListenerServiceAsync(
             PassiveDataService::class.java,
             passiveListenerConfig
         )
-        rc.addListener({
-            Log.d(TAG, "future completed")
-            Log.d(TAG, "rc = $rc, done = ${rc.isDone} and cancelled = ${rc.isCancelled}")
-        }, ContextCompat.getMainExecutor(this))
-        listenerStarted = true
+        if ( rc != null ) {
+            Futures.addCallback(rc, object : FutureCallback<Void?> {
+                override fun onSuccess(result: Void?) {
+                    //handle on all success and combination success
+                    Log.d(TAG, "future onSuccess")
+                    listenerStarted = true
+                    notCapable = false
+                }
+
+                override fun onFailure(t: Throwable) {
+                    //handle on either task fail or combination failed
+                    Log.d(TAG, "future onFailure $t")
+                    passiveMonitoringClient?.clearPassiveListenerServiceAsync()
+                    notCapable = true
+
+                    dataRepo.putHeartRateValue(NOT_HEART_RATE_CAPABLE)
+                }
+            }, ContextCompat.getMainExecutor(this))
+        }
     }
 
     companion object {

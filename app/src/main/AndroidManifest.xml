@@ -149,7 +149,7 @@
                 android:value="SHORT_TEXT" />
             <meta-data
                 android:name="android.support.wearable.complications.UPDATE_PERIOD_SECONDS"
-                android:value="100" />
+                android:value="300" />
         </service>
 
         <service android:name=".complication.HeartRateService"
