@@ -28,16 +28,14 @@ class PassiveDataService : PassiveListenerService() {
                             HeartRateAccuracy.SensorStatus.ACCURACY_MEDIUM
                         ).contains((it.accuracy as HeartRateAccuracy).sensorStatus)
                 }
-                .filter {
-                    it.value > 0
-                }
+                .filter {it.value > 0}
                 // HEART_RATE_BPM is a SAMPLE type, so start and end times are the same.
                 .maxByOrNull { it.timeDurationFromBoot }?.value
             Log.i(
                 TAG,
                 "List of ${bpmList.size} items, FINAL SAVED HEART RATE IS: $savedValue")
-            if ( savedValue != null ) {
-                dataRepo.putHeartRateValue(savedValue.toFloat())
+            savedValue?.let{
+                dataRepo.putHeartRateValue(it.toFloat())
             }
         }
     }

@@ -57,11 +57,8 @@ class HeartRateComplicationProviderService : CoroutinesComplicationDataSourceSer
         super.onCreate()
         startService(Intent(this, HeartRateService::class.java))
 
-        if (bindService(
-                Intent(this, HeartRateService::class.java),
-                mConnection, BIND_AUTO_CREATE
-            )
-        ) {
+        if (bindService(Intent(this, HeartRateService::class.java),
+                mConnection, BIND_AUTO_CREATE)) {
             mShouldUnbind = true
         }
         dataRepo = PassiveDataRepository(this)
@@ -91,27 +88,24 @@ class HeartRateComplicationProviderService : CoroutinesComplicationDataSourceSer
             ComplicationType.SHORT_TEXT -> ShortTextComplicationData.Builder(
                 getHRComplicationText(heartRate),
                 getHRComplicationTitle("BPM")
-            )
-                .setMonochromaticImage(
-                MonochromaticImage.Builder(
-                    Icon.createWithResource(
-                        this,
-                        when (heartRate) {
-                            NO_HEART_RATE.toInt() -> {
-                                R.drawable.noheart_96
+            ).setMonochromaticImage(
+                    MonochromaticImage.Builder(
+                        Icon.createWithResource(
+                            this,
+                            when (heartRate) {
+                                NO_HEART_RATE.toInt() -> {
+                                    R.drawable.noheart_96
+                                }
+                                NOT_HEART_RATE_CAPABLE.toInt() -> {
+                                    R.drawable.notheart_96
+                                }
+                                else -> {
+                                    R.drawable.heart_96
+                                }
                             }
-                            NOT_HEART_RATE_CAPABLE.toInt() -> {
-                                R.drawable.notheart_96
-                            }
-                            else -> {
-                                R.drawable.heart_96
-                            }
-                        }
-                    )
-                ).build()
-            )
-                .setTapAction(tapAction())
-                .build()
+                        )
+                    ).build()
+                ).setTapAction(tapAction()).build()
 
             else -> throw IllegalArgumentException("Unexpected complication type $type")
         }
@@ -121,7 +115,7 @@ class HeartRateComplicationProviderService : CoroutinesComplicationDataSourceSer
         return if (heartRate <= 0) {
             PlainComplicationText.Builder("--").build()
         } else {
-            PlainComplicationText.Builder("$heartRate").build()
+            PlainComplicationText.Builder(heartRate.toString()).build()
         }
     }
 

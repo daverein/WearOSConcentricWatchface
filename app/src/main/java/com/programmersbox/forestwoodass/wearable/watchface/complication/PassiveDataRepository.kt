@@ -6,40 +6,37 @@ import android.content.Context
 import android.content.SharedPreferences
 import androidx.wear.watchface.complications.datasource.ComplicationDataSourceUpdateRequester
 
-class PassiveDataRepository(private var context: Context) {
+class PassiveDataRepository(private val context: Context) {
 
-    private var sharedPreferences: SharedPreferences? = null
-
-    init {
-        sharedPreferences = context.getSharedPreferences(PREFERENCES_FILENAME, Service.MODE_PRIVATE)
+    private val sharedPreferences: SharedPreferences by lazy {
+        context.getSharedPreferences(PREFERENCES_FILENAME, Service.MODE_PRIVATE)
     }
 
     fun putHeartRateValue(value: Float)
     {
-        val myEdit = sharedPreferences!!.edit()
-        myEdit.putFloat(LATEST_HEART_RATE, value)
-        myEdit.apply()
+        sharedPreferences.edit()
+            .putFloat(LATEST_HEART_RATE, value)
+            .apply()
         val request =
             ComplicationDataSourceUpdateRequester.create(
-                context, ComponentName(
-                    context, HeartRateComplicationProviderService::class.java
-                )
+                context,
+                ComponentName(context, HeartRateComplicationProviderService::class.java)
             )
         request.requestUpdateAll()
     }
 
     fun getHeartRateValue(): Float {
-        return sharedPreferences?.getFloat(LATEST_HEART_RATE, NO_HEART_RATE)!!
+        return sharedPreferences.getFloat(LATEST_HEART_RATE, NO_HEART_RATE)
     }
 
     fun getPermissionDeclined(): Boolean {
-        return sharedPreferences?.getBoolean(DECLINED_PERMISSION, false)!!
+        return sharedPreferences.getBoolean(DECLINED_PERMISSION, false)
     }
 
     fun putPermissionDeclined(value: Boolean) {
-        val myEdit = sharedPreferences!!.edit()
-        myEdit.putBoolean(DECLINED_PERMISSION, value)
-        myEdit.apply()
+        sharedPreferences.edit()
+            .putBoolean(DECLINED_PERMISSION, value)
+            .apply()
     }
 
     companion object {
