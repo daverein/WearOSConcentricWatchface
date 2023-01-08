@@ -64,7 +64,7 @@ dependencies {
   // Kotlin components
   implementation libs.kotlinx.coroutines.core
   implementation libs.kotlinx.coroutines.android
-  implementation 'com.google.guava:guava:29.0-android'
+  implementation 'com.google.guava:guava:29.0-jre'
   implementation "androidx.concurrent:concurrent-futures:1.1.0"
   implementation("androidx.concurrent:concurrent-futures-ktx:1.1.0")
   implementation libs.androidx.activity.ktx
