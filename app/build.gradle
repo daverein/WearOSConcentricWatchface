@@ -14,76 +14,84 @@
  * limitations under the License.
  */
 plugins {
-    id 'com.android.application'
-    id 'org.jetbrains.kotlin.android'
-    id 'org.jetbrains.kotlin.kapt'
+  id 'com.android.application'
+  id 'org.jetbrains.kotlin.android'
+  id 'org.jetbrains.kotlin.kapt'
 }
 
 android {
-    compileSdkVersion 33
+  compileSdkVersion 33
 
-    defaultConfig {
-        applicationId "com.programmersbox.forestwoodass.wearable.watchface"
-        minSdk 28
-        targetSdk 33
-        versionCode 2
-        versionName "1.0.0.2"
-    }
+  defaultConfig {
+    applicationId "com.programmersbox.forestwoodass.wearable.watchface"
+    minSdk 30
+    targetSdk 33
+    versionCode 2
+    versionName "1.0.0.2"
+  }
 
-    buildFeatures {
-        viewBinding true
-    }
+  buildFeatures {
+    viewBinding true
+  }
 
-    buildTypes {
-        release {
-            minifyEnabled false
-            proguardFiles getDefaultProguardFile("proguard-android-optimize.txt"), "proguard-rules.pro"
-        }
+  buildTypes {
+    release {
+      minifyEnabled false
+      proguardFiles getDefaultProguardFile("proguard-android-optimize.txt"), "proguard-rules.pro"
     }
-    packagingOptions {
-        resources {
-            excludes += ['META-INF/atomicfu.kotlin_module']
-        }
+  }
+  packagingOptions {
+    resources {
+      excludes += ['META-INF/atomicfu.kotlin_module']
     }
+  }
 
 
-    compileOptions {
-        sourceCompatibility = 1.8
-        targetCompatibility = 1.8
-    }
+  compileOptions {
+    sourceCompatibility = 1.8
+    targetCompatibility = 1.8
+  }
 
-    kotlinOptions {
-        jvmTarget = "1.8"
-    }
-    namespace 'com.programmersbox.forestwoodass.wearable.watchface'
+  kotlinOptions {
+    jvmTarget = "1.8"
+  }
+  namespace 'com.programmersbox.forestwoodass.wearable.watchface'
 }
 
 dependencies {
-    implementation libs.androidx.core.ktx
+  implementation libs.androidx.core.ktx
 
-    // Kotlin components
-    implementation libs.kotlinx.coroutines.core
-    implementation libs.kotlinx.coroutines.android
+  // Kotlin components
+  implementation libs.kotlinx.coroutines.core
+  implementation libs.kotlinx.coroutines.android
+  implementation 'com.google.guava:guava:29.0-android'
+  implementation "androidx.concurrent:concurrent-futures:1.1.0"
+  implementation("androidx.concurrent:concurrent-futures-ktx:1.1.0")
+  implementation libs.androidx.activity.ktx
 
-    implementation libs.androidx.activity.ktx
+  // Lifecycle components
+  implementation libs.androidx.lifecycle.runtime.ktx
+  implementation libs.androidx.lifecycle.viewmodel.ktx
 
-    // Lifecycle components
-    implementation libs.androidx.lifecycle.runtime.ktx
-    implementation libs.androidx.lifecycle.viewmodel.ktx
+  // Material components
+  implementation libs.android.material
 
-    // Material components
-    implementation libs.android.material
+  // Wear libraries
+  implementation libs.androidx.wear
 
-    // Wear libraries
-    implementation libs.androidx.wear
+  // Watch face specific libraries
+  implementation libs.wear.watchface.complications.data
+  implementation libs.wear.watchface.complications.data.source
 
-    // Watch face specific libraries
-    implementation libs.wear.watchface.complications.data
-    implementation libs.wear.watchface.complications.data.source
+  implementation libs.wear.watchface
+  implementation libs.wear.watchface.client
+  implementation libs.wear.watchface.data
+  implementation libs.wear.watchface.editor
+  implementation libs.wear.watchface.style
 
-    implementation libs.wear.watchface
-    implementation libs.wear.watchface.client
-    implementation libs.wear.watchface.data
-    implementation libs.wear.watchface.editor
-    implementation libs.wear.watchface.style
+  implementation("androidx.health:health-services-client:1.0.0-beta01")
+  implementation 'androidx.datastore:datastore-core:1.0.0'
+  // Datastore
+  implementation "androidx.datastore:datastore-preferences:1.0.0"
+
 }
