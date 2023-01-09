@@ -42,6 +42,10 @@ const val BLUE_COLOR_STYLEID = "blue_style_id"
 private const val BLUE_COLOR_STYLE_NAME_RESOURCE_ID = R.string.blue_style_name
 
 @Suppress("SpellCheckingInspection")
+const val ALLBLUE_COLOR_STYLEID = "allblue_style_id"
+private const val ALLBLUE_COLOR_STYLE_NAME_RESOURCE_ID = R.string.all_blue_style_name
+
+@Suppress("SpellCheckingInspection")
 const val GOLD_COLOR_STYLEID = "gold_style_id"
 private const val GOLD_COLOR_STYLE_NAME_RESOURCE_ID = R.string.gold_style_name
 
@@ -133,6 +137,16 @@ class ColorStylesDynamic(
                 primaryColorId = R.color.blue_primary_color,
                 primaryColorTextId = R.color.blue_color_text_primary,
                 secondaryColorId = R.color.blue_secondary_color,
+                backgroundColorId = R.color.blue_background_color,
+                outerElementColorId = R.color.blue_outer_element_color
+            )
+            )
+            colorList.add(ColorStylesDynamic(
+                id = ALLBLUE_COLOR_STYLEID,
+                nameResourceId = ALLBLUE_COLOR_STYLE_NAME_RESOURCE_ID,
+                primaryColorId = R.color.blue_primary_color,
+                primaryColorTextId = R.color.blue_color_text_primary,
+                secondaryColorId = R.color.blue_primary_color,
                 backgroundColorId = R.color.blue_background_color,
                 outerElementColorId = R.color.blue_outer_element_color
             )

@@ -176,4 +176,5 @@
     <string name="activity_config_low_power_enabled_label">Low Power Mode</string>
     <string name="black_gold_style_name">Black Gold</string>
     <string name="hr_complication_provider">Native Heart Rate</string>
+    <string name="all_blue_style_name">All Blue</string>
 </resources>
