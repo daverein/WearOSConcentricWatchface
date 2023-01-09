@@ -13,7 +13,7 @@ import androidx.wear.watchface.complications.datasource.ComplicationRequest
 import com.programmersbox.forestwoodass.wearable.watchface.R
 import com.programmersbox.forestwoodass.wearable.watchface.complication.PassiveDataRepository.Companion.NOT_HEART_RATE_CAPABLE
 import com.programmersbox.forestwoodass.wearable.watchface.complication.PassiveDataRepository.Companion.NO_HEART_RATE
-import com.programmersbox.forestwoodass.wearable.watchface.editor.WatchFaceConfigActivity
+
 
 
 class HeartRateComplicationProviderService : CoroutinesComplicationDataSourceService() {
@@ -127,15 +127,16 @@ class HeartRateComplicationProviderService : CoroutinesComplicationDataSourceSer
         const val TAG = "HeartRateComplicationProviderService"
 
         fun Context.tapAction(): PendingIntent? {
-            val intent = Intent(this, WatchFaceConfigActivity::class.java)
-                .addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+            val launchIntent: Intent = this.packageManager.getLaunchIntentForPackage("com.samsung.android.wear.shealth")
+                ?: return null
+            launchIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+
             return PendingIntent.getActivity(
                 this,
                 0,
-                intent,
+                launchIntent,
                 PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE
             )
         }
     }
-
 }
