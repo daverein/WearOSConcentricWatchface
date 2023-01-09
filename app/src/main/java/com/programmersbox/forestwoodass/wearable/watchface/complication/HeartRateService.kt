@@ -34,11 +34,12 @@ class HeartRateService : Service() {
 
     override fun onCreate() {
         super.onCreate()
+        dataRepo = PassiveDataRepository(this)
         if (android.os.Build.VERSION.SDK_INT  < android.os.Build.VERSION_CODES.R) {
+            dataRepo.putHeartRateValue(NOT_HEART_RATE_CAPABLE)
             stopSelf()
             return
         }
-        dataRepo = PassiveDataRepository(this)
         when (PackageManager.PERMISSION_GRANTED) {
             ContextCompat.checkSelfPermission(
                 this,
