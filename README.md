@@ -1,6 +1,6 @@
 Concentric Native (WearOS Watchface)
 ===============================
-My version of the Pixel Concentric and Digital watchfaces, plus an Analog-style one.
+My version of the Pixel Concentric and Digital watchfaces, plus an Analog-style one, and a heart rate complication for Samsung Watch4/Watch5 devices.
 
 Features
 --------
@@ -14,7 +14,8 @@ Features
 * Control over colors and complication elements
 * Ability to show AOD in full colors
 * Only 15fps for a good battery experience, with a 1fps Low Power mode
-
+* Heart Rate Complication that uses the built-in Health Services (Samsung health) to provide the latest heart rate BPM.  This can be re-used by any other watchface!  Note: No data is collected!  It is simply displayed.
+  
 Introduction
 ------------
 This is my version of the Google Pixel Concentric Watchface.  It started off being as closely mirroring it as possible, but then I realized I was too old to see the time with those font sizes... and lack of complications for several of the different faces it provided.  So I made the fonts bigger and added complications.  And made the fonts even bigger when in Always on Display (ambient) mode.
