@@ -315,26 +315,7 @@ abstract class SecondsRevealNativeCanvasRenderer(
                 bounds.exactCenterY(),
                 paintToUse
             )
-//            if (i % 5 == 0) {
-//                val textBounds = Rect()
-//                val tx = "%d".format(((i) / 5))
-//                hourTextPaint.getTextBounds(tx, 0, tx.length, textBounds)
-//                val x = bounds.centerX() - (textBounds.width() / 2f)
-//                val y = bounds.height() * (1f - startPoint) + textBounds.height() + 6f
-//                canvas.save()
-//                canvas.rotate(
-//                    -i * 6f,
-//                    x + textBounds.width() / 2f,
-//                    y - textBounds.height().toFloat() / 2
-//                )
-//                hourTextPaint.textSize = bounds.height() * (SECOND_DIAL_FONT_SIZE)
-//                canvas.drawText(
-//                    tx,
-//                    x, y,
-//                    outerElementPaint
-//                )
-//                canvas.restore()
-//            }
+
             canvas.rotate(6f, bounds.exactCenterX(), bounds.exactCenterY())
         }
         canvas.restoreToCount(pos)

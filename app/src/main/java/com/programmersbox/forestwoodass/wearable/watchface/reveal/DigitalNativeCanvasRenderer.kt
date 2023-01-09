@@ -38,8 +38,6 @@ class DigitalNativeCanvasRenderer(
     ) {
         super.render(canvas, bounds, zonedDateTime, sharedAssets)
 
-        drawDial(canvas, bounds)
-
         // CanvasComplicationDrawable already obeys rendererParameters.
         if ((renderParameters.drawMode != DrawMode.AMBIENT || (!isBatteryLow() && watchFaceData.compAOD))) {
             drawComplications(canvas, zonedDateTime)
