@@ -129,8 +129,11 @@ class HeartRateComplicationProviderService : CoroutinesComplicationDataSourceSer
         const val TAG = "HeartRateComplicationProviderService"
 
         fun Context.tapAction(): PendingIntent? {
-            val launchIntent: Intent = this.packageManager.getLaunchIntentForPackage("com.samsung.android.wear.shealth")
+            this.packageManager.getLaunchIntentForPackage("com.samsung.android.wear.shealth")
                 ?: return null
+            val launchIntent = Intent()
+            launchIntent.component = ComponentName("com.samsung.android.wear.shealth",
+                "com.samsung.android.wear.shealth.app.heartrate.view.HeartRateActivity")
             launchIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
 
             return PendingIntent.getActivity(
