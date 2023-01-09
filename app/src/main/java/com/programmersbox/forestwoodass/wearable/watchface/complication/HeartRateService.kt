@@ -126,8 +126,8 @@ class HeartRateService : Service() {
             PassiveDataService::class.java,
             passiveListenerConfig
         )
-        if ( rc != null ) {
-            Futures.addCallback(rc, object : FutureCallback<Void?> {
+        rc?.let {
+            Futures.addCallback(it, object : FutureCallback<Void?> {
                 override fun onSuccess(result: Void?) {
                     //handle on all success and combination success
                     Log.d(TAG, "future onSuccess")

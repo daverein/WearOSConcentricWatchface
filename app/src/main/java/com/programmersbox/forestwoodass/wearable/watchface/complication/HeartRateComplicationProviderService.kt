@@ -112,7 +112,9 @@ class HeartRateComplicationProviderService : CoroutinesComplicationDataSourceSer
     }
 
     private fun getHRComplicationText(heartRate: Int): ComplicationText {
-        return if (heartRate <= 0) {
+        return if (heartRate == NOT_HEART_RATE_CAPABLE.toInt()) {
+            PlainComplicationText.Builder("N/A").build()
+        } else if (heartRate <= 0) {
             PlainComplicationText.Builder("--").build()
         } else {
             PlainComplicationText.Builder(heartRate.toString()).build()
